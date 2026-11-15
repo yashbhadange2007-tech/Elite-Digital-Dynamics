@@ -1,11 +1,46 @@
 {
   "version": 2,
   "skills": {
+    "build-premium-website": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "461548d311f335b08496fc0e977ccaaf0feac3b6c25483c13081c24beb0f8330"
+    },
+    "design-taste-frontend": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "ca55e687ab90f05970d6be6b2f316222af13e3f3a1675619587517f69aee0944"
+    },
+    "frontend-design-skill": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "20c8999dbb6b359435c85b86b6a841cc573f1baa79104b3ad8d1bf8fec6a9859"
+    },
+    "impeccable": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "6d4d303656f8f874bbd4b787011554bf41d8d585fe080d34307e4fb3efefb79e"
+    },
     "modern-web-guidance": {
       "source": "GoogleChrome/modern-web-guidance",
       "sourceType": "github",
       "skillPath": "skills/modern-web-guidance/SKILL.md",
       "computedHash": "9e69ce00dc314b64f6664031b70295ea46c7de93ac682c624808df6e48e08b66"
+    },
+    "playwright-skill": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "4eaff8d2d87e113ade72664fc7c0acc418ce96e65d90eef7da12c55edb5c3a2a"
+    },
+    "security": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "b8d4b6118bc37beca3194169ef1eb2aabcb5208369e5f9b3153a2a2ac768e795"
+    },
+    "ui-ux-pro-max": {
+      "source": "../../../tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad/skills-src/repo",
+      "sourceType": "local",
+      "computedHash": "a229c24a18daaf9c53a76137658900e363aa3cc182c3810a148402ba74e6078f"
     }
   }
 }
