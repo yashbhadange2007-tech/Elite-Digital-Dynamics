@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" ><rect width="512" height="512" rx="112" fill="#0A0606"/><radialGradient id="bg" cx="256" cy="256" r="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3A0A06"/><stop offset="1" stop-color="#0A0606" stop-opacity="0"/></radialGradient><rect width="512" height="512" rx="112" fill="url(#bg)"/><g transform="translate(96 96) scale(5)"><defs>
+  <linearGradient id="ringi" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FF8A6B"/><stop offset=".45" stop-color="#C42415"/><stop offset="1" stop-color="#7A140D"/>
+  </linearGradient>
+  <linearGradient id="inneri" x1="44" y1="20" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#C42415"/>
+  </linearGradient>
+  <radialGradient id="corei" cx="30.6" cy="30.4" r="7.6" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFD9CC"/><stop offset=".45" stop-color="#FF3B1F"/><stop offset="1" stop-color="#C42415"/>
+  </radialGradient>
+  <radialGradient id="glowi" cx="32" cy="32" r="16" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FF3B1F" stop-opacity=".55"/><stop offset="1" stop-color="#FF3B1F" stop-opacity="0"/>
+  </radialGradient>
+</defs><circle cx="32" cy="32" r="16" fill="url(#glowi)"/><path d="M53.44 27.05A22 22 0 1 1 36.95 10.56" fill="none" stroke="url(#ringi)" stroke-width="6.4" stroke-linecap="round"/><path d="M19.69 34.17A12.5 12.5 0 1 1 29.83 44.31" fill="none" stroke="url(#inneri)" stroke-width="3.6" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="url(#corei)"/></g></svg>
