@@ -73,7 +73,7 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 - Second line: The real app is private, so this is a working demo with sample data. Watch it run, or take over and click through.
 - Label on the demo (always visible): `Sample data, nothing is posted`
 - Credit: `Built for IPMH, Pune`
-- Controls: **Pause tour** / **Resume tour**, step chips: Create · Schedule · Published · Analytics. Desktop also: Phone / Laptop view toggle.
+- Controls: **Pause tour** / **Resume tour**, and four step chips: Create, Schedule, Published, Analytics. Phone frame on phones, laptop frame from 1024px wide.
 
 ### How we work
 - No eyebrow. The numbers 01 to 05 label the steps.
@@ -99,7 +99,7 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 6. **What do you need from me to start?** A short conversation about your business, your logo and photos if you have them, and the details customers ask for most: services, timings, location and contact numbers. If your content is not ready, tell us and we will work out what is needed together.
 
 ### Enquiry and contact
-- Above the heading, where the 3D rings settle into the logo: the tagline `Your Vision, Our Innovation` (small, salmon).
+- Above the heading: the logo stage (an empty square where the 3D rings land as the logo; it shows the 2D mark when the scene is off), then the tagline `Your Vision, Our Innovation` (small, salmon).
 - H2: **Tell us what you are planning.**
 - Lead: Fill this in, or call or WhatsApp us. We are in Shivaji Nagar, Pune.
 
@@ -195,19 +195,22 @@ Contact block (beside the form on desktop, above it on phone):
 
 ## 5. Scroll choreography (3D)
 
-The object: outer band **A** and inner band **B** are the two logo rings (each with a gap and rounded ends), turning in opposite directions around the core. Two thin closed orbit rings **C** and **D** add the gyroscope depth. In the logo pose C and D fold away into the core.
+The object is our logo in 3D and nothing else: outer ring **A** and inner ring **B** (each an open band with a gap and round ends) turning in opposite directions around the glowing core.
 
 | Pose | Rings | Object position, phone | Object position, desktop | Dim |
 |---|---|---|---|---|
-| hero | A and B tilted on different axes like a gyroscope, C and D crossing them; slow counter-turn | lower half of the screen, centre shifted right so it bleeds off the edge; headline above it | right 55% of the screen, large; headline left | 0 (full) |
-| services | all rings flatten and face the viewer, concentric; gaps keep turning slowly | centred, behind the list, strongly dimmed | left third, half off-screen; list on the right | 0.55 |
-| work | rings stand upright and rise from below as arcs, like gates over the previews | bottom edge, only the upper arcs visible | bottom centre, wide arcs behind the frames | 0.6 |
-| demo | small and calm, drifts to a corner; capped at 30fps | top right corner, small | top right, small | 0.75 |
-| process | rings spread along one axis, evenly spaced, one per step feel | along the left edge, vertical stack | horizontal row behind the steps | 0.55 |
+| hero | A and B tilted on different axes like a gyroscope; slow counter-turn | lower half of the screen, shifted right so it bleeds off the edge; headline above it | right 55% of the screen, large; headline left | 0 (full) |
+| services | both rings flatten and face the viewer, concentric, still turning, cropped by the screen edge | low and centred, behind the panel | left third, half off-screen; list on the right | 0.55 |
+| work | rings stand upright and rise from below as arcs behind the previews | bottom edge, only the upper arcs visible | bottom centre, wide arcs behind the frames | 0.6 |
+| demo | small and calm in a corner; capped at 30fps | top right corner, small | top right, small | 0.75 |
+| process | the object comes apart along one line: ring A, core, ring B side by side | along the left edge, top to bottom | in a row behind the steps | 0.6 |
 | faq | small gyroscope to one side | top right, small | right edge | 0.65 |
-| contact | **the logo**: A and B face the viewer, coplanar, outer gap at top-right, inner gap at bottom-left, core glowing; C and D folded into the core; turning stops and the rings settle exactly | centred above the form heading | left column, above the contact block | 0.15 |
+| contact | **the logo**: A and B face the viewer in one plane, outer gap at top-right, inner gap at bottom-left, core glowing; turning stops and the rings settle exactly | lands on the logo stage above the heading | lands on the logo stage in the left column | 0.1 |
 
-Rules: text never sits on the bright core; where a heading must cross the object, the scrim and the pose dim keep AA contrast. The logo pose holds still (sway amplitude near zero) so it reads as the mark.
+Rules:
+- Text never sits on the bright core. Where a heading must cross the object, the scrim and the pose dim keep AA contrast.
+- The contact pose is anchored to the **logo stage**, an empty square in the contact section. The rings fly to it as it scrolls into view, are fully settled when it reaches the middle of the screen, and stay attached to it as the page scrolls on. The logo pose holds still so it reads as the mark.
+- When the scene is off (no WebGL, reduced motion, paused), the hero shows a still picture of the object and the logo stage shows the 2D mark.
 
 ## 6. Client sites (from the scout)
 _To be filled from `docs/research/sites.md`: name, caption, embed mode per device, reason._

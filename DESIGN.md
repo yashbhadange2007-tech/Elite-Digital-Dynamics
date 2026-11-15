@@ -118,7 +118,7 @@ Blur budget: at most the nav pill and **one** `primary` panel blur in any viewpo
 
 **Nav**
 - Sticky, transparent at the top of the page. After 24px of scroll the links and button sit in one glass pill (the nav's blur).
-- Desktop: lockup left (height 32px), four links centre-right (pill hit areas, 44px high, muted text, white on hover or current section with a salmon hairline border), primary button `md` right. One line at 1024.
+- Desktop: lockup left (height 32px), four links centre-right (pill hit areas, 44px high, muted text; white with a salmon hairline border on hover and focus), primary button `md` right. One line at 1024.
 - Phone: mark only (36px), primary button `md`, menu button (44px, icon). Menu is a full-width glass sheet under the nav with the four links (56px rows), then Call and WhatsApp. Closes on link tap, Escape and outside tap. Use native `popover` or `<dialog>` semantics.
 
 **Section header**: h2, then lead under it (stacked, left aligned, never headline-left / paragraph-right). Space below: 48px phone, 64px desktop.
@@ -152,10 +152,10 @@ Blur budget: at most the nav pill and **one** `primary` panel blur in any viewpo
 | Hero | Text block at top, left aligned, over a text scrim; object fills the lower half, bleeding off the right edge; primary button full width, ghost button full width under it. Hero fits one screen (`min-height: 100svh`). | Text left, 7 of 12 columns, vertically centred slightly high; object right, large, partly behind the text column's edge. Buttons in one row. |
 | Services | One `primary` glass panel holding a numbered index: each service is a row (number, name, promise, three deliverables as a plain list). All rows open; no accordion. | Same single panel, 12 columns: number (1 col), name + promise (5 cols), deliverables (6 cols, in one row of three short lines). Not cards, not three equal columns. |
 | Work: client sites | Segmented control with the three business names (pill tabs, horizontally scrollable if needed); **one** phone frame shown for the selected site; name, caption and "Open live site" under it. Only the selected iframe is mounted. | Asymmetric trio in one row: laptop frame (about 58% width) for the first site and two phone frames for the others, bottoms aligned. No glass panel behind; frames sit on the page with the upright ring arcs behind them. |
-| Work: SocialSync | Eyebrow, h2, two short paragraphs; then the phone frame centred with the demo; step chips and Pause tour under the frame (wrap to two rows). | Text in 4 columns left (sticky while the demo is in view), demo right in a laptop frame (8 columns) with the Phone / Laptop toggle; chips and Pause above the frame. |
+| Work: SocialSync | Eyebrow, h2, two short paragraphs; then the phone frame centred with the demo; step chips and Pause tour under the frame (wrap to two rows). | Text in 4 columns left (sticky while the demo is in view), demo right in a laptop frame (8 columns); chips and Pause above the frame. |
 | How we work | Vertical rail: a 1px salmon-tinted line at the left, five steps hanging off it (number, verb as h3, one sentence). No panel. | Horizontal rail: one hairline across, five equal columns hanging under it, each with number, verb, sentence. No cards. |
 | FAQ | h2, then the accordion full width inside one glass panel (lite). | Two columns: h2 sticky left (4 cols), accordion right (8 cols) inside one panel. |
-| Contact | Tagline and h2 centred under the 3D logo (the only centred heading on the page), then the contact block, then the form in a `primary` glass panel. Submit buttons full width. | Left 5 columns: the 3D logo settles above the tagline, h2, lead and contact block. Right 7 columns: the form in the `primary` glass panel. |
+| Contact | Logo stage (168px square), tagline and h2, all centred (the only centred heading on the page), then the contact block, then the form in a `primary` glass panel. Submit buttons full width. | Left 5 columns: logo stage (220px square), tagline, h2, lead and contact block. Right 7 columns: the form in the `primary` glass panel. |
 | Footer | Stacked lockup, links, contact, bottom row, single column. | Lockup left, two link columns right, bottom row. |
 
 Privacy and 404: single column, max `44rem`, static CSS glow top-right, no 3D, same nav and footer.
@@ -172,8 +172,9 @@ Privacy and 404: single column, max `44rem`, static CSS glow top-right, no 3D, s
 - Edge highlights: environment strip lights `#FF8A6B` and `#FFD9CC`; large soft key `#C42415`; dim fill `#2A0A07`.
 - Core: unlit `#FF3B1F` with a hot centre `#FFD9CC` offset up-left (as in the logo); halo sprites `#FF3B1F` at 0.55 and `#C42415` at 0.25; point light `#FF4A2A`.
 - **Logo geometry** (from `edd-mark.svg`, 64-unit box, y down; normalised to outer radius 1): outer ring A radius 22 (1.00), band 6.4 (0.291), gap 64deg centred at top-right (45deg above the +x axis); inner ring B radius 12.5 (0.568), band 3.6 (0.164), gap 70deg centred at bottom-left (225deg); core radius 6 (0.273); glow radius 16 (0.727). Round ends on both rings. A is lit salmon at top-left and darkest at bottom-right (gradient direction of the logo).
-- Idle: A and B turn in opposite directions (the gaps make the turn visible). Two thin closed orbit rings C and D add depth and fold into the core in the contact pose.
-- Contact pose = the logo exactly, facing the viewer, turning stopped (spin eases to the nearest full turn so there is no snap).
+- Idle: A and B turn in opposite directions (the gaps make the turn visible). The object is exactly the logo's two rings and core; no extra rings.
+- Band cross-section: a flattened pill (wide across the ring, roughly 45% as thick, fully rounded edges) so the edges catch the salmon lights the way the reference rings do.
+- Contact pose = the logo exactly, facing the viewer, turning stopped (spin eases to the nearest full turn so there is no snap). It lands on the logo stage in the contact section, sized so the mark fills the stage the way `edd-mark.svg` fills its 64-unit box, and stays attached to it while the page scrolls.
 - Bloom: none. Only if the side-by-side with the reference shows the glow clearly weaker: one half-resolution bloom pass at tier 3 on desktop, with its measured frame cost reported.
 
 ## 10. Accessibility
