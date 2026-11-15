@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# test output (tests/evidence/ stays tracked on purpose)
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
+# env files (.env.example is tracked)
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.log
