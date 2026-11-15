@@ -38,7 +38,7 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 ### Hero
 - Eyebrow: `Digital agency in Pune`
 - H1: **Make your business the easy choice online.**
-- Line: Websites, apps and automation for Pune's local businesses: gyms, salons, hotels and clinics.
+- Line: Websites, apps and automation for local businesses: gyms, salons, hotels and clinics.
 - Primary button: **Start a project**
 - Secondary (ghost): **See our work** (to `#work`)
 - Nothing else in the hero. The tagline lives at the logo moment in the contact section and in the footer lockup.
@@ -61,10 +61,9 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 ### Our work: client sites
 - No eyebrow.
 - H2: **Work you can open right now.**
-- Lead: Three live client websites. Scroll a preview, or tap it to open the real site.
+- Lead: Three live client websites. Browse each one here, or open the full site.
 - Per site: device frame with the business name in the address bar, name as h3, one-line caption, button **Open live site**.
-- Names and captions: **filled from `docs/research/sites.md`** (see section 6).
-- Small note under the previews: Previews load the live sites, so they show whatever is on them today.
+- Names and captions: section 6.
 
 ### Our work: SocialSync demo
 - Eyebrow: `App we built`
@@ -165,7 +164,7 @@ Contact block (beside the form on desktop, above it on phone):
 - Title: `Elite Digital Dynamics | Websites, Apps & Automation in Pune`
 - Title template for other pages: `%s | Elite Digital Dynamics`
 - Description: `Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.`
-- OG title: `Elite Digital Dynamics`; OG description: `Websites, apps and automation for Pune's local businesses. Your Vision, Our Innovation.`
+- OG title: `Elite Digital Dynamics`; OG description: `Websites, apps and automation for local businesses. Your Vision, Our Innovation.`
 - Share image: 1200x630, dark background with the red glow, mark at left, company name in type, tagline. Alt: `Elite Digital Dynamics: two red rings around a glowing core. Your Vision, Our Innovation.`
 - Structured data: `ProfessionalService` (a LocalBusiness type) with name, slogan, both phones, email, street address, locality Pune, region Maharashtra, country IN, area served Pune, logo, URL, and the five services as offers. **No** rating, price range, opening hours, geo coordinates, founding date or social profiles.
 
@@ -212,5 +211,21 @@ Rules:
 - The contact pose is anchored to the **logo stage**, an empty square in the contact section. The rings fly to it as it scrolls into view, are fully settled when it reaches the middle of the screen, and stay attached to it as the page scrolls on. The logo pose holds still so it reads as the mark.
 - When the scene is off (no WebGL, reduced motion, paused), the hero shows a still picture of the object and the logo stage shows the 2D mark.
 
-## 6. Client sites (from the scout)
-_To be filled from `docs/research/sites.md`: name, caption, embed mode per device, reason._
+## 6. Client sites (measured by the scout, full evidence in `docs/research/sites.md`)
+
+| Order | Name (address bar and h3) | Caption | Phone frame | Laptop frame |
+|---|---|---|---|---|
+| 1 | Hotel Orient Elite | Central Solapur hotel: rooms, vegetarian restaurant, rooftop cafe and event hall. | screenshot | screenshot |
+| 2 | Goodlife Fitness | Premium gym in Murarji Peth, Solapur, with boxing, yoga, steam and spa. | interactive | interactive |
+| 3 | Goodlife Fitness Club | 24-hour weights-and-cardio gym at Sai Trade Center, Solapur. | interactive | interactive |
+
+Why these modes:
+- **The tall iframe fails on all three sites.** Each hero is `min-height: 100vh`, so in a tall iframe the hero grows to the iframe's height and the rest of the page is cut off. No height works (document height is always iframe height plus a constant). The tall mode stays in the code for the day the client sites cap their hero height when framed.
+- **Goodlife Fitness and Goodlife Fitness Club: interactive.** They render correctly at normal height, cost 1.75 MB and 0.97 MB on mount, and hand scrolling back to our page at both ends (wheel and touch).
+- **Hotel Orient Elite: screenshot.** It frames and renders, but it downloads 41.3 MB on every mount (17 PNG photos and a video, none lazy) and its smooth-scroll library never gives the mouse wheel back to our page. Both break the owner's rules (phones first; scrolling must not get stuck). In screenshot mode the visitor still scrolls the preview and a tap opens the real site.
+
+Layout order: the hotel takes the laptop frame on desktop and is the first tab on phones, so nothing live loads on a phone until the visitor picks a Goodlife tab.
+
+The two Goodlife sites are different businesses' pages (different address, phone, hours and offer), and the first also calls itself "Goodlife Fitness Club" in its footer, so the captions carry the difference: place and purpose.
+
+Not ours to fix but the owner should know: the hotel page weighs 41.3 MB and Goodlife Fitness Club 20.2 MB (multi-megabyte PNG photos). A prospect who opens them on mobile data waits.

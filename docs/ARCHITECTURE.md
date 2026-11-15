@@ -237,6 +237,7 @@ Plus HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-wh
     - SocialSync: phone frame below 1024px, laptop frame from 1024px. No frame toggle.
     - Nav: no scroll-spy / current-section highlight.
     - Portfolio config: everything about a site lives in `src/components/work/sites.data.json` (slug, url, name, addressLabel, caption, mode per device, measured heights, footerColor, shots). `sites.config.ts` only types and re-exports it. No separate `sites.measured.json`.
-    - `scripts/check-launch-inputs.mjs` prints the missing launch inputs (domain, form key) and is run by hand (`pnpm check:launch`). It is never part of `build`.
+    - No launch-check script: `.env.example` and the final report list the inputs the owner still owes (domain, form key).
     - Tests: each area owner leaves one `tests/<area>.spec.ts` that imports `test` and `expect` from `tests/fixtures.ts` (written by the orchestrator: fails a test on console errors, page errors, failed or off-site requests, and visible ".vercel.app" text). The contrast-over-canvas sampler and the cross-site suite belong to Phase 4, not to G.
-    - G owns: privacy page, 404, metadata, icons, share image, sitemap, robots, manifest, JSON-LD and the launch-input script. Not test helpers.
+    - G owns: privacy page, 404, metadata, icons, share image, sitemap, robots, manifest and JSON-LD. Not test helpers.
+16. **Lazy cuts (ponytail: the best code is the code never written).** File lists in this document are a ceiling, not a target. Portfolio tests fake awkward, refusing and hostile pages with Playwright route fulfilment on made-up hosts: no stub server and no probe script in the repo. Icons: `icon.svg`, `apple-icon.png`, manifest 192 and 512 only (no `.ico`, no maskable). One share image file. Form spam protection is the honeypot only, and only in key mode: no time trap, because silently dropping a fast real visitor loses a lead.

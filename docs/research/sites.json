@@ -1,0 +1,296 @@
+[
+  {
+    "slug": "hotel-orient-elite",
+    "name": "Hotel Orient Elite",
+    "caption": "Central Solapur hotel: rooms, vegetarian restaurant, rooftop cafe and event hall.",
+    "url": "https://hotelorientelite.co.in",
+    "finalUrl": "https://hotelorientelite.co.in/",
+    "frameable": true,
+    "mode": {
+      "phone": "screenshot",
+      "laptop": "screenshot"
+    },
+    "height": {
+      "phone": 19850,
+      "laptop": 15068
+    },
+    "footerColor": "#050403",
+    "externalHosts": [
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "www.google.com"
+    ],
+    "problems": [
+      "Tall iframe fails: hero section#hero is min-height:100vh, so document height = iframe height + a constant and never converges (growth 93.6% then 48.3% at 390; 94.2% then 48.5% at 1280). Everything below the hero is cut off.",
+      "Interactive iframe traps the mouse wheel: Lenis smooth scrolling never passes wheel events to the parent page, at the top or the bottom of the framed page. Touch swipes do pass through.",
+      "41.3 MB transferred on every load (17 PNG photos 36.6 MB, one MP4 4.5 MB), none of it lazy.",
+      "A preloader covers the page from about 1.2 s to about 3 s after navigation.",
+      "Document height at 390 varies by about 50 px between loads (rotating review card).",
+      "www.hotelorientelite.co.in also answers 200 and does not redirect to the apex.",
+      "Google Maps embed (www.google.com) could not load in the build container, so the map box is empty in screenshots taken there."
+    ],
+    "details": {
+      "title": "Hotel Orient Elite | Cinematic Hospitality in Solapur",
+      "description": "Hotel Orient Elite, Solapur - a cinematic luxury hospitality experience.",
+      "address": "Balives Rd, South Kasba, Budhavar Peth, Solapur, Maharashtra 413002",
+      "phones": [
+        "070587 57171",
+        "+91 70586 48181",
+        "+91 88570 37171"
+      ],
+      "status": 200,
+      "redirectChain": [
+        "https://hotelorientelite.co.in/"
+      ],
+      "xFrameOptions": null,
+      "contentSecurityPolicy": null,
+      "frameSrcHosts": [
+        "https://hotelorientelite.co.in"
+      ],
+      "heightBeforeLazyContent": {
+        "phone": 19850,
+        "laptop": 15068
+      },
+      "tallIframeScrollHeights": {
+        "390": [
+          19892,
+          38504,
+          57116,
+          75728,
+          94308
+        ],
+        "1280": [
+          15068,
+          29256,
+          43444,
+          57632,
+          71820
+        ]
+      },
+      "tallIframeStretches": true,
+      "stretchingSelectors": [
+        "section#hero.min-h-screen",
+        ".luxury-container.min-h-[calc(100vh-var(--nav-height))]",
+        ".h-[76vh]",
+        ".h-[68vh]"
+      ],
+      "pageWeight": {
+        "transferBytes": 41316246,
+        "requests": 26,
+        "transferBytesOnIframeMount": 41317114
+      },
+      "failedHostsInBuildContainer": [
+        "www.google.com"
+      ],
+      "linkOnlyHosts": [
+        "www.instagram.com",
+        "wa.me"
+      ],
+      "horizontalOverflowAt390": false,
+      "wheelChainsToParent": false,
+      "touchChainsToParent": true,
+      "autoplayMediaWithSound": false,
+      "navigatesTopWindow": false,
+      "opensPopupsOnLoad": false,
+      "iframeLoadEventMs": 1004,
+      "modeByBriefRuleAlone": {
+        "phone": "interactive",
+        "laptop": "interactive"
+      },
+      "modeReason": "Tall stretches. Interactive renders correctly but holds the mouse wheel and costs 41.3 MB per mount, so a scrollable screenshot with an Open live site button is the safer frame."
+    }
+  },
+  {
+    "slug": "goodlife-fitness",
+    "name": "Goodlife Fitness",
+    "caption": "Premium gym in Murarji Peth, Solapur, with boxing, yoga, steam and spa.",
+    "url": "https://goodlife-fitness-website.vercel.app",
+    "finalUrl": "https://goodlife-fitness-website.vercel.app/",
+    "frameable": true,
+    "mode": {
+      "phone": "interactive",
+      "laptop": "interactive"
+    },
+    "height": {
+      "phone": 26296,
+      "laptop": 22997
+    },
+    "footerColor": "#090706",
+    "externalHosts": [
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "maps.google.com"
+    ],
+    "problems": [
+      "Tall iframe fails: section#top and its inner container are min-height:100vh, so document height = iframe height + a constant and never converges (growth 95.2% then 48.8% at 390; 94.7% then 48.7% at 1280). Everything below the hero is cut off and 97 scroll-reveal elements stay at opacity 0.",
+      "Very long page: 26,296 px at 390 and 22,997 px at 1280, so an interactive preview holds the scroll for a long time before the parent page takes over.",
+      "97 text elements are at opacity 0 until scrolled into view: scroll the page before taking any screenshot.",
+      "The footer and body copy call the business Goodlife Fitness Club, the same name as the other Goodlife site.",
+      "Google Maps embed (maps.google.com) could not load in the build container, so the map box is empty in screenshots taken there."
+    ],
+    "details": {
+      "title": "Goodlife Fitness | Best Premium Gym in Solapur | CrossFit, Zumba, Boxing, Yoga",
+      "description": "Solapur's #1 premium gym in Murarji Peth. CrossFit, Zumba, Boxing, Power Yoga, Steam Bath, Spa & Salon. Expert trainers. Open Mon–Sat 6AM–11PM, Sun 6AM–12PM. Join Goodlife Fitness today.",
+      "address": "Sai Icon, near Ambassador Hotel, Dharamsi Lane, Murarji Peth, Solapur, Maharashtra 413001, India",
+      "phones": [
+        "+91 94039 25958",
+        "+91 99752 12686"
+      ],
+      "hours": "Mon–Sat 6:00 AM – 11:00 PM, Sun 6:00 AM – 12:00 PM",
+      "status": 200,
+      "redirectChain": [
+        "https://goodlife-fitness-website.vercel.app/"
+      ],
+      "xFrameOptions": null,
+      "contentSecurityPolicy": null,
+      "frameSrcHosts": [
+        "https://goodlife-fitness-website.vercel.app"
+      ],
+      "heightBeforeLazyContent": {
+        "phone": 26296,
+        "laptop": 22997
+      },
+      "tallIframeScrollHeights": {
+        "390": [
+          26296,
+          51328,
+          76360,
+          101392,
+          126424
+        ],
+        "1280": [
+          22997,
+          44783,
+          66569,
+          88355,
+          110141
+        ]
+      },
+      "tallIframeStretches": true,
+      "stretchingSelectors": [
+        "section#top.min-h-screen",
+        "section#top > div.min-h-screen",
+        "div.dark.min-h-screen"
+      ],
+      "pageWeight": {
+        "transferBytes": 4991071,
+        "requests": 34,
+        "transferBytesOnIframeMount": 1751602
+      },
+      "failedHostsInBuildContainer": [
+        "maps.google.com"
+      ],
+      "linkOnlyHosts": [
+        "wa.me",
+        "www.instagram.com",
+        "instagram.com"
+      ],
+      "horizontalOverflowAt390": false,
+      "wheelChainsToParent": true,
+      "touchChainsToParent": true,
+      "autoplayMediaWithSound": false,
+      "navigatesTopWindow": false,
+      "opensPopupsOnLoad": false,
+      "iframeLoadEventMs": 1860,
+      "modeByBriefRuleAlone": {
+        "phone": "interactive",
+        "laptop": "interactive"
+      },
+      "modeReason": "Tall stretches the hero to the full iframe height. At normal height it renders correctly, costs 1.75 MB on mount and passes wheel and touch scroll back to the parent at both ends."
+    }
+  },
+  {
+    "slug": "goodlife-fitness-club",
+    "name": "Goodlife Fitness Club",
+    "caption": "24-hour weights-and-cardio gym at Sai Trade Center, Solapur.",
+    "url": "https://goodlife-fitness-club.vercel.app",
+    "finalUrl": "https://goodlife-fitness-club.vercel.app/",
+    "frameable": true,
+    "mode": {
+      "phone": "interactive",
+      "laptop": "interactive"
+    },
+    "height": {
+      "phone": 10169,
+      "laptop": 7500
+    },
+    "footerColor": "#070707",
+    "externalHosts": [
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "www.google.com"
+    ],
+    "problems": [
+      "Tall iframe fails: section#top is min-height:100svh, so document height = iframe height + 8,524 px at 390 (+ 6,433 px at 1280) and never converges (growth 91.4% then 47.8% at 390; 88.9% then 47.1% at 1280). Everything below the hero is cut off.",
+      "Eight facility photos are 2.0 to 2.7 MB PNGs right under the hero: about 17 MB on the first scroll inside the preview, 20.2 MB for the whole page.",
+      "Document height changes after lazy images load (9,368 to 10,169 px at 390; 7,233 to 7,500 px at 1280) and with viewport height (the hero is exactly one viewport tall).",
+      "Hero counters count up from 0 for 2 to 3 s: a screenshot taken too early shows wrong numbers.",
+      "Google Maps embed (www.google.com) could not load in the build container, so the map box is empty in screenshots taken there."
+    ],
+    "details": {
+      "title": "Goodlife Fitness Club | 24 Hour Gym in Solapur",
+      "description": "Goodlife Fitness Club — Solapur's 24-hour gym. Advanced equipment, cardio, free weights & expert trainers. 4.9★ from 274 reviews. Free parking.",
+      "address": "Sai Trade Center, 4th Floor, near BSNL Office, Solapur, Maharashtra 413002",
+      "phones": [
+        "+91 93253 42686"
+      ],
+      "hours": "Open 24 hours",
+      "status": 200,
+      "redirectChain": [
+        "https://goodlife-fitness-club.vercel.app/"
+      ],
+      "xFrameOptions": null,
+      "contentSecurityPolicy": null,
+      "frameSrcHosts": [
+        "https://goodlife-fitness-club.vercel.app"
+      ],
+      "heightBeforeLazyContent": {
+        "phone": 9368,
+        "laptop": 7233
+      },
+      "tallIframeScrollHeights": {
+        "390": [
+          9324,
+          17848,
+          26372,
+          34896,
+          43420
+        ],
+        "1280": [
+          7233,
+          13666,
+          20099,
+          26532,
+          32965
+        ]
+      },
+      "tallIframeStretches": true,
+      "stretchingSelectors": [
+        "section#top.min-h-[100vh].min-h-svh"
+      ],
+      "pageWeight": {
+        "transferBytes": 20207130,
+        "requests": 25,
+        "transferBytesOnIframeMount": 967893
+      },
+      "failedHostsInBuildContainer": [
+        "www.google.com"
+      ],
+      "linkOnlyHosts": [
+        "wa.me"
+      ],
+      "horizontalOverflowAt390": false,
+      "wheelChainsToParent": true,
+      "touchChainsToParent": true,
+      "autoplayMediaWithSound": false,
+      "navigatesTopWindow": false,
+      "opensPopupsOnLoad": false,
+      "iframeLoadEventMs": 1182,
+      "modeByBriefRuleAlone": {
+        "phone": "interactive",
+        "laptop": "interactive"
+      },
+      "modeReason": "Tall stretches the hero and cuts the rest. At normal height it renders correctly, costs 0.97 MB on mount and passes wheel and touch scroll back to the parent at both ends."
+    }
+  }
+]
