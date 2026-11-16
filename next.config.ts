@@ -21,6 +21,13 @@ const visitRedirects = (sites as { slug: string; url: string }[]).map(({ slug, u
 const nextConfig: NextConfig = {
   pageExtensions: previewRoutes ? ['tsx', 'ts', 'preview.tsx'] : ['tsx', 'ts'],
 
+  // `next dev` would otherwise write an AGENTS.md into the repository root on its own.
+  agentRules: false,
+
+  // No floating dev badge: it lands in evidence screenshots and can take taps in phone-size
+  // tests. Compile and runtime errors are still shown.
+  devIndicators: false,
+
   async redirects() {
     return visitRedirects;
   },

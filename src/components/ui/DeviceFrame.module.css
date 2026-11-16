@@ -1,0 +1,118 @@
+/*
+ * Device frames (DESIGN.md 7). In `@layer components` so utilities passed in `className` win.
+ * No traffic-light dots. The address bar shows a business name, never a URL.
+ */
+@layer components {
+  .frame {
+    --frame-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.7);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: 1.2;
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The box the children fill. Its size is fixed by the frame; a child that needs to scroll sets
+     its own overflow. It is an unnamed size container: query it with `@container (min-width: ...)`.
+     (Unnamed on purpose: CSS Modules would rename a container name per file.) */
+  .viewport {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    overflow: hidden;
+    background-color: var(--color-bg);
+    container-type: inline-size;
+  }
+
+  /* ---- Phone ----
+     20.5rem wide, less only when the container is narrower (the same result as
+     `min(100%, 20.5rem)`, but it also holds inside an auto-sized grid or flex track). */
+  .phone {
+    inline-size: 20.5rem;
+    max-inline-size: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-hairline);
+    border-radius: 2.25rem;
+    background-color: var(--color-ember-950);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.07),
+      var(--frame-shadow);
+  }
+
+  .phone .screen {
+    overflow: hidden;
+    border-radius: 1.75rem;
+    background-color: var(--color-bg);
+  }
+
+  .phone .bar {
+    gap: 0.375rem;
+    min-block-size: 2.25rem;
+    padding-inline: 1.25rem;
+    border-block-end: 1px solid var(--color-hairline);
+    background-color: rgb(255 255 255 / 0.03);
+  }
+
+  .phone .bar > svg {
+    flex: none;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+  }
+
+  .phone .viewport {
+    block-size: min(70svh, 560px);
+  }
+
+  /* ---- Laptop ---- */
+  .laptop {
+    inline-size: 100%;
+  }
+
+  /* The base lip is 6% wider than the lid, so the lid is inset by half of that on each side. */
+  .laptop .screen {
+    margin-inline: 2.83%;
+    overflow: hidden;
+    border: 1px solid var(--color-hairline);
+    border-radius: 1rem;
+    background-color: var(--color-ember-950);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.07),
+      var(--frame-shadow);
+  }
+
+  .laptop .bar {
+    min-block-size: 2.5rem;
+    padding: 0.375rem 1rem;
+    border-block-end: 1px solid var(--color-hairline);
+  }
+
+  .laptop .label {
+    max-inline-size: min(100%, 24rem);
+    padding: 0.25rem 1rem;
+    border-radius: var(--radius-pill);
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  .laptop .viewport {
+    aspect-ratio: 16 / 10;
+  }
+
+  .base {
+    block-size: 0.625rem;
+    border: 1px solid var(--color-hairline);
+    border-block-start-color: rgb(255 255 255 / 0.16);
+    border-radius: 0 0 0.75rem 0.75rem;
+    background-color: var(--color-ember-950);
+  }
+}

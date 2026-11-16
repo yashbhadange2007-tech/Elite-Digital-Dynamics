@@ -39,8 +39,17 @@
     "eslint": "^10.15.0",
     "eslint-config-next": "16.4.6",
     "sharp": "^0.35.5",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "eslint-plugin-import>eslint": "10",
+        "eslint-plugin-jsx-a11y>eslint": "10",
+        "eslint-plugin-react>eslint": "10"
+      }
+    }
   }
 }

@@ -1,0 +1,280 @@
+export const meta = {
+  name: 'edd-phase2-build',
+  description: 'Phase 2: build site areas in parallel with strict file ownership (args = list of area keys: S, C, P, D, E, G)',
+  phases: [{ title: 'Build', detail: 'one agent per area, each verifies its own acceptance checks' }],
+}
+
+const ROOT = '/home/user/Elite-Digital-Dynamics'
+const IMG = '/tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/images'
+const SCRATCH = '/tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/scratchpad'
+
+const REPORT = {
+  type: 'object',
+  properties: {
+    built: { type: 'array', items: { type: 'string' } },
+    checks: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          status: { type: 'string', enum: ['pass', 'fail', 'not_verified'] },
+          evidence: { type: 'string' },
+        },
+        required: ['id', 'status', 'evidence'],
+      },
+    },
+    deviations: { type: 'array', items: { type: 'string' } },
+    needs_from_orchestrator: { type: 'array', items: { type: 'string' } },
+    notes: { type: 'string' },
+  },
+  required: ['built', 'checks', 'deviations', 'needs_from_orchestrator', 'notes'],
+}
+
+function common(key, area, skills, owns) {
+  return `You are agent ${key} on a team of six building the Elite Digital Dynamics agency website in ${ROOT} (Next.js 16 App Router, React 19, TypeScript, Tailwind v4, React Three Fiber). The foundation (config, tokens, fonts, primitives, stores, page skeleton with stub sections) is built and committed. Five other agents are working in the same working tree right now, each in its own folder. Your area: ${area}.
+
+READ FIRST, in this order:
+1. docs/BRIEF.md: the owner's own words. It wins over everything else.
+2. docs/ARCHITECTURE.md: the technical contracts. Section 9 "Owner changes after approval" overrides the sections before it.
+3. docs/FOUNDATION.md: what the foundation agent actually built (exact exports, props, file names, gotchas). Where it differs from ARCHITECTURE.md, FOUNDATION.md is the truth.
+4. DESIGN.md: every colour, size, radius and motion value. Take values from it through the CSS variables and Tailwind tokens, never from memory.
+5. SPEC.md: structure and final copy. Use the words exactly as written.
+Then look, with the Read tool, at the owner's five reference screenshots in ${IMG} (1.png, 2.png, 3.webp, 4.png, 5.png) and at the logo files in public/brand/.
+
+SKILLS (use the Skill tool; if a name is not found, read .claude/skills/<name>/SKILL.md instead and continue):
+- Load "modern-web-guidance" first and search it for each web platform feature you are about to use. CLAUDE.md requires this before any HTML, CSS or client JavaScript work.
+- ${skills}
+- Apply "anthropic-skills:karpathy-guidelines" to all code: state your assumptions, write the minimum that meets the brief (nothing speculative, no options nobody asked for), touch only your own files, and prove each requirement with a check you actually ran.
+- Lazy means efficient here. The file lists in ARCHITECTURE.md are a ceiling, not a target: fewer files and less code that still pass every check below is the better answer. Stop at the first rung that works: native HTML and CSS, then what the foundation already provides, then what is already installed, then the least new code. No abstraction for single-use code, nothing "for later".
+Where a skill's taste disagrees with DESIGN.md, the reference screenshots or the brief, they win over the skill.
+
+RULES OF THE SHARED TREE (breaking these breaks five other agents):
+- You own ONLY: ${owns}. If you need a change in a file you do not own (a ui primitive, a token, a store, package.json, next.config.ts, layout.tsx, page.tsx), do NOT make it. Work around it and list it under needs_from_orchestrator in your report.
+- A shared dev server is already running at http://localhost:3000. Do not start another server on port 3000, do not run "next build", do not run any git command that changes state (no commit, stash, checkout, reset), do not install packages. If the dev server is down or stuck, say so in your report and carry on with what you can check.
+- Check your work on your own preview route under /preview/. The home page / imports every area, so another agent's half-written file can break it for a moment. If that happens use your preview route and try / again later. Never fix another agent's files.
+- Type-check with "pnpm exec tsc --noEmit" and lint with "pnpm exec eslint" on your own folders. Ignore errors in files you do not own. Run only your own unit tests ("pnpm exec vitest run <your folder>").
+- Browser checks: Chromium and Playwright are preinstalled (require('playwright') works from any directory; never run "playwright install"). This container has no GPU: launch Chromium with the args --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist whenever WebGL matters. Put ad-hoc scripts and screenshots in ${SCRATCH}/${key}/, not in the repo. LOOK at your screenshots with the Read tool. A check you did not look at or run is not a check.
+- Network: only the npm registry and the three client-site hosts are reachable from here. The finished site must make zero requests to any other origin: no CDNs, no Google Fonts, no remote images.
+- Visible text: no em dash or en dash; no testimonials, client counts, years of experience, awards, team members or prices; exact names and contact details as in SPEC.md and src/lib/site.ts.
+- Leave ONE Playwright spec for your area in tests/ (file name given below) that imports "test" and "expect" from "./fixtures" (tests/fixtures.ts already fails any test on console errors, page errors, failed requests and off-site requests). Encode your acceptance checks in it, run it with "pnpm exec playwright test tests/<file>" and make it pass on all three projects (phone, tablet, desktop).
+
+YOUR REPORT (structured): "built" = files you created or changed; "checks" = one entry for EVERY numbered acceptance check below with status pass, fail or not_verified and concrete evidence (numbers, what you saw in which screenshot); "deviations" = every place you departed from DESIGN.md, SPEC.md or ARCHITECTURE.md and why; "needs_from_orchestrator" = changes you need in files you do not own; "notes" = assumptions you made and anything the orchestrator must know. Report failures plainly: a false pass costs far more than an honest fail.
+`
+}
+
+const S = common('S', 'the live 3D scene, the centrepiece of the whole site',
+  'No design skill for you. Your craft is three.js and React Three Fiber.',
+  'src/components/scene/** (including unit tests next to the code), public/scene/**, scripts/capture-poster.mjs, src/app/preview/scene/page.preview.tsx, tests/scene.spec.ts') + `
+WHAT THE OWNER WANTS (read the brief's section "The 3D scene" and ARCHITECTURE.md sections 3 and 9, items 2 to 6 and 13 to 15; DESIGN.md sections 3 and 9; SPEC.md section 5):
+The object is the owner's logo in 3D and nothing else: outer ring A and inner ring B (open glossy bands with a gap and round ends, dark red with bright salmon highlights on their edges) turning in opposite directions around a glowing red core. It sits fixed behind the page, drifts when idle, follows scroll through seven poses, reacts slightly to the pointer, and at the end of the page lands on the logo stage in exactly the logo's arrangement. The reference screenshots show the material, light and mood to match; the ring arrangement and choreography are ours.
+
+BUILD (entry: default export SceneLayer in src/components/scene/SceneLayer.tsx, mounted by page.tsx; replace the stub):
+1. SceneLayer (client): renders the scene layer wrapper (aria-hidden, pointer-events none, z-index var(--z-scene); fixed and 100lvh tall when live; position absolute at the top of the page, 100lvh tall, in the still and poster states, see ARCHITECTURE 9.14). After first paint and an idle callback it probes WebGL (getContext with failIfMajorPerformanceCaveat true, unless the URL has ?scene=force), decides live, still or poster, sets html[data-scene], and only for live or still loads the canvas chunk with next/dynamic (ssr false). The page's text must be usable before any of this loads, and three.js must never be requested in the poster state. The canvas fades in on its first rendered frame.
+2. Geometry (geometry.ts): rings A and B from the "Logo geometry" numbers in DESIGN.md section 9. Each is an open band: flattened pill cross-section (wide across the ring, about 45 percent as thick, fully rounded edges), swept around the arc, with round ends that join the band smoothly (the 2D logo uses round line caps). Smooth normals, no visible seams or facets at the top tier. Segment counts are parameters so the quality tiers can lower them. Core sphere plus one or two additive halo sprites with a canvas-generated radial texture (no image files).
+3. Look (materials.ts, environment.ts): dark glossy red metal with salmon to near-white highlights on the edges, as in the reference. Hint: with a metallic material the reflection is tinted by the dark red base colour, so white lights alone give red highlights, not salmon ones; the pale edge highlights come from a fresnel rim term (and from clearcoat, if you add it). Start with ONE MeshStandardMaterial plus a small fresnel rim (onBeforeCompile) for every tier. Reflections come from an environment you generate in code: a tiny scene of emissive panels (large soft red key, two thin salmon and near-white strips at grazing angles, dim fill; colours in DESIGN.md section 9) run once through PMREMGenerator.fromScene. No HDR file, no network, no drei, no postprocessing package (they are not installed). Core: unlit, hot spot offset up-left as in the logo. Transparent canvas over the CSS glow; check the additive halos do not show a dark box on the transparent background. Compare ACESFilmic and Neutral tone mapping against the reference and keep the closer one.
+4. Poses (poses.ts, data only) for the seven pose ids in src/lib/scroll-store.ts, separately for phone (under 768px wide) and desktop, following SPEC.md section 5: where the object sits (as fractions of the viewport), its scale, dim (0 to 1), fps cap (30 for demo), each ring's orientation, in-plane spin speed (A and B opposite signs; 0 in the contact pose) and sway. The hero pose must leave the hero text readable: the text column is on the left on desktop and at the top on phones (DESIGN.md section 8).
+5. Solver (solver.ts): a pure module with no renderer in it. Input: time step, raw poseIndex from scrollState, pointer, viewport, logo stage rect. It damps poseIndex (maath easing damp; clamp dt to 50 ms), and the visible state is a pure function of the damped value (smoothstep inside each segment, slerp for orientations, lerp for the rest), so fast scrolling and reversals always pass through the intermediate poses with continuous velocity. Idle drift is a bounded sway. In-plane spin is its own channel: phase integrates from the current pose's spin speed; where spin speed is 0 the phase eases to the nearest full turn, so the rings arrive at the exact logo angles without a snap or an unwind. Pointer adds a damped tilt of at most 0.12 rad, only when (hover: hover) and (pointer: fine).
+6. Contact pose on the logo stage (ARCHITECTURE 9.13): the Contact section contains an element with data-logo-stage (agent E is building it now; build your preview with your own stand-in stage). Cache its document rect on resize and on fonts ready; each frame derive its on-screen centre from scrollState.y. As the pose blends into contact the object moves to the stage centre and scales so the mark fills the stage the way edd-mark.svg fills its 64 unit box, then stays attached to the stage while the page scrolls.
+7. Frame loop: frameloop demand with your own driver that invalidates only when the tab is visible, motion is full and the tier is above 0; skip alternate frames at tier 1 or when the pose's fps cap is 30. Debounce resize so a phone's moving URL bar does not reallocate the buffer.
+8. Quality (quality.ts) wired to src/lib/quality-store.ts, exactly as simplified in ARCHITECTURE 9.15: tiers 3, 2, 1, 0 (dpr cap 2 / 1.5 / 1, segment counts, halo count, half frame rate at tier 1, stopped at 0); start tier by device; step DOWN only, after two consecutive slow 90-frame windows (median above 24 ms; ignore the first 45 frames after mount, resume or tier change, and any delta above 250 ms); glass promotion and demotion as written there.
+9. Glow follow: move the foundation's .page-glow element with transform only so it stays centred on the object, and set its opacity from the pose dim (DESIGN.md section 3).
+10. Reduced motion and the Pause motion control (motion "still" in the quality store): render one frame of the hero pose, set html[data-scene="still"], stop the loop. Poster (Poster.tsx): an img of the hero pose in the same layer, used when WebGL is missing or slow, on Save-Data and after context loss. scripts/capture-poster.mjs produces public/scene/poster-mobile.webp and poster-desktop.webp from the real scene (Playwright with the WebGL args opens the preview with the hero pose locked and still, waits for window.__scene.ready, takes an element screenshot with omitBackground, sharp writes alpha WebP). Run it and keep the files.
+11. Debug hooks: window.__scene = { ready, frames, tier, dpr, poseIndex, state, info: { calls, triangles } } and a small ?hud=1 overlay (tier, dpr, median and p95 frame time, glass mode, scene state) so the owner can check a real phone.
+12. Preview route /preview/scene: your own tall stand-in sections carrying data-pose for all seven poses plus a stand-in logo stage, so scrolling can be tested without the other agents. Query params: pose=<id> locks a pose, tier=<n> locks a tier, still=1, hud=1, scene=force.
+13. Bloom: none. Only if your side-by-side with the reference shows the glow clearly weaker, add one half-resolution bloom pass at tier 3 on fine pointers (three/examples/jsm only) and report its measured frame cost.
+
+ACCEPTANCE CHECKS (verify every one; iterate until it passes or you can state exactly why it cannot here):
+S1. Unit, no snaps: drive solver.ts with scroll histories that include an instant jump from pose 0 to 6 and back, reversals mid-transition, and irregular time steps between 8 and 50 ms. Assert a bound on the frame to frame change of every ring orientation, the object position and scale (state the bound you chose and why), and that at rest on each whole poseIndex the output equals that pose.
+S2. Unit, logo settle: after any of those histories, at rest in the contact pose, both rings face the viewer in one plane, ring A's gap centre is at top-right (45 degrees above the positive x axis on screen) and ring B's at bottom-left, each within 0.5 degrees, and spin speed is 0.
+S3. Unit, quality controller with a mock clock: steps down after two slow windows, never steps up, ignores warm-up frames and long gaps, glass promotes once and demotes for good.
+S4. Renders: in headless Chromium with the WebGL args and ?scene=force, window.__scene.frames increases over 2 seconds and the screenshot shows two glossy red open rings and a bright core on a transparent canvas over the glow, with no dark rectangle around the halos. Also state what happens WITHOUT ?scene=force in this GPU-less container (expected: poster).
+S5. Look: hero pose at 1440x900 and 375x812 placed side by side with reference 1.png and 4.png in one image you save and look at. Same family: dark glossy red, pale salmon edge highlights, glowing core with a hot spot, soft red glow behind. Iterate on lights and material until it holds up; then say honestly what is still weaker than the reference.
+S6. Logo match: lock the contact pose, screenshot it, and overlay it on edd-mark.svg rasterised at the same size. Both ring silhouettes and the core agree within 3 percent of the outer diameter and the gaps are where the logo has them. Save and look at the overlay.
+S7. Scroll: on your preview, scroll top to bottom and back, including big instant jumps, sampling the solver state every frame through window.__scene: no discontinuity beyond the S1 bound; a screenshot in each of the seven sections shows the arrangement SPEC.md section 5 describes; in the contact section the logo sits on the stage and stays on it while you scroll a little further.
+S8. Idle and pointer: with no input the rings keep turning; a mouse move changes the tilt slightly and smoothly on a fine pointer and not at all under touch emulation.
+S9. Hidden tab: when the document becomes hidden the frame counter stops, and it resumes when visible again.
+S10. Reduced motion (Playwright reducedMotion reduce) and the Pause motion control: html[data-scene="still"], the frame counter stays constant after the first frame, and the scene layer scrolls away with the hero instead of staying fixed.
+S11. No WebGL: with an init script that makes getContext return null for webgl and webgl2, the poster image shows in the hero, html[data-scene="poster"], and no three.js chunk is requested (assert on the network log). Context loss (WEBGL_lose_context) also ends on the poster, never on a blank or black box.
+S12. Loading order: the initial HTML contains no canvas; the scene chunk is requested only after first paint; the canvas is not the largest contentful paint.
+S13. Budget: at tier 3 renderer.info reports at most 8 draw calls and 40k triangles; tier 1 is clearly lower (give the numbers per tier). Script time per frame of your own frame callback under 4x CPU throttling: report median and p95 (target median under 2 ms). These are software-rendering numbers: do not present them as phone frame rates.
+S14. Step-down in the browser: under forced load (for example heavy CPU throttling) the tier goes down over time, html[data-glass] ends on lite, and nothing ever steps back up.
+S15. Tiers look alike: screenshots of the hero pose at tiers 3, 2 and 1 side by side show the same object and colours (no visible change of material identity).
+S16. No console errors and zero requests to other origins on your preview route. tests/scene.spec.ts encodes S4, S7 (a shortened form), S9, S10, S11 and S12 and passes.
+Near the end, open the real home page / with ?scene=force (agent C is building the hero and services now) at 1440x900 and 375x812: the hero headline and buttons must not sit on the bright core or on a pale highlight. If they do, adjust your hero and services poses (not C's layout) and say what you changed.
+`
+
+const C = common('C', 'navigation, hero, services, how we work, FAQ and footer (all static sections and all their copy)',
+  'Load "build-premium-website" (structure and conversion flow; its default stack and fonts do NOT apply here) and "frontend-design-skill" (component craft).',
+  'src/components/sections/**, src/app/preview/sections/page.preview.tsx, tests/sections.spec.ts') + `
+BUILD (replace the stubs; keep each entry file's default export name and the section ids and poses the stubs use):
+- content.ts: every string for your sections, copied exactly from SPEC.md section 3 (navigation, hero, services, how we work, FAQ, footer). Components read from it.
+- Nav.tsx: per DESIGN.md section 7 "Nav" and SPEC.md "Navigation". It is rendered by the root layout on every page (home, /privacy, the 404), so links must be "/#services", "/#work", "/#process", "/#faq" and the button "/#contact". Desktop: horizontal lockup, four links, the "Start a project" button, one line at 1024px, at most 72px high; after 24px of scroll the links and button sit in one glass pill. Phone: mark only, "Start a project" button, a menu button that opens a sheet with the four links, then Call and WhatsApp (use native popover or dialog semantics per modern-web-guidance; closes on link tap, Escape and outside tap; focus moves in and returns). No scroll-spy.
+- Hero.tsx: section id "top", pose "hero". Eyebrow, h1, one line, the primary button "Start a project" and the ghost button "See our work", nothing else. min-height 100svh; text block left on desktop (7 of 12 columns), top on phones with the lower part of the screen left for the 3D object; text sits on a .text-scrim. The h1 is the page's largest paint: no reveal animation on it, no client-only rendering.
+- Services.tsx: id "services", pose "services". ONE primary glass panel holding a numbered index of the five services (number 01 to 05, exact name, promise, three deliverables as a real list), with the fixed review note under service 03. Layout per DESIGN.md section 8. Not cards, not three equal columns, no accordion.
+- Process.tsx: id "process", pose "process". Five steps on a rail: vertical on phones, horizontal from 1024px. No cards, no glass.
+- Faq.tsx: id "faq", pose "faq". Six native details elements sharing one name (one open at a time), per DESIGN.md section 7 "FAQ", inside one lite glass panel; h2 sticky in a left column from 1024px.
+- Footer.tsx: per DESIGN.md section 7 "Footer" and SPEC.md "Footer": stacked lockup with real text for the company name, links, contact repeat from src/lib/site.ts, the MotionToggle primitive, the copyright line, the Privacy link. Rendered by the root layout on every page.
+Use the foundation primitives (Section, Container, GlassPanel, Button, Eyebrow, NumberLabel, Heading, Reveal, Logo, MotionToggle, ExternalLink) and icons from @phosphor-icons/react as FOUNDATION.md describes. Server components unless state is needed (the phone menu, the scrolled-nav state).
+
+ACCEPTANCE CHECKS:
+C1. Copy: the h1, hero line, five service names, promises, deliverables, the review note, five step names and texts, six FAQ questions and answers and the footer line on the rendered page equal SPEC.md character for character (compare by script).
+C2. Hero fits the first screen at 360x640, 375x812, 768x1024 and 1440x900: eyebrow, h1, line and both buttons are fully inside the viewport without scrolling. The h1 takes at most 2 lines at 1440 and at most 4 at 360.
+C3. Nav: one line and at most 72px high at 1024 and 1440; glass pill appears after scrolling. Phone: mark, button and menu button fit at 360 with no overlap; the menu opens and closes by tap, Escape, outside tap and link tap; focus goes into the sheet and back to the button; every nav link and "Start a project" lands on the right section with its heading visible below the nav, from the home page and from /privacy.
+C4. Services: five items with the exact names, numbers 01 to 05, the review note visible, all in one glass panel. Nothing in the review service text suggests fake, paid or filtered reviews.
+C5. Process: five steps; rail is vertical at 375 and horizontal at 1440.
+C6. FAQ: six details; opening one closes the other; Enter and Space toggle; answers readable.
+C7. Footer: lockup, links, contact, copyright, Privacy link; the motion control flips html[data-motion] and the choice survives a reload.
+C8. Keyboard: Tab from the top of /preview/sections goes skip links, nav, hero buttons, then on through every interactive element in visual order; each shows the focus ring (screenshot one focused button and one focused nav link and look).
+C9. Touch targets: at 375 every link and button in your sections is at least 44 by 44 px, with at least 8px between neighbours (measure by script; list any exception).
+C10. No horizontal overflow at 360, 375, 768 and 1440 (documentElement.scrollWidth is not larger than the viewport width).
+C11. axe (WCAG 2.1 AA, via @axe-core/playwright) on /preview/sections reports no violations. One h1; heading levels in order; exactly one eyebrow in your sections (the hero's).
+C12. Without JavaScript (a Playwright context with javaScriptEnabled false) all section text is visible: the reveal is an enhancement, not a gate.
+C13. Both glass modes (html[data-glass="real"] and "lite") look right: screenshots of the nav pill and the services panel in each.
+C14. Looks: full-page screenshots of /preview/sections at 375, 768 and 1440. Look at each section. Compare your hero and services panel with reference 1.png and 2.png for mood, type weight, spacing and panel feel, while keeping our own layout (DESIGN.md section 8). Fix what is weaker; list what you could not fix.
+C15. tests/sections.spec.ts encodes C2, C3, C6, C7, C10, C11 and C12 and passes on all three projects.
+Near the end, open the real home page / with ?scene=force (agent S is building the 3D scene now) at 375x812 and 1440x900 and check the hero and services text is readable over the object. If it is not, strengthen the text scrim in your own sections and report it; the object's position belongs to S.
+`
+
+const P = common('P', 'the "Our work" section: three live client sites in device frames',
+  'Load "frontend-design-skill" (component craft).',
+  'src/components/work/** (including sites.data.json and sites.config.ts), public/work/**, scripts/capture-sites.mjs, src/app/preview/work/page.preview.tsx, tests/work.spec.ts') + `
+INPUTS: docs/research/sites.md and docs/research/sites.json hold what a scout measured on the three live sites in a real browser. Read both first, including "Notes for whoever builds the frames". SPEC.md section 6 has the decisions taken from them: names, captions, order, and the mode per site and frame (hotel: screenshot in both frames; the two Goodlife sites: interactive in both). The tall mode fails on all three live sites today, so it is exercised only against a made-up page in tests, but it must work: it is the owner's preferred technique and one data change switches a site to it. Read the brief's section "Our work: live client sites" and ARCHITECTURE.md section 4 with section 9 items 9 and 15. SPEC.md has the section copy.
+
+BUILD (entry: default export Work in src/components/work/Work.tsx; section id "work", pose "work"):
+- sites.data.json: one entry per site with everything in it: slug, url, name, addressLabel (the business name, never a URL), caption, mode for the phone frame and for the laptop frame ("tall", "interactive" or "screenshot"), measured heights at virtual width 390 and 1280, footerColor, and the screenshot tiles. Keep the slugs and urls the foundation put there (next.config.ts builds the /visit/<slug> redirects from this file). sites.config.ts only adds types and re-exports.
+- SitePreview with the three modes behind that one config:
+  tall: iframe at the fixed virtual width, as tall as the whole page, scaled to the frame width, pointer-events none, inert, tabIndex -1, inside OUR scroller (focusable region, at most min(70svh, 560px) tall, overscroll-behavior auto so the page keeps scrolling at both ends, touch-action pan-y), with a transparent link over the content so a tap or click opens the real site in a new tab.
+  interactive: a normal-height iframe the visitor scrolls directly, plus the clear "Open live site" button.
+  screenshot: scrollable full-page screenshot tiles in the same scroller.
+  Every mode: sandbox="allow-scripts allow-same-origin" and nothing more, referrerpolicy strict-origin-when-cross-origin, a title; the screenshot is the skeleton under the iframe until it loads and stays if it has not loaded after 8 seconds; mounted only when within 600px of the viewport.
+- Links: the tap target and the "Open live site" button go to /visit/<slug> through the ExternalLink primitive (new tab, noopener noreferrer).
+- Layout per DESIGN.md section 8: on phones a segmented control with the three business names and ONE phone frame for the selected site (only that iframe is in the DOM); from 1024px an asymmetric trio in one row, a laptop frame for the first site and phone frames for the other two. Name (h3), caption and the "Open live site" button under each frame. Use the DeviceFrame primitive. Order as in SPEC.md section 6: the hotel is the laptop frame on desktop and the first tab on phones.
+- No probe script in the repo: the scout already measured the sites. If you must re-measure one, its scripts are in ${SCRATCH}/sites/ (probe.js). scripts/capture-sites.mjs: full-page screenshots of each site at 390 and 1280 cut into WebP tiles (each at most 4096px tall) in public/work/<slug>/. Follow the scout's capture notes exactly: launch that browser WITHOUT the GPU flags and capture with clip tiles (full-page capture wraps after about 8192px with the flags); scroll the page once first so scroll-reveal content is visible; wait 3 s for the hotel's preloader and 4 s for Goodlife Fitness Club's counters. Keep the files small (the hotel is 19,850px tall at 390 and is shown as a screenshot, so its tiles are real page weight: lazy-load every tile after the first, pick a WebP quality that stays sharp, and report the total bytes per site). Google Maps is blocked in this container, so each site's map box is an empty dark box in captures taken here: say so in your report; it cannot be fixed from here.
+- Awkward and hostile pages for tests come from Playwright route fulfilment, not from a server: in tests/work.spec.ts fulfil made-up hosts (for example https://stub-tall.test, https://stub-deny.test, https://stub-topnav.test) with a long page of 100vh sections, a response carrying X-Frame-Options DENY, and a page that sets top.location. Your preview route takes a query param that points one frame at such a URL in a chosen mode. Allow those hosts in the spec with test.use({ extraAllowedOrigins: [...] }) from the fixtures.
+
+ACCEPTANCE CHECKS:
+P1. Mode per real site and per device frame is the one in SPEC.md section 6, backed by the scout's numbers (or your own re-measure: state them). Screenshot each real site inside its frame at the top, the middle and the bottom of its scroll and look: no stretched full-height sections, no blank gaps, no cut-off page, no browser error page, no empty box.
+P2. Scrolling: wheel and touch-drag over a preview scroll the preview; at its top and bottom ends the page itself continues to scroll (assert window.scrollY changes after the preview reaches its end, with wheel on desktop and touch on the phone project).
+P3. Opening: a tap or click on the preview, and the "Open live site" button, each open a new tab whose URL is /visit/<slug>, and that URL answers 307 to the real site (check with a request, not by loading it).
+P4. The text ".vercel.app" appears nowhere a visitor can see or a screen reader can read: not in innerText, aria-label, title, alt or the frame's address bar (assert by script over the whole section). The address bar shows the business name.
+P5. Lazy mount: with the section far below the fold no request goes to any client-site host; iframes appear only when the section is within about 600px; on the phone project only the selected site's iframe exists and switching tabs swaps it.
+P6. Never empty: with the client host blocked (page.route abort) the frame shows the screenshot fallback, not an error page and not an empty box; the stub that refuses framing shows tiles in screenshot mode; a slow load stays on the skeleton and then the fallback after 8 seconds.
+P7. Sandbox: every iframe has exactly sandbox="allow-scripts allow-same-origin"; with the stub that sets top.location our page's URL is unchanged after 2 seconds.
+P8. Keyboard: Tab reaches the site selector, the scroller (arrow keys scroll it) and "Open live site"; focus never goes into a tall-mode iframe.
+P9. Size: each preview scroller is at most min(70svh, 560px) tall, and at 375x667 part of the page outside the preview is always touchable, so page scrolling cannot get stuck.
+P10. Layout: one frame with tabs at 360 and 375; trio at 1440; sensible at 768; no horizontal overflow. Look at screenshots of each.
+P11. axe (WCAG 2.1 AA) on /preview/work: no violations in our own markup.
+P12. tests/work.spec.ts encodes P2, P3, P4, P5, P6 (against the stubs), P7 and P8 and passes on all three projects. The fixtures allow requests to the three client hosts; nothing else off-site may be requested by OUR page (requests made inside the client iframes to their own third parties are theirs and may fail here).
+`
+
+const D = common('D', 'the SocialSync demo: a self-running, clickable demo of an app the agency built',
+  'Load "frontend-design-skill" (product UI craft: complete states, keyboard operability).',
+  'src/components/socialsync/**, src/app/preview/socialsync/page.preview.tsx, tests/socialsync.spec.ts') + `
+READ the brief's section "Our work: SocialSync demo" twice: it lists the real product's logo paths, colours, navigation and screens, and those are facts to reproduce. Then ARCHITECTURE.md section 5 with section 9 item 15, SPEC.md "Our work: SocialSync demo" (the section copy, label and credit) and DESIGN.md section 8 (layout row).
+
+BUILD (entry: default export SocialSyncShowcase in src/components/socialsync/SocialSyncShowcase.tsx; it renders the whole section: id "demo", pose "demo", eyebrow, h2, both paragraphs, credit, controls and the device frame):
+- The demo lives inside the DeviceFrame primitive: phone frame below 1024px, laptop frame from 1024px. No frame toggle. Inside the screen one component adapts with a container query: dark navy sidebar when the screen is 720px or wider, bottom tab bar below.
+- Its own light look, scoped to the device screen: only --ss-* variables with the brief's colours, Figtree through the font variable exported by src/lib/fonts.ts (it must load only when the demo mounts), color-scheme light, isolation isolate, CSS Module. Nothing of the dark site leaks in; nothing of the demo leaks out.
+- machine.ts: one plain useReducer state for everything (mode tour or manual, screen, draft post, publish progress, posts, analytics view). tour.ts: a script of delayed actions that dispatches the SAME actions the buttons do, one timer at a time, so the guided loop and manual clicks can never disagree.
+- Screens. Full: Home (greeting; the next post on the dark stage gradient with its picture and a live countdown that ticks once per second), Create post (add a photo or video once; choose platforms Instagram, Facebook Page, YouTube; write the text, optional different text per platform, a YouTube title that is required when YouTube is selected; "Post now" or "Schedule for later" with date and time in IST; preview per platform; publish, with the logo ring animating as the post reaches each platform), Analytics (numbers per platform, and a "Compare platforms" view with average views, engagement rate, watch time, best day and time in IST, top posts). Read-only sample screens: Calendar, Posts, Accounts, Settings (one small static view each, a dozen lines of markup, no interactions). Navigation exactly: Home, Calendar, Posts, Analytics, Accounts, Settings, plus a "Create post" button.
+- The SocialSync logo drawn from the exact SVG paths and colours in the brief (light and dark variants).
+- Sample data you invent: account names and posts that are plainly fictional and neutral, no real people, no real handles, nothing that reads as IPMH's real numbers. Sample "media" should be designed tip cards built with HTML and CSS in the SocialSync palette (the kind of graphic a clinic really posts), not photos and not remote images.
+- The label "Sample data, nothing is posted" is visible on every screen and in every state. The credit "Built for IPMH, Pune" is visible in the section.
+- Controls outside the screen: "Pause tour" / "Resume tour" and four step chips (Create, Schedule, Published, Analytics) that jump the demo to that step.
+- Guided loop: create a post, schedule it, see it published, see analytics, then start again. Any pointer or key press inside the demo takes control (the tour stops and the control reads "Resume tour"). The tour pauses when less than a quarter of the demo is on screen, when the tab is hidden and while focus is inside; under reduced motion or html[data-motion="still"] it never autoplays and the chips still work.
+- Light on the main thread while a 3D scene runs behind it: loaded with next/dynamic only when within 600px of the viewport, over a server-rendered skeleton that reserves the exact size; animation with transform and opacity only; the ring with SVG stroke-dashoffset; charts as static inline SVG; times with Intl.DateTimeFormat for Asia/Kolkata, the next post time relative to mount.
+Expose the current tour step and screen as data attributes on the demo root so tests can follow it.
+
+ACCEPTANCE CHECKS:
+D1. Unattended loop: left alone and on screen, the demo goes through create (media added, three platforms chosen, text typed, YouTube title filled), schedule (date and time in IST), per-platform preview, publish (ring animates, each platform marked in turn), published (visible on Home or Posts, countdown ticking), analytics, compare platforms, and starts again. Log the step changes with timestamps by script (one loop should take roughly 30 to 45 seconds) and look at a screenshot of every step in the phone frame and in the laptop frame.
+D2. By hand: every step chip jumps to its step; a click or key inside takes control and the control reads "Resume tour"; resuming continues. In Create post every control works by hand: choosing platforms, typing, a different text for one platform, the YouTube title rule (publish is disabled with a visible reason until it is filled), "Post now" against "Schedule for later", the preview tabs, publish to the published state. Analytics switches between per-platform numbers and "Compare platforms".
+D3. The label "Sample data, nothing is posted" is visible at every step of D1 (assert in the script), and the credit line is in the section.
+D4. Product look: computed font-family inside the screen is Figtree and outside is Manrope; page, card, text, teal, navy, stage gradient, mint and the three platform colours match the brief's hex values; the logo matches the brief's paths; sidebar at laptop size and bottom tabs at phone size; the seven navigation entries have the exact names.
+D5. Scoping: a text element outside the demo keeps the site's colour and font after the demo mounts, and no --ss-* variable is defined on html or body.
+D6. Sample data: names and handles are fictional, there are no people photos, and times show IST.
+D7. Pausing: scrolled so less than a quarter is visible the step does not advance for 10 seconds; hidden tab the same; under Playwright reducedMotion reduce it never starts by itself and the chips still work.
+D8. Keyboard: every control in and around the demo is reachable and operable with the keyboard, with a focus ring that has at least 3:1 contrast on the light UI.
+D9. Loading: the demo chunk and the Figtree file are not requested until the section is within about 600px of the viewport; the layout shift of the section when the demo replaces its skeleton is 0 (measure with a layout-shift PerformanceObserver).
+D10. Main thread: during one full unattended loop on the desktop project there is no long task over 50 ms caused by the demo (longtask PerformanceObserver; report what you measured).
+D11. axe (WCAG 2.1 AA) on /preview/socialsync with the demo mounted: no violations, including contrast inside the light UI.
+D12. Layout: phone frame at 360 and 375 with no horizontal overflow and every tap target at least 44px; laptop frame with the text column at 1440. Look at the screenshots: it must read as a real, finished product, not a wireframe.
+D13. tests/socialsync.spec.ts encodes D1 (shortened), D2 (the main path), D3, D7 and D9 and passes on all three projects.
+`
+
+const E = common('E', 'the enquiry form, the contact block and the logo stage',
+  'Load "frontend-design-skill" (forms: complete states, validation, accessibility).',
+  'src/components/contact/** (including unit tests next to the code), src/app/preview/contact/page.preview.tsx, tests/contact.spec.ts') + `
+READ the brief's section "Enquiry form and contact", ARCHITECTURE.md section 6 with section 9 items 7 and 13, SPEC.md "Enquiry and contact" (every label, helper, message and button text is written there: use them exactly) and DESIGN.md section 7 "Form fields" and "Contact block" and the Contact row of section 8.
+The owner will add the Web3Forms key later. The site ships in no-key mode, so no-key mode is the product today and must feel finished, not like a fallback. Never send a request to the real Web3Forms API: key mode is tested only against mocked responses.
+
+BUILD (entry: default export Contact in src/components/contact/Contact.tsx; section id "contact"):
+- Logo stage (ARCHITECTURE 9.13): at the top of the section one empty square with the attributes data-logo-stage and data-pose="contact" (168px on phones, 220px from 1024px). The Contact Section itself gets NO pose prop. Inside the stage, the 2D mark (/brand/edd-mark.svg) as the fallback: visible by default, hidden only while html has data-scene="live" (the 3D rings land there). Under it the tagline "Your Vision, Our Innovation", then the h2 and lead.
+- EnquiryForm with the prop accessKey (Contact passes process.env.NEXT_PUBLIC_WEB3FORMS_KEY). Fields, labels, helpers and which are required: the table in SPEC.md. Labels above fields, never placeholder-only; correct type, inputmode and autocomplete on each; a native select for the service (the five from src/lib/services.ts plus "Not sure yet").
+- validation.ts (pure, unit-tested): the Indian phone rule from ARCHITECTURE.md section 6, name required, email checked only when present, message up to 2000 characters. Output phone as +91XXXXXXXXXX.
+- No-key mode: the notice from SPEC.md shown before the buttons; two buttons, "Send on WhatsApp" (primary) and "Send by email" (ghost). After validation each opens, synchronously inside the click handler, a pre-filled WhatsApp message (wa.me with the agency number from src/lib/site.ts) or a pre-filled mailto to the agency email (body trimmed to about 1800 characters), containing every field the visitor filled. Afterwards the page says it was OPENED, with the exact SPEC.md wording, never that it was sent, and the visitor's entries stay in the form. Put the two openers behind a small function so tests can intercept them.
+- Key mode (submit.ts): POST JSON to https://api.web3forms.com/submit with access_key, subject, from_name, name, phone, email, business, service, message and botcheck; 12 second timeout; success only when the response is ok and the body says success true. Pending, success and failure states exactly as SPEC.md words them; on any failure the entries stay and the two no-key buttons are offered.
+- Spam (key mode only; in no-key mode we send nothing ourselves, so there is nothing to protect): an off-screen honeypot checkbox named botcheck (aria-hidden, tabIndex -1, autocomplete off). If it is ticked, show the normal success state and send nothing. No time trap: a fast real visitor using autofill must never be dropped.
+- Accessibility: noValidate; validate on submit, then on blur; aria-invalid and aria-describedby per field; on a failed submit focus the first invalid field and fill an error summary with role alert; the success panel has role status and its heading takes focus; a pending button is aria-disabled, not disabled.
+- ContactBlock: both phone numbers as tel links, the email as mailto, a "Chat on WhatsApp" button, the address in an address element, all from src/lib/site.ts, per DESIGN.md "Contact block".
+- Layout per DESIGN.md section 8: on phones stage, tagline and h2 centred, then the contact block, then the form in a primary glass panel with full-width buttons; from 1024px the stage, tagline, h2, lead and contact block in the left 5 columns and the form panel in the right 7.
+Your preview route takes ?key=none (default) and ?key=demo (a dummy key so key mode can be exercised against mocks), and a query param to shorten the timeout for tests.
+
+ACCEPTANCE CHECKS:
+E1. Unit, phone rule: accepted and normalised to +919226046693: "9226046693", "92260 46693", "+91 92260 46693", "+91-92260-46693", "0091 9226046693", "919226046693", "09226046693". Accepted: an 11 digit landline with a leading 0 such as "020 2553 1234". Rejected: "12345", "922604669", "5226046693", "9999999999", "98765abcde", empty. Email and name rules covered too.
+E2. No-key mode, invalid submit: the error summary appears with the SPEC.md heading, the first invalid field has focus, each invalid field shows its exact SPEC.md message and aria-invalid; fixing a field clears its error on blur.
+E3. No-key mode, valid submit: "Send on WhatsApp" opens a wa.me URL for 919226046693 whose decoded text contains every filled field; "Send by email" opens a mailto to elitedigitaldynamics.26@gmail.com with subject and body containing every filled field; after each, the exact "opened" message from SPEC.md is shown, the word "sent" is not used as a claim, and the entries are still in the form. The notice text is visible before any submit.
+E4. Key mode against page.route mocks of https://api.web3forms.com/submit: a 200 with success true gives the success panel with the visitor's name and focus on its heading, and "Send another" returns to an empty form; a 400, a 429, a 200 with success false, an aborted request and a timeout each give the failure message with the entries kept and both fallback buttons offered. The request body has the documented fields and the key. No request ever reaches the real API (the route handler fulfils or aborts every one; assert the count).
+E5. Spam: in key mode with the honeypot ticked no request is made and the success state shows. A valid submit made right after page load (autofill speed) is sent normally, not dropped.
+E6. Accessibility: every field has a bound label and the right autocomplete; the error summary has role alert; the success panel has role status; the whole flow works with the keyboard alone; axe (WCAG 2.1 AA) on /preview/contact reports no violations in the default, error and success states.
+E7. Contact block: two tel:+91 links with the exact numbers, the mailto, a WhatsApp link to wa.me/919226046693, and the address in an address element, each matching src/lib/site.ts character for character.
+E8. Logo stage: exactly one element with data-logo-stage and data-pose="contact", 168px square at 375 and 220px square at 1440; the 2D mark is visible with no data-scene on html and hidden after setting html data-scene="live"; the tagline is under it; the Contact section element itself has no data-pose.
+E9. Layout and states: screenshots at 360, 375, 768 and 1440 of the default, error, after-open, pending, success and failure states. Fields are 52px high with 16px text; buttons are full width on phones; no horizontal overflow; error text is readable and never relies on colour alone. Look at them and fix what is off.
+E10. tests/contact.spec.ts encodes E2, E3, E4, E5 and E8 and passes on all three projects; the unit tests pass.
+`
+
+const G = common('G', 'the privacy page, the 404, metadata, icons, the share image, sitemap, robots, manifest and structured data',
+  'Load "build-premium-website" (only its SEO and launch basics apply; its stack does not).',
+  'src/app/privacy/**, src/app/not-found.tsx, src/app/sitemap.ts, src/app/robots.ts, src/app/manifest.ts, src/app/icon.svg, src/app/apple-icon.png, src/app/opengraph-image.png and its alt text file, src/components/seo/**, public/icons/**, scripts/make-icons.mjs, scripts/capture-og.mjs, src/app/preview/seo/page.preview.tsx, tests/seo.spec.ts') + `
+READ SPEC.md "Privacy page", "404" and "Metadata", ARCHITECTURE.md section 9 items 1 and 15, DESIGN.md section 7 "Logo use" and the last line of section 8 (privacy and 404 layout). Check the Next.js 16 docs shipped in node_modules/next (metadata file conventions, not-found, sitemap, robots, manifest, icons, opengraph-image) rather than relying on memory.
+
+BUILD (replace the foundation's stubs):
+- src/components/seo/metadata.ts: export metadata and viewport (the root layout re-exports them). Title and template, description, metadataBase from site.siteUrl, canonical, Open Graph and Twitter (summary_large_image) with the SPEC.md texts, theme colour and colour scheme dark, icons and manifest wired by the file conventions. Language en-IN is already on html.
+- src/components/seo/JsonLd.tsx: one application/ld+json script with a ProfessionalService built ONLY from src/lib/site.ts and src/lib/services.ts: name, slogan, both phones, email, street address, locality Pune, region Maharashtra, country IN, area served Pune, url, logo, and the five services as offers. No rating, price range, opening hours, geo, founding date or social profiles: those facts do not exist. Escape "<" in the JSON.
+- /privacy (src/app/privacy/page.tsx): the SPEC.md text exactly, as real headings and paragraphs, single column up to 44rem, own metadata (title "Privacy"), the static CSS glow only. No 3D.
+- src/app/not-found.tsx: the SPEC.md 404 copy, "Back to home" to / and "Start a project" to /#contact, real 404 status.
+- sitemap.ts (/ and /privacy, absolute URLs from site.siteUrl), robots.ts (allow all, sitemap link), manifest.ts (name, short_name, description, start_url, display standalone, background and theme colour from DESIGN.md, icons).
+- Icons from the owner's files (never redraw them): src/app/icon.svg from public/brand/edd-favicon.svg; src/app/apple-icon.png 180x180 and public/icons/icon-192.png and icon-512.png, rendered from public/brand/edd-app-icon.svg with sharp by scripts/make-icons.mjs. No favicon.ico and no maskable variant: nobody asked for them.
+- Share image: scripts/capture-og.mjs renders a local HTML template at 1200x630 with Playwright (dark background with the red glow from DESIGN.md, the mark from public/brand/edd-mark.svg at left, the company name in Manrope from src/fonts, the tagline "Your Vision, Our Innovation") to src/app/opengraph-image.png, with the alt text from SPEC.md. No network. Twitter cards should reuse it: check the rendered head has twitter:image, and add a twitter-image file only if it does not.
+- No launch-check script: .env.example already documents the two inputs the owner still owes (production domain, form key).
+- /preview/seo: a page showing the share image, every icon at real size and the JSON-LD text, for inspection.
+
+ACCEPTANCE CHECKS:
+G1. /privacy shows the SPEC.md text exactly (compare by script), one h1, headings in order, the shared nav and footer, no canvas, and no three.js chunk is requested.
+G2. An unknown URL answers with HTTP status 404 and the SPEC.md copy; both buttons go to the right place.
+G3. Head of /: title, description, canonical, og:title, og:description, og:image as an absolute URL, twitter:card summary_large_image, theme-color, the svg icon link, apple-touch-icon and the manifest link are all present with the SPEC.md values (assert by script). /privacy has its own title through the template.
+G4. Share image: 1200x630 PNG under 300 KB. Look at it: mark, name and tagline crisp and correctly spelled, glow present, nothing clipped, the font really is Manrope.
+G5. Icons: look at each. icon.svg is the owner's favicon artwork; apple-icon is 180x180; manifest icons are 192 and 512.
+G6. /sitemap.xml lists both pages with absolute URLs; /robots.txt allows crawling and names the sitemap; /manifest.webmanifest parses and has name, short_name, icons, colours and display.
+G7. JSON-LD on /: exactly one script, parses as JSON, type ProfessionalService, name, phones, email and address equal to src/lib/site.ts character for character, five offers with the exact service names, and none of the missing facts (rating, priceRange, openingHours, geo, foundingDate, sameAs).
+G8. Missing launch inputs degrade safely: with NEXT_PUBLIC_SITE_URL unset, the canonical link, og:image, sitemap and robots still carry valid absolute URLs (the fallback in src/lib/site.ts) and nothing throws.
+G9. axe (WCAG 2.1 AA) on /privacy and on the 404 page: no violations. Both pages are usable by keyboard and have no horizontal overflow at 360 and 1440. Look at screenshots of both at 375 and 1440.
+G10. tests/seo.spec.ts encodes G1, G2, G3, G6 and G7 and passes on all three projects.
+`
+
+const PROMPTS = { S, C, P, D, E, G }
+const LABELS = { S: 'S scene', C: 'C sections', P: 'P portfolio', D: 'D socialsync', E: 'E form', G: 'G seo-legal' }
+
+const which = Array.isArray(args) ? args : ['S', 'C', 'P', 'D', 'E', 'G']
+const unknown = which.filter((k) => !PROMPTS[k])
+if (unknown.length) throw new Error('unknown area keys: ' + unknown.join(', '))
+
+phase('Build')
+log('Building areas: ' + which.join(', '))
+const results = await parallel(which.map((k) => () => agent(PROMPTS[k], { label: LABELS[k], phase: 'Build', schema: REPORT })))
+
+const out = {}
+which.forEach((k, i) => { out[k] = results[i] })
+const failed = which.filter((k) => !out[k])
+if (failed.length) log('WARNING: no report from: ' + failed.join(', '))
+return out

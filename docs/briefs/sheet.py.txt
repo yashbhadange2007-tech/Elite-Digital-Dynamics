@@ -1,0 +1,21 @@
+# Usage: python3 sheet.py out.png "label:left.png" "label:right.png" ...   (images scaled to one height, placed side by side)
+import sys
+from PIL import Image, ImageDraw
+out, items = sys.argv[1], [a.split(':', 1) for a in sys.argv[2:]]
+H = 900
+imgs = []
+for label, path in items:
+    im = Image.open(path).convert('RGB')
+    im = im.resize((round(im.width * H / im.height), H), Image.LANCZOS)
+    imgs.append((label, im))
+pad, bar = 16, 40
+W = sum(im.width for _, im in imgs) + pad * (len(imgs) + 1)
+sheet = Image.new('RGB', (W, H + bar + pad), (24, 24, 24))
+d = ImageDraw.Draw(sheet)
+x = pad
+for label, im in imgs:
+    d.text((x, 12), label, fill=(235, 235, 235))
+    sheet.paste(im, (x, bar))
+    x += im.width + pad
+sheet.save(out)
+print(out, sheet.size)

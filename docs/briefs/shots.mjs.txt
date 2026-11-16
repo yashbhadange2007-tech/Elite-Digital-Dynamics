@@ -1,0 +1,40 @@
+// Usage: node shots.mjs <baseUrl> <outDir> <deviceScaleFactor> [path]
+// Screenshots every section of the home page at phone, tablet and desktop widths.
+import { chromium } from 'playwright';
+import { mkdirSync } from 'node:fs';
+const [, , base = 'http://localhost:3000', outDir = './out', dsf = '1', path = '/?scene=force'] = process.argv;
+mkdirSync(outDir, { recursive: true });
+const VIEWPORTS = [
+  { name: 'phone', width: 375, height: 812, isMobile: true, hasTouch: true },
+  { name: 'tablet', width: 768, height: 1024 },
+  { name: 'desktop', width: 1440, height: 900 },
+];
+const SECTIONS = ['top', 'services', 'work', 'demo', 'process', 'faq', 'contact'];
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+for (const vp of VIEWPORTS) {
+  const ctx = await browser.newContext({
+    viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: Number(dsf), isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch,
+  });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(String(e)));
+  await page.goto(base + path, { waitUntil: 'load' });
+  await page.waitForFunction(() => window.__scene?.ready, null, { timeout: 20000 }).catch(() => console.log(vp.name, 'scene not ready after 20s'));
+  await page.waitForTimeout(1500);
+  for (const id of SECTIONS) {
+    const found = await page.evaluate((id) => {
+      const el = document.getElementById(id);
+      if (!el) return false;
+      window.scrollTo({ top: id === 'top' ? 0 : window.scrollY + el.getBoundingClientRect().top - 72, behavior: 'instant' });
+      return true;
+    }, id);
+    if (!found) { console.log(vp.name, 'missing section', id); continue; }
+    await page.waitForTimeout(2200); // let the damped pose settle
+    await page.screenshot({ path: `${outDir}/${vp.name}-${id}.png` });
+  }
+  const scene = await page.evaluate(() => (window.__scene ? { ...window.__scene, info: window.__scene.info } : null)).catch(() => null);
+  console.log(vp.name, 'scene:', JSON.stringify(scene), '| console errors:', errors.length, errors.slice(0, 4));
+  await ctx.close();
+}
+await browser.close();
