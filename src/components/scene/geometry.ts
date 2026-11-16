@@ -20,27 +20,27 @@ const THICKNESS = 0.45;
 export type RingShape = { radius: number; band: number; gap: number; gapAt: number };
 
 /**
- * One open ring in the xy plane, facing +z: a flattened pill cross-section swept around the arc,
- * closed at both ends by half a turn of the same profile (the 3D form of a round line cap), so the
- * caps meet the band with no crease. Normals are analytic, so there are no seams or facets.
+ * One open ring in the xy plane, facing +z: a flattened elliptical cross-section swept around the
+ * arc, closed at both ends by half a turn of the same profile (the 3D form of a round line cap),
+ * so the caps meet the band with no crease. Normals are analytic, so there are no seams or facets.
  *
- * `around` = segments along the arc, `edge` = segments on each rounded edge of the profile.
+ * `around` = segments along the arc, `edge` = segments on each half of the profile.
  */
 export function makeRing(shape: RingShape, around: number, edge: number): BufferGeometry {
-  const width = shape.band;
-  const half = (width * THICKNESS) / 2; // half thickness = radius of the rounded edges
-  const flat = width / 2 - half; // half length of the flat face
+  const across = shape.band / 2; // half width across the ring
+  const along = across * THICKNESS; // half thickness along the axis
 
-  // Half profile (a >= 0) from the middle of the front face, round the outer edge, to the middle
-  // of the back face. Each point: offset across the ring, offset along the axis, and its normal.
-  const prof: [a: number, b: number, na: number, nb: number][] = [[0, half, 0, 1]];
+  // Half profile (a >= 0) of the ellipse, from the middle of the front face, round the outer edge,
+  // to the middle of the back face. Each point: offset across the ring, offset along the axis, and
+  // its normal. The face is gently crowned, not flat, so it reflects a sweep of the surroundings.
+  const prof: [a: number, b: number, na: number, nb: number][] = [];
   for (let k = 0; k <= edge; k++) {
     const angle = Math.PI / 2 - (k * Math.PI) / edge;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
-    prof.push([flat + half * c, half * s, c, s]);
+    const length = Math.hypot(c / across, s / along);
+    prof.push([across * c, along * s, c / across / length, s / along / length]);
   }
-  prof.push([0, -half, 0, -1]);
   const halfCount = prof.length;
 
   // Full closed profile for the band: the half, then its mirror image back to the start.

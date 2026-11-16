@@ -6,7 +6,8 @@ import { site } from '@/lib/site';
 import { CTA, FOOTER, NAV_LINKS } from './content';
 
 // Pill links pulled left by their own padding, so the text lines up with the column edge.
-const LINK = 'ui-pill-link -ml-4';
+// The padding is small enough that the focus ring stays inside the phone gutter.
+const LINK = 'ui-pill-link -ml-2 px-2';
 
 /**
  * Footer (DESIGN.md 7, SPEC.md). Rendered by the root layout on every page, so links are `/#id`.
@@ -49,12 +50,12 @@ export default function Footer() {
           <p className="pt-2 text-text-muted">{site.address.full}</p>
         </address>
 
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-6 lg:col-span-12">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-6 lg:col-span-12">
           <p className="text-small text-text-muted">{FOOTER.line}</p>
           <Link href={FOOTER.privacy.href} className={LINK}>
             {FOOTER.privacy.label}
           </Link>
-          <MotionToggle className="-ml-4 sm:ml-auto" />
+          <MotionToggle className="-ml-2 px-2 sm:ml-auto" />
         </div>
       </Container>
     </footer>

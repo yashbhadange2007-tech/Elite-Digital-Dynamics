@@ -24,6 +24,10 @@ const FILL = '#2A0A07';
 const CORE = '#FF3B1F';
 export const CORE_LIGHT = '#FF4A2A';
 
+const srgb = (hex: string) => {
+  const c = new Color(hex).convertLinearToSRGB();
+  return `vec3(${c.r.toFixed(4)}, ${c.g.toFixed(4)}, ${c.b.toFixed(4)})`;
+};
 const glsl = (hex: string, scale = 1) => {
   const c = new Color(hex).multiplyScalar(scale);
   return `vec3(${c.r.toFixed(4)}, ${c.g.toFixed(4)}, ${c.b.toFixed(4)})`;
@@ -41,7 +45,7 @@ export function makeRingMaterial(): MeshStandardMaterial {
       '#include <emissivemap_fragment>',
       `#include <emissivemap_fragment>
       float rim = 1.0 - saturate(dot(normal, normalize(vViewPosition)));
-      totalEmissiveRadiance += ${glsl(SALMON, 0.9)} * pow(rim, 3.0) + ${glsl(HOT, 0.9)} * pow(rim, 7.0);`,
+      totalEmissiveRadiance += ${glsl(SALMON, 0.6)} * pow(rim, 4.0) + ${glsl(HOT, 1.3)} * pow(rim, 9.0);`,
     );
   };
   return material;
@@ -60,14 +64,13 @@ export function makeCoreMaterial(): ShaderMaterial {
         vNormalView = normalize(normalMatrix * normal);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }`,
+    // Colours are mixed and written as sRGB values, the way the SVG gradient is drawn.
     fragmentShader: `
       varying vec3 vNormalView;
       void main() {
         float d = length(normalize(vNormalView).xy - vec2(-0.233, 0.267)) / 1.267;
-        vec3 color = mix(${glsl(HOT)}, ${glsl(CORE)}, smoothstep(0.0, 0.45, d));
-        color = mix(color, ${glsl(KEY_RED)}, smoothstep(0.45, 1.0, d));
-        gl_FragColor = vec4(color, 1.0);
-        #include <colorspace_fragment>
+        vec3 color = mix(${srgb(HOT)}, ${srgb(CORE)}, clamp(d / 0.45, 0.0, 1.0));
+        gl_FragColor = vec4(mix(color, ${srgb(KEY_RED)}, clamp((d - 0.45) / 0.55, 0.0, 1.0)), 1.0);
       }`,
   });
 }
@@ -114,10 +117,10 @@ export function makeEnvironment(renderer: WebGLRenderer): Texture {
     mesh.lookAt(0, 0, 0);
     scene.add(mesh);
   };
-  panel(KEY_RED, 5, 9, 6, -3, 6, 6); // key: above, front left
-  panel(KEY_RED, 2, 6, 5, 6, -2, 5); // softer key from the right
-  panel(SALMON, 14, 1.2, 12, -8, 2, -5); // strip: behind left
-  panel(HOT, 12, 1, 10, 7, 4, -6); // strip: behind right
+  panel(KEY_RED, 2.4, 9, 6, -3, 6, 6); // key: above, front left
+  panel(KEY_RED, 1.1, 6, 5, 6, -2, 5); // softer key from the right
+  panel(SALMON, 18, 1.4, 12, -8, 2, -4); // strip: behind left
+  panel(HOT, 16, 1.2, 10, 7, 4, -4); // strip: behind right
   panel(FILL, 3, 12, 6, 0, -7, 2); // fill from below
 
   const pmrem = new PMREMGenerator(renderer);

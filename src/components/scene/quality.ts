@@ -7,9 +7,9 @@ import type { GlassMode, Tier } from '@/lib/quality-store';
 
 /** What each running tier costs: resolution cap, ring detail and number of glow sprites. */
 export const TIERS: Record<1 | 2 | 3, { dpr: number; around: number; edge: number; halos: number }> = {
-  3: { dpr: 2, around: 192, edge: 12, halos: 2 },
-  2: { dpr: 1.5, around: 112, edge: 8, halos: 2 },
-  1: { dpr: 1, around: 72, edge: 5, halos: 1 },
+  3: { dpr: 2, around: 192, edge: 16, halos: 2 },
+  2: { dpr: 1.5, around: 112, edge: 10, halos: 2 },
+  1: { dpr: 1, around: 72, edge: 6, halos: 1 },
 };
 
 /** Shortest time between rendered frames at half rate (tier 1, or a pose capped at 30fps), ms. */

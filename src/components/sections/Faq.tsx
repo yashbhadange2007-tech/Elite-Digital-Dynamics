@@ -26,9 +26,10 @@ export default function Faq() {
               key={item.q}
               name="faq"
               open={index === 0}
-              className="group border-b border-hairline last:border-b-0"
+              className="group border-b border-hairline py-1 last:border-b-0"
             >
-              <summary className="flex min-h-16 cursor-pointer list-none items-center gap-4 rounded-card py-4 text-h3 [&::-webkit-details-marker]:hidden">
+              {/* 56px target with 4px above and below: a 64px row and 8px between neighbouring targets. */}
+              <summary className="flex min-h-14 cursor-pointer list-none items-center gap-4 rounded-card py-3 text-h3 [&::-webkit-details-marker]:hidden">
                 <Plus
                   aria-hidden="true"
                   className="size-5 flex-none text-salmon duration-2 ease-out group-open:rotate-45 motion-full:transition-transform"
