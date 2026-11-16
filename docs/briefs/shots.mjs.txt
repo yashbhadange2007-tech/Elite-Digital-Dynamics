@@ -1,6 +1,6 @@
 // Usage: node shots.mjs <baseUrl> <outDir> <deviceScaleFactor> [path]
 // Screenshots every section of the home page at phone, tablet and desktop widths.
-import { chromium } from 'playwright';
+import { createRequire } from 'node:module'; const { chromium } = createRequire(import.meta.url)('playwright');
 import { mkdirSync } from 'node:fs';
 const [, , base = 'http://localhost:3000', outDir = './out', dsf = '1', path = '/?scene=force'] = process.argv;
 mkdirSync(outDir, { recursive: true });
