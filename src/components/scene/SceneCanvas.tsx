@@ -48,7 +48,8 @@ function buildObject(tier: 1 | 2 | 3, materials: Materials) {
   const { around, edge, halos } = TIERS[tier];
   const ringA = new Mesh(makeRing(LOGO.ringA, around, edge), materials.ring);
   const ringB = new Mesh(makeRing(LOGO.ringB, Math.round(around * 0.75), edge), materials.ring);
-  const core = new Mesh(new SphereGeometry(LOGO.coreRadius, around / 4, around / 8), materials.core);
+  // The core keeps its detail at every tier: it is small, and a faceted outline shows at once.
+  const core = new Mesh(new SphereGeometry(LOGO.coreRadius, 40, 20), materials.core);
   const light = new PointLight(CORE_LIGHT);
   const group = new Group().add(ringA, ringB, core, light);
   [2 * LOGO.glowRadius, 4.6 * LOGO.glowRadius].slice(0, halos).forEach((diameter, k) => {
@@ -87,6 +88,7 @@ function createEngine(root: RootState, options: Omit<RigProps, 'still'>) {
 
   let still = false;
   let announced = false;
+  debug.ready = false;
   let tier = controller.tier as 1 | 2 | 3;
   let object: ReturnType<typeof buildObject>;
 

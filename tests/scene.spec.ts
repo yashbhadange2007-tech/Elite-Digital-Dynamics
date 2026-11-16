@@ -83,9 +83,10 @@ test.describe('live', () => {
     await waitReady(page);
     const solved = (await page.evaluate(() => window.__scene!.solved))!;
     const { at } = await canvasPixels(page);
-    // Up and left of the core. Inside the glow disc there is light; in the corner of its square
-    // quad (beyond the disc, beyond every ring) the canvas must be fully transparent.
-    const diagonal = (distance: number) => at(solved.x - (distance * solved.r) / Math.SQRT2, solved.y - (distance * solved.r) / Math.SQRT2);
+    // Down and left of the core (on screen at every viewport). Inside the glow disc there is light;
+    // in the corner of its square quad (beyond the disc, beyond every ring) the canvas must be
+    // fully transparent.
+    const diagonal = (distance: number) => at(solved.x - (distance * solved.r) / Math.SQRT2, solved.y + (distance * solved.r) / Math.SQRT2);
     expect(diagonal(1.3).a).toBeGreaterThan(0);
     expect(diagonal(1.9).a).toBe(0);
     expect(diagonal(2.2).a).toBe(0);
