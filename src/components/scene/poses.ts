@@ -11,7 +11,7 @@ export type Place = { x: number; y: number; size: number; a?: [number, number]; 
 
 export type Pose = {
   id: PoseId;
-  /** Below 768px wide. */
+  /** Below 1024px wide, where the page's sections stack (text on top, object below). */
   phone: Place;
   desktop: Place;
   /** 0 = full brightness, 1 = fully dimmed (the object sits behind panels). */
@@ -31,8 +31,8 @@ export const POSES: readonly Pose[] = [
   {
     // Skewed gyroscope. Desktop: right, large, headline left. Phone: lower half, bleeding off the right.
     id: 'hero',
-    phone: { x: 0.66, y: 0.72, size: 0.46 },
-    desktop: { x: 0.72, y: 0.52, size: 0.34 },
+    phone: { x: 0.68, y: 0.78, size: 0.42 },
+    desktop: { x: 0.755, y: 0.54, size: 0.32 },
     dim: 0,
     fps: 60,
     tiltA: [-52, 28, 0],

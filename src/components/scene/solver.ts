@@ -28,8 +28,8 @@ export const MAX_DT = 0.05;
 export const MAX_TILT = 0.12;
 /** Strength of the pull to the nearest full turn in the contact pose, per second. */
 export const SETTLE_RATE = 4;
-/** Below this width the phone placements are used. */
-const PHONE_MAX = 768;
+/** Below this width the phone placements are used: the `lg` breakpoint, where the layouts change. */
+const PHONE_MAX = 1024;
 
 export type SolverInput = {
   /** Seconds since the last step. */

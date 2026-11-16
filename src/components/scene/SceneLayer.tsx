@@ -161,12 +161,12 @@ export default function SceneLayer() {
       >
         {state === 'poster' ? (
           <picture>
-            <source media="(min-width: 48rem)" srcSet="/scene/poster-desktop.webp" />
+            <source media="(min-width: 64rem)" srcSet="/scene/poster-desktop.webp" />
             <img
               src="/scene/poster-mobile.webp"
               alt=""
               decoding="async"
-              className="size-full object-cover object-bottom-right md:object-right"
+              className="size-full object-cover object-bottom-right lg:object-right"
             />
           </picture>
         ) : decision && state ? (

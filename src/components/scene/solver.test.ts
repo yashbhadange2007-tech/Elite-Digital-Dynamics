@@ -13,7 +13,7 @@ const logoWeight = (p: number) => (p > LAST - 1 ? smooth(p - (LAST - 1)) : 0);
 
 /** A page model: 900px of scroll per pose, the logo stage at the viewport centre when poseIndex is 6. */
 function makeInput(viewport: { w: number; h: number }) {
-  const size = viewport.w < 768 ? 168 : 220;
+  const size = viewport.w < 1024 ? 168 : 220;
   return (poseIndex: number, dt: number): SolverInput => ({
     dt,
     poseIndex,
@@ -138,7 +138,7 @@ describe.each([
     const solver = createSolver(0);
     let out = solver.out;
     for (let n = 0; n < 600; n++) out = solver.step(input(index, 1 / 60));
-    const at = viewport.w < 768 ? pose.phone : pose.desktop;
+    const at = viewport.w < 1024 ? pose.phone : pose.desktop;
     const stage = input(index, 0).stage!;
 
     expect(out.p).toBeCloseTo(index, 4);
