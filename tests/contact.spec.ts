@@ -175,7 +175,7 @@ test.describe('no-key mode (E2, E3)', () => {
 
     await page.getByRole('button', { name: 'Send on WhatsApp' }).click();
     await expect(page.locator('#contact').getByRole('status')).toContainText(MSG.openedWa);
-    await expect(page.getByRole('link', { name: 'Call +91 92260 46693' })).toHaveAttribute('href', 'tel:+919226046693');
+    await expect(page.locator('#contact').getByRole('status').getByRole('link', { name: 'Call +91 92260 46693' })).toHaveAttribute('href', 'tel:+919226046693');
     let urls = await opened(page);
     expect(urls).toHaveLength(1);
     const wa = new URL(urls[0]);
@@ -246,7 +246,7 @@ test.describe('key mode against mocks (E4)', () => {
     await page.getByRole('button', { name: 'Send enquiry' }).click();
     const button = page.getByRole('button', { name: 'Sending…' });
     await expect(button).toHaveAttribute('aria-disabled', 'true');
-    await expect(button).toBeEnabled(); // aria-disabled, not disabled
+    expect(await button.evaluate((el: HTMLButtonElement) => el.disabled)).toBe(false); // aria-disabled, not disabled
     await button.click({ force: true }); // a second press sends nothing more
     release();
     await expect(page.getByRole('heading', { name: /Thanks, Asha Patil/ })).toBeFocused();

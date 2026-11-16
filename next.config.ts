@@ -37,7 +37,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self' https://api.web3forms.com",
+  // Framed sites too: SitePreview pings them to detect an unreachable host before showing the frame.
+  `connect-src 'self' https://api.web3forms.com ${framedOrigins.join(' ')}`.trim(),
   `frame-src ${framedOrigins.join(' ') || "'none'"}`,
   "worker-src 'self' blob:",
   "media-src 'self'",

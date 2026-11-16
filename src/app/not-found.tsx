@@ -1,15 +1,15 @@
+import type { Metadata } from 'next';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Heading } from '@/components/ui/Heading';
 
-/**
- * STUB (foundation). Agent G replaces this with the 404 page from SPEC.md.
- * Keep `<main id="main">` (skip link target) and `data-glow="top-right"` (static glow, no 3D).
- */
+// Next adds noindex here; the title names the page and the home canonical is not inherited.
+export const metadata: Metadata = { title: 'Page not found', alternates: { canonical: null } };
+
 export default function NotFound() {
   return (
     <main id="main" data-glow="top-right">
-      <Container className="py-24">
+      <Container className="pt-[clamp(2rem,6vw,5rem)] pb-(--section-pad)">
         <div className="max-w-text">
           <Heading level={1}>This page is not here.</Heading>
           <p className="ui-lead mt-6">The link may be old or mistyped.</p>

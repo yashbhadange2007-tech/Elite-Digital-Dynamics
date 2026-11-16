@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from 'next';
 import { site } from '@/lib/site';
 
 /**
- * STUB (foundation). Agent G owns this file and replaces it with the full metadata from SPEC.md
- * (Open Graph, share image, icons, canonical). The root layout re-exports both names.
+ * Site-wide metadata (SPEC.md "Metadata"), re-exported by the root layout.
+ * Icons, the share image and the manifest link come from the file conventions in src/app
+ * (icon.svg, apple-icon.png, opengraph-image.png + .alt.txt, manifest.ts), so they are not listed here.
+ * Pages set their own `title` (filled into the template) and their own canonical path.
  */
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),
@@ -13,11 +15,18 @@ export const metadata: Metadata = {
   },
   description:
     'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.',
-  // Until src/app/icon.svg exists, so browsers do not ask for a missing /favicon.ico.
-  icons: { icon: '/brand/edd-favicon.svg' },
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    siteName: site.name,
+    title: 'Elite Digital Dynamics',
+    description: 'Websites, apps and automation for local businesses. Your Vision, Our Innovation.',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#080505',
+  themeColor: '#080505', // --color-bg
 };
