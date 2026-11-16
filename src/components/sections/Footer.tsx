@@ -17,8 +17,8 @@ const LINK = 'ui-pill-link -ml-2 px-2';
 export default function Footer() {
   return (
     <footer className="border-t border-hairline">
-      <Container className="grid gap-y-10 py-12 lg:grid-cols-12 lg:gap-x-8 lg:py-16">
-        <div className="lg:col-span-5">
+      <Container className="grid gap-y-10 py-12 md:grid-cols-12 md:gap-x-8 lg:py-16">
+        <div className="md:col-span-12 lg:col-span-5">
           {/* The artwork is centred in a wider box: 21.7% of its width is empty on each side.
               The negative margin puts the visible lockup on the column edge. */}
           <Logo
@@ -28,7 +28,7 @@ export default function Footer() {
           />
         </div>
 
-        <nav aria-label="Footer" className="lg:col-span-3">
+        <nav aria-label="Footer" className="md:col-span-4 lg:col-span-3">
           <ul className="grid justify-items-start gap-2">
             {[...NAV_LINKS, CTA].map((link) => (
               <li key={link.href}>
@@ -40,7 +40,7 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <address className="grid content-start justify-items-start gap-2 not-italic lg:col-span-4">
+        <address className="grid content-start justify-items-start gap-2 not-italic md:col-span-8 lg:col-span-4">
           <a href={site.phones[0].tel} className={LINK}>
             {site.phones[0].display}
           </a>
@@ -50,7 +50,7 @@ export default function Footer() {
           <p className="pt-2 text-text-muted">{site.address.full}</p>
         </address>
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-6 lg:col-span-12">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-6 md:col-span-12">
           <p className="text-small text-text-muted">{FOOTER.line}</p>
           <Link href={FOOTER.privacy.href} className={LINK}>
             {FOOTER.privacy.label}

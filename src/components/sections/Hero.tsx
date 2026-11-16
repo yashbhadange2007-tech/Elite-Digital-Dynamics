@@ -20,7 +20,9 @@ export default function Hero() {
       className="-mt-(--nav-h) min-h-svh pt-[calc(var(--nav-h)+clamp(2rem,6vw,5rem))] pb-12"
     >
       <Container className="lg:grid lg:grid-cols-12 lg:gap-x-8">
-        <div className="text-scrim flex max-w-text flex-col items-start gap-4 lg:col-span-7 lg:gap-6">
+        {/* A stronger text scrim than the shared one: full strength to 60% of the way out and
+            wider on the desktop's right, where the end of the h1 meets the ring's bright edge. */}
+        <div className="text-scrim flex max-w-text flex-col items-start gap-4 before:inset-y-[-20%] before:bg-[radial-gradient(closest-side,rgb(8_5_5/0.72)_60%,transparent)] lg:col-span-7 lg:gap-6 lg:before:right-[-20%]">
           <Eyebrow>{HERO.eyebrow}</Eyebrow>
           <Heading level={1} id="top-title">
             {HERO.title}
@@ -30,7 +32,8 @@ export default function Hero() {
             <Button href="#contact" size="lg" icon={<ArrowRight />}>
               {CTA.label}
             </Button>
-            <Button href={HERO.secondary.href} size="lg" variant="ghost">
+            {/* Filled a little: on phones the object passes behind this button. */}
+            <Button href={HERO.secondary.href} size="lg" variant="ghost" className="bg-bg/60 hover:bg-ember-900">
               {HERO.secondary.label}
             </Button>
           </div>

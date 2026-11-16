@@ -43,7 +43,7 @@ export default function Nav() {
   return (
     <header className="sticky top-0">
       <Container className="flex min-h-(--nav-h) items-center justify-between gap-2">
-        {/* The logo gets its own lite capsule, so it stays readable over the page text. */}
+        {/* The logo gets its own capsule (never blurred), so it stays readable over the page text. */}
         <Link href="/" className={cn(pill(false), '-ml-1 inline-flex items-center lg:-ml-3 lg:px-3')}>
           {/* `lazy` on both: the one hidden by CSS is then never downloaded. */}
           <Logo variant="horizontal" decorative loading="lazy" className="hidden lg:block" />

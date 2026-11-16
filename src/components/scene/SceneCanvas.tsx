@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree, type RootState } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Group, MathUtils, Mesh, PointLight, SphereGeometry, Sprite } from 'three';
 import { getQuality, setGlass, setTier } from '@/lib/quality-store';
 import { scrollState } from '@/lib/scroll-store';
@@ -28,6 +28,9 @@ export type SceneCanvasProps = {
   /** Called when the scene should be replaced by the poster (context lost, or too slow). */
   onGiveUp: () => void;
 };
+
+/** The engine also gets the setter for the canvas resolution. */
+type RigProps = SceneCanvasProps & { setDpr: (dpr: number) => void };
 
 const FOV = 32;
 const CAMERA_Z = 10;
@@ -63,9 +66,9 @@ function buildObject(tier: 1 | 2 | 3, materials: Materials) {
  * Everything imperative lives in this plain function, outside React: it owns the objects, the
  * listeners and the frame loop. `root` is React Three Fiber's state for the canvas.
  */
-function createEngine(root: RootState, options: Omit<SceneCanvasProps, 'still'>) {
-  const { gl, scene, invalidate, setDpr } = root;
-  const { lockPose, lockTier, debug, onReady, onGiveUp } = options;
+function createEngine(root: RootState, options: Omit<RigProps, 'still'>) {
+  const { gl, scene, invalidate } = root;
+  const { lockPose, lockTier, debug, onReady, onGiveUp, setDpr } = options;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
   const controller = createController({
@@ -253,19 +256,19 @@ function createEngine(root: RootState, options: Omit<SceneCanvasProps, 'still'>)
   };
 }
 
-function Rig({ still, lockPose, lockTier, debug, onReady, onGiveUp }: SceneCanvasProps) {
+function Rig({ still, lockPose, lockTier, debug, onReady, onGiveUp, setDpr }: RigProps) {
   const get = useThree((state) => state.get);
   const size = useThree((state) => state.size);
   const engine = useRef<ReturnType<typeof createEngine> | null>(null);
 
   useEffect(() => {
-    const created = createEngine(get(), { lockPose, lockTier, debug, onReady, onGiveUp });
+    const created = createEngine(get(), { lockPose, lockTier, debug, onReady, onGiveUp, setDpr });
     engine.current = created;
     return () => {
       engine.current = null;
       created.dispose();
     };
-  }, [get, lockPose, lockTier, debug, onReady, onGiveUp]);
+  }, [get, lockPose, lockTier, debug, onReady, onGiveUp, setDpr]);
 
   useEffect(() => {
     engine.current?.setStill(still);
@@ -276,10 +279,12 @@ function Rig({ still, lockPose, lockTier, debug, onReady, onGiveUp }: SceneCanva
 }
 
 export default function SceneCanvas(props: SceneCanvasProps) {
+  // The resolution has to go through the Canvas prop: React Three Fiber re-applies it on every render.
+  const [dpr, setDpr] = useState(1);
   return (
     <Canvas
       frameloop="demand"
-      dpr={1}
+      dpr={dpr}
       camera={{ fov: FOV, position: [0, 0, CAMERA_Z], near: 1, far: 30 }}
       // Tone mapping stays on React Three Fiber's default, ACES Filmic: next to the reference it
       // turns the hot reds pale salmon, where Neutral keeps them saturated red.
@@ -287,7 +292,7 @@ export default function SceneCanvas(props: SceneCanvasProps) {
       // debounced so the drawing buffer is not reallocated on every step of a drag.
       resize={{ scroll: false, debounce: 200 }}
     >
-      <Rig {...props} />
+      <Rig {...props} setDpr={setDpr} />
     </Canvas>
   );
 }

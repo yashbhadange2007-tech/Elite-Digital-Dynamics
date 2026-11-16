@@ -35,8 +35,9 @@ const glsl = (hex: string, scale = 1) => {
 
 /**
  * The one ring material for every tier: dark glossy red metal. A metal tints its reflections with
- * its own colour, so the pale edge highlights of the reference come from a fresnel rim added on
- * top (salmon, turning near-white at the most grazing angles).
+ * its own colour, so nothing in the environment can make it look pale. The pale parts are added on
+ * top: a fresnel rim (salmon, near-white at the most grazing angles) for the edge highlights of
+ * the reference, and a soft salmon sheen from the top left, the lit side of the logo's gradient.
  */
 export function makeRingMaterial(): MeshStandardMaterial {
   const material = new MeshStandardMaterial({ color: RING_BODY, metalness: 1, roughness: 0.22 });
@@ -44,8 +45,11 @@ export function makeRingMaterial(): MeshStandardMaterial {
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <emissivemap_fragment>',
       `#include <emissivemap_fragment>
-      float rim = 1.0 - saturate(dot(normal, normalize(vViewPosition)));
-      totalEmissiveRadiance += ${glsl(SALMON, 0.6)} * pow(rim, 4.0) + ${glsl(HOT, 1.3)} * pow(rim, 9.0);`,
+      vec3 toViewer = normalize(vViewPosition);
+      float rim = 1.0 - saturate(dot(normal, toViewer));
+      float sheen = saturate(dot(reflect(-toViewer, normal), normalize(vec3(-0.45, 0.5, 0.74))));
+      totalEmissiveRadiance += ${glsl(SALMON, 0.6)} * pow(rim, 4.0) + ${glsl(HOT, 1.3)} * pow(rim, 9.0)
+        + ${glsl(SALMON, 0.5)} * pow(sheen, 10.0);`,
     );
   };
   return material;
@@ -99,8 +103,9 @@ export function makeHaloMaterial(color: string, opacity: number): SpriteMaterial
 
 /**
  * The reflections: a tiny scene of glowing panels, blurred once into an environment map.
- * A large soft red key above and in front, two thin pale strips at grazing angles behind the
- * object (they only show on edges that turn away from the viewer), and a dim fill everywhere.
+ * A large soft red key above and in front, a broad dimmer red from the viewer's side, two thin
+ * pale strips at grazing angles behind the object (they only show on edges that turn away from
+ * the viewer), and a dim fill everywhere.
  * No HDR file and no network.
  */
 export function makeEnvironment(renderer: WebGLRenderer): Texture {
@@ -117,8 +122,8 @@ export function makeEnvironment(renderer: WebGLRenderer): Texture {
     mesh.lookAt(0, 0, 0);
     scene.add(mesh);
   };
-  panel(KEY_RED, 2.4, 9, 6, -3, 6, 6); // key: above, front left
-  panel(KEY_RED, 1.1, 6, 5, 6, -2, 5); // softer key from the right
+  panel(KEY_RED, 5, 10, 8, -5, 5, 6); // key: above, front left (the logo is lit from top-left)
+  panel(KEY_RED, 3, 16, 16, 0, 0, 12); // broad and soft from the viewer's side: faces are never black
   panel(SALMON, 18, 1.4, 12, -8, 2, -4); // strip: behind left
   panel(HOT, 16, 1.2, 10, 7, 4, -4); // strip: behind right
   panel(FILL, 3, 12, 6, 0, -7, 2); // fill from below

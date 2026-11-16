@@ -55,12 +55,12 @@ export const POSES: readonly Pose[] = [
   {
     // Upright arcs rising from below, behind the previews.
     id: 'work',
-    phone: { x: 0.5, y: 1.04, size: 0.62 },
-    desktop: { x: 0.5, y: 1.05, size: 0.56 },
+    phone: { x: 0.5, y: 1.0, size: 0.6 },
+    desktop: { x: 0.5, y: 1.0, size: 0.46 },
     dim: 0.6,
     fps: 60,
-    tiltA: [-24, 56, 0],
-    tiltB: [18, -44, 0],
+    tiltA: [0, 38, 0],
+    tiltB: [0, -52, 0],
     spin: [0.16, -0.24],
     sway: 0.05,
   },
