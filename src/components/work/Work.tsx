@@ -59,7 +59,7 @@ export default function Work({ stub }: WorkProps) {
             <li
               key={site.slug}
               className={cn(
-                'mx-auto max-w-[20.5rem] lg:row-span-4 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[minmax(0,1fr)] lg:grid-rows-subgrid',
+                'mx-auto max-w-[20.5rem] lg:row-span-2 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[minmax(0,1fr)] lg:grid-rows-subgrid',
                 !chosen && 'max-lg:hidden',
               )}
             >
@@ -77,14 +77,16 @@ export default function Work({ stub }: WorkProps) {
                   {wide || chosen ? <SitePreview site={site} device="phone" /> : null}
                 </DeviceFrame>
               )}
-              <Heading level={3} className="mt-5">
-                {site.name}
-              </Heading>
-              <p className="mt-2 text-text-muted">{site.caption}</p>
-              <div className="mt-4">
-                <Button href={`/visit/${site.slug}`} external variant="ghost" icon={<ArrowUpRight />}>
-                  Open live site
-                </Button>
+              <div className="text-scrim mt-5 grid content-start gap-2">
+                <Heading level={3} className="lg:text-[1.375rem]">
+                  {site.name}
+                </Heading>
+                <p className="text-text-muted">{site.caption}</p>
+                <div className="mt-2">
+                  <Button href={`/visit/${site.slug}`} external variant="ghost" icon={<ArrowUpRight />}>
+                    Open live site
+                  </Button>
+                </div>
               </div>
             </li>
           );

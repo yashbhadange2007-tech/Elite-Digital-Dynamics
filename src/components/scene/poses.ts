@@ -87,10 +87,11 @@ export const POSES: readonly Pose[] = [
     sway: 0.05,
   },
   {
-    // Small and calm in the top right corner (the same size on a tablet as on a phone).
+    // Small and calm in the top right corner (the same size on a tablet as on a phone). Desktop:
+    // bleeding off the right edge, so it clears the laptop frame on 1280 to 1440px screens.
     id: 'demo',
     phone: { x: 0.86, y: 0.13, size: 0.13, maxR: 50 },
-    desktop: { x: 0.92, y: 0.17, size: 0.085 },
+    desktop: { x: 0.98, y: 0.15, size: 0.08 },
     dim: 0.75,
     fps: 30,
     tiltA: [-36, 22, 0],
@@ -101,10 +102,10 @@ export const POSES: readonly Pose[] = [
   {
     // The object comes apart along one line: ring A, core, ring B.
     id: 'process',
-    // Phone: down the left edge, the core half off screen so no step text sits on it.
+    // Phone: down the left edge, the core mostly off screen so ring A stays left of the step numbers.
     // Desktop: a row behind the steps, centred on the rail (the steps' list sits about 56px below
     // the section's centre, which is the screen's centre at rest).
-    phone: { x: 0, y: 0.5, size: 0.19, a: [0, 2.5], b: [0, -2.1] },
+    phone: { x: -0.1, y: 0.5, size: 0.19, a: [0, 2.5], b: [0, -2.1] },
     desktop: { x: 0.5, y: 0.56, size: 0.12, a: [-2.7, 0], b: [2.3, 0] },
     dim: 0.6,
     fps: 60,

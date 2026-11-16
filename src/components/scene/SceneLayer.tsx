@@ -91,6 +91,23 @@ function decide(): Decision {
   };
 }
 
+/** A still of the hero pose (scripts/capture-poster.mjs). */
+function ScenePoster() {
+  return (
+    <picture>
+      <source media="(min-width: 64rem)" srcSet="/scene/poster-desktop.webp" width={2160} height={1350} />
+      <img
+        src="/scene/poster-mobile.webp"
+        alt=""
+        decoding="async"
+        width={750}
+        height={1624}
+        className="size-full object-cover object-bottom-right lg:object-right"
+      />
+    </picture>
+  );
+}
+
 export default function SceneLayer() {
   const motion = useQuality().motion;
   const [decision, setDecision] = useState<Decision | null>(null);
@@ -147,9 +164,24 @@ export default function SceneLayer() {
 
   const onReady = useCallback(() => setShown(true), []);
   const onGiveUp = useCallback(() => setGaveUp(true), []);
+  // The poster stands in under the hero until the canvas has faded in, then it is dropped.
+  const [underlayGone, setUnderlayGone] = useState(false);
 
   return (
     <>
+      {state !== 'poster' && !underlayGone ? (
+        <div
+          aria-hidden="true"
+          className={cn(
+            'pointer-events-none absolute top-0 left-0 z-(--z-scene) h-lvh w-full contain-strict',
+            'transition-opacity duration-(--dur-3) ease-(--ease-out)',
+            shown && 'opacity-0',
+          )}
+          onTransitionEnd={() => setUnderlayGone(true)}
+        >
+          <ScenePoster />
+        </div>
+      ) : null}
       <div
         aria-hidden="true"
         data-scene-layer
@@ -160,15 +192,7 @@ export default function SceneLayer() {
         )}
       >
         {state === 'poster' ? (
-          <picture>
-            <source media="(min-width: 64rem)" srcSet="/scene/poster-desktop.webp" />
-            <img
-              src="/scene/poster-mobile.webp"
-              alt=""
-              decoding="async"
-              className="size-full object-cover object-bottom-right lg:object-right"
-            />
-          </picture>
+          <ScenePoster />
         ) : decision && state ? (
           <div className={cn('size-full opacity-0 transition-opacity duration-(--dur-3)', shown && 'opacity-100')}>
             <SceneCanvas
