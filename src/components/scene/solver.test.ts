@@ -2,7 +2,7 @@ import { Quaternion, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { POSE_ORDER } from '@/lib/scroll-store';
 import { LOGO } from './geometry';
-import { POSES } from './poses';
+import { POSES, REACH_UP } from './poses';
 import { createSolver, MAX_SPEED, SETTLE_RATE, type SolverInput } from './solver';
 
 const LAST = POSES.length - 1;
@@ -91,6 +91,7 @@ function run(viewport: { w: number; h: number }, history: History, seed: number,
 describe.each([
   { name: 'desktop', viewport: { w: 1440, h: 900 } },
   { name: 'phone', viewport: { w: 375, h: 812 } },
+  { name: 'short phone', viewport: { w: 360, h: 640 } },
 ])('solver on $name', ({ viewport }) => {
   const input = makeInput(viewport);
   // Largest distance and size difference between neighbouring poses on this viewport, px.
@@ -150,8 +151,9 @@ describe.each([
       expect(out.r).toBeCloseTo(stage.size * LOGO.radiusInBox, 2);
     } else {
       expect(out.x).toBeCloseTo(at.x * viewport.w, 2);
-      expect(out.y).toBeCloseTo(at.y * viewport.h, 2);
-      expect(out.r).toBeCloseTo(at.size * Math.min(viewport.w, viewport.h), 2);
+      const r = at.size * Math.min(viewport.w, viewport.h);
+      expect(out.r).toBeCloseTo(r, 2);
+      expect(out.y).toBeCloseTo(Math.max(at.y * viewport.h, at.below === undefined ? 0 : at.below + REACH_UP * r), 2);
     }
     expect(out.a.x).toBeCloseTo(at.a?.[0] ?? 0, 3);
     expect(out.a.y).toBeCloseTo(at.a?.[1] ?? 0, 3);

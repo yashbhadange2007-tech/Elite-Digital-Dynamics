@@ -1,7 +1,7 @@
 import { damp } from 'maath/easing';
 import { Euler, MathUtils, Quaternion } from 'three';
 import { LOGO } from './geometry';
-import { POSES, type Place, type Pose } from './poses';
+import { POSES, REACH_UP, type Place, type Pose } from './poses';
 
 /**
  * Turns scroll, time and pointer into what the scene shows. No renderer in here: plain numbers and
@@ -90,7 +90,9 @@ function place(pose: Pose, input: SolverInput): { x: number; y: number; r: numbe
     // Off screen the object waits just outside the edge instead of thousands of px away.
     return { x: stage.x, y: clamp(stage.y, -stage.size, h + stage.size), r: stage.size * LOGO.radiusInBox, at };
   }
-  return { x: at.x * w, y: at.y * h, r: at.size * Math.min(w, h), at };
+  const r = at.size * Math.min(w, h);
+  const y = at.below === undefined ? at.y * h : Math.max(at.y * h, at.below + REACH_UP * r);
+  return { x: at.x * w, y, r, at };
 }
 
 export function createSolver(startIndex = 0) {

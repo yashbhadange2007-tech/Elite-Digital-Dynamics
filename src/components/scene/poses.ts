@@ -6,8 +6,13 @@ import type { PoseId } from '@/lib/scroll-store';
  * Where the object sits: `x` and `y` are the centre as fractions of the viewport (0, 0 is top
  * left), `size` is ring A's radius as a fraction of the viewport's shorter side. `a` and `b`
  * optionally move a ring away from the core, in units of ring A's radius (x right, y up).
+ * `below` keeps the top of the object at least this many px from the top of the screen, however
+ * short the screen is (the hero's text and buttons on phones end about 490px down).
  */
-export type Place = { x: number; y: number; size: number; a?: [number, number]; b?: [number, number] };
+export type Place = { x: number; y: number; size: number; a?: [number, number]; b?: [number, number]; below?: number };
+
+/** How far the tilted object reaches above its centre, in units of ring A's radius (used by `below`). */
+export const REACH_UP = 0.85;
 
 export type Pose = {
   id: PoseId;
@@ -31,7 +36,7 @@ export const POSES: readonly Pose[] = [
   {
     // Skewed gyroscope. Desktop: right, large, headline left. Phone: lower half, bleeding off the right.
     id: 'hero',
-    phone: { x: 0.68, y: 0.78, size: 0.42 },
+    phone: { x: 0.68, y: 0.79, size: 0.42, below: 500 },
     desktop: { x: 0.755, y: 0.54, size: 0.32 },
     dim: 0,
     fps: 60,
@@ -79,8 +84,10 @@ export const POSES: readonly Pose[] = [
   {
     // The object comes apart along one line: ring A, core, ring B.
     id: 'process',
-    phone: { x: 0.1, y: 0.5, size: 0.2, a: [0, 2.5], b: [0, -2.1] },
-    desktop: { x: 0.5, y: 0.6, size: 0.15, a: [-2.7, 0], b: [2.3, 0] },
+    // Phone: down the left edge, the core half off screen so no step text sits on it.
+    // Desktop: a row under the steps' text.
+    phone: { x: 0, y: 0.5, size: 0.19, a: [0, 2.5], b: [0, -2.1] },
+    desktop: { x: 0.5, y: 0.82, size: 0.12, a: [-2.7, 0], b: [2.3, 0] },
     dim: 0.6,
     fps: 60,
     tiltA: [-18, 14, 0],
