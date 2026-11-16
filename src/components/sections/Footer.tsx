@@ -11,8 +11,9 @@ const LINK = 'ui-pill-link -ml-2 px-2';
 
 /**
  * Footer (DESIGN.md 7, SPEC.md). Rendered by the root layout on every page, so links are `/#id`.
- * Stacked lockup (the Logo adds the company name as real text), links, the contact repeat, then
- * the bottom row: copyright line, Privacy and the motion control. Hairline on top, no glass.
+ * Stacked lockup (the Logo adds the company name as real text) and the tagline as text, links,
+ * the contact repeat, then the bottom row: copyright line, Privacy and the motion control.
+ * Hairline on top, no glass.
  */
 export default function Footer() {
   return (
@@ -20,12 +21,18 @@ export default function Footer() {
       <Container className="grid gap-y-10 py-12 md:grid-cols-12 md:gap-x-8 lg:py-16">
         <div className="md:col-span-12 lg:col-span-5">
           {/* The artwork is centred in a wider box: 21.7% of its width is empty on each side.
-              The negative margin puts the visible lockup on the column edge. */}
-          <Logo
-            variant="stacked"
-            loading="lazy"
-            className="-ml-[44px] h-[120px] w-auto max-w-none lg:-ml-[55px] lg:h-[150px]"
-          />
+              The negative margin puts the visible lockup on the column edge. The box stops at
+              196 of the artwork's 250 units, under "DIGITAL DYNAMICS": the tagline line drawn
+              below it is a few pixels tall, so it is set as live text instead: eyebrow type,
+              without the .ui-eyebrow class (the page has exactly one eyebrow). */}
+          <div className="h-[94px] overflow-hidden lg:h-[118px]">
+            <Logo
+              variant="stacked"
+              loading="lazy"
+              className="-ml-[44px] h-[120px] w-auto max-w-none lg:-ml-[55px] lg:h-[150px]"
+            />
+          </div>
+          <p className="pt-3 text-eyebrow text-salmon">{site.taglineDisplay}</p>
         </div>
 
         <nav aria-label="Footer" className="md:col-span-4 lg:col-span-3">

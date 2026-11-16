@@ -22,6 +22,7 @@ const HOT = '#FFD9CC';
 const KEY_RED = '#C42415';
 const FILL = '#2A0A07';
 const CORE = '#FF3B1F';
+const DEEP = '#7A140D'; // ember-700: the core's outermost edge
 export const CORE_LIGHT = '#FF4A2A';
 
 const srgb = (hex: string) => {
@@ -40,7 +41,7 @@ const glsl = (hex: string, scale = 1) => {
  * the reference, and a soft salmon sheen from the top left, the lit side of the logo's gradient.
  */
 export function makeRingMaterial(): MeshStandardMaterial {
-  const material = new MeshStandardMaterial({ color: RING_BODY, metalness: 1, roughness: 0.22 });
+  const material = new MeshStandardMaterial({ color: RING_BODY, metalness: 1, roughness: 0.2 });
   material.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <emissivemap_fragment>',
@@ -48,7 +49,7 @@ export function makeRingMaterial(): MeshStandardMaterial {
       vec3 toViewer = normalize(vViewPosition);
       float rim = 1.0 - saturate(dot(normal, toViewer));
       float sheen = saturate(dot(reflect(-toViewer, normal), normalize(vec3(-0.45, 0.5, 0.74))));
-      totalEmissiveRadiance += ${glsl(SALMON, 0.6)} * pow(rim, 4.0) + ${glsl(HOT, 1.3)} * pow(rim, 9.0)
+      totalEmissiveRadiance += ${glsl(SALMON, 0.45)} * pow(rim, 5.0) + ${glsl(HOT, 1.9)} * pow(rim, 11.0)
         + ${glsl(SALMON, 0.5)} * pow(sheen, 10.0);`,
     );
   };
@@ -56,8 +57,10 @@ export function makeRingMaterial(): MeshStandardMaterial {
 }
 
 /**
- * The core: unlit, with the logo's radial gradient. The hot spot sits up-left of centre, as in
- * edd-mark.svg (gradient centre 1.4 left and 1.6 up of a radius-6 disc, gradient radius 7.6).
+ * The core: unlit, with the logo's radial gradient (edd-mark.svg, `coreh`): a small hot spot about
+ * a quarter of the radius up-left of centre, the core red by 45% of the radius from it, and the
+ * logo red at the limb, deepening to ember-700 at the outline, so the disc reads as a sphere.
+ * The view-space normal's xy is the point's place on the disc, in units of the radius.
  */
 export function makeCoreMaterial(): ShaderMaterial {
   return new ShaderMaterial({
@@ -72,9 +75,12 @@ export function makeCoreMaterial(): ShaderMaterial {
     fragmentShader: `
       varying vec3 vNormalView;
       void main() {
-        float d = length(normalize(vNormalView).xy - vec2(-0.233, 0.267)) / 1.267;
-        vec3 color = mix(${srgb(HOT)}, ${srgb(CORE)}, clamp(d / 0.45, 0.0, 1.0));
-        gl_FragColor = vec4(mix(color, ${srgb(KEY_RED)}, clamp((d - 0.45) / 0.55, 0.0, 1.0)), 1.0);
+        vec3 n = normalize(vNormalView);
+        float d = length(n.xy - vec2(-0.18, 0.18));
+        vec3 color = mix(${srgb(HOT)}, ${srgb(CORE)}, sqrt(clamp(d / 0.45, 0.0, 1.0)));
+        float limb = 1.0 - smoothstep(0.1, 0.95, n.z);
+        color = mix(color, ${srgb(KEY_RED)}, limb);
+        gl_FragColor = vec4(mix(color, ${srgb(DEEP)}, 0.6 * limb * limb * limb), 1.0);
       }`,
   });
 }
@@ -124,8 +130,8 @@ export function makeEnvironment(renderer: WebGLRenderer): Texture {
   };
   panel(KEY_RED, 5, 10, 8, -5, 5, 6); // key: above, front left (the logo is lit from top-left)
   panel(KEY_RED, 3, 16, 16, 0, 0, 12); // broad and soft from the viewer's side: faces are never black
-  panel(SALMON, 18, 1.4, 12, -8, 2, -4); // strip: behind left
-  panel(HOT, 16, 1.2, 10, 7, 4, -4); // strip: behind right
+  panel(SALMON, 30, 1.4, 12, -8, 2, -4); // strip: behind left
+  panel(HOT, 28, 1.2, 10, 7, 4, -4); // strip: behind right
   panel(FILL, 3, 12, 6, 0, -7, 2); // fill from below
 
   const pmrem = new PMREMGenerator(renderer);

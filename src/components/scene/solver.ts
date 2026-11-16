@@ -1,7 +1,7 @@
 import { damp } from 'maath/easing';
 import { Euler, MathUtils, Quaternion } from 'three';
 import { LOGO } from './geometry';
-import { POSES, REACH_UP, type Place, type Pose } from './poses';
+import { POSES, REACH_UP, SHORT_MAX, type Place, type Pose } from './poses';
 
 /**
  * Turns scroll, time and pointer into what the scene shows. No renderer in here: plain numbers and
@@ -16,6 +16,13 @@ import { POSES, REACH_UP, type Place, type Pose } from './poses';
  *   pull towards the nearest full turn takes over, so the rings arrive at the logo's exact angles
  *   without a snap and without unwinding.
  * - Idle sway is two bounded sines. The pointer adds a damped tilt of at most MAX_TILT.
+ * - Dim leads the move: on the way into a dimmer pose it reaches that pose's dim in the first
+ *   DIM_LEAD of the segment, on the way into a brighter one it waits until the last DIM_LEAD. So the
+ *   object is already quiet when the next section's heading arrives over it.
+ * - The core keeps out of text that has no panel (SPEC 5: text never sits on the bright core). For
+ *   each block of such text vertically near the core, the core is pushed sideways just clear of it
+ *   (right, or left when the core is left of the text's start). The push fades in over AVOID_REACH
+ *   of vertical distance and is itself damped, so it never jumps, even on a scroll jump.
  */
 
 /** Seconds for the damped pose index to close most of a gap. */
@@ -30,6 +37,18 @@ export const MAX_TILT = 0.12;
 export const SETTLE_RATE = 4;
 /** Below this width the phone placements are used: the `lg` breakpoint, where the layouts change. */
 const PHONE_MAX = 1024;
+/** Share of a segment over which dim changes (see above). */
+export const DIM_LEAD = 0.25;
+/** Clear space between the core and text, px. */
+export const AVOID_MARGIN = 16;
+/** Vertical distance over which the push fades in, as a fraction of the viewport height. */
+export const AVOID_REACH = 0.1;
+/** Seconds for the push to close most of a gap, and its speed limit in viewport widths per second. */
+const PUSH_TIME = 0.15;
+const PUSH_SPEED = 2;
+
+/** A block of text on screen, px from the top left of the scene layer. */
+export type Box = { left: number; top: number; right: number; bottom: number };
 
 export type SolverInput = {
   /** Seconds since the last step. */
@@ -42,6 +61,8 @@ export type SolverInput = {
   viewport: { w: number; h: number };
   /** The logo stage on screen: centre and side length in px, or null when the page has none. */
   stage: { x: number; y: number; size: number } | null;
+  /** Text without a panel behind it, which the core keeps clear of. */
+  avoid?: readonly Box[];
   /** Jump straight to `poseIndex` (the still frame). */
   snap?: boolean;
 };
@@ -90,13 +111,30 @@ function place(pose: Pose, input: SolverInput): { x: number; y: number; r: numbe
     // Off screen the object waits just outside the edge instead of thousands of px away.
     return { x: stage.x, y: clamp(stage.y, -stage.size, h + stage.size), r: stage.size * LOGO.radiusInBox, at };
   }
-  const r = at.size * Math.min(w, h);
-  const y = at.below === undefined ? at.y * h : Math.max(at.y * h, at.below + REACH_UP * r);
+  const short = h < SHORT_MAX ? at.short : undefined;
+  const r = Math.min(at.size * Math.min(w, h) * (short?.scale ?? 1), at.maxR ?? Infinity);
+  const y = short ? short.y * h : at.below === undefined ? at.y * h : Math.max(at.y * h, at.below + REACH_UP * r);
   return { x: at.x * w, y, r, at };
 }
 
+/**
+ * How far the core at (x, y) with clearance `clear` has to move sideways to keep out of the text
+ * blocks, each block's share faded by its vertical distance. The largest push wins.
+ */
+function avoidText(x: number, y: number, clear: number, boxes: readonly Box[], reach: number): number {
+  let push = 0;
+  for (const box of boxes) {
+    const gap = Math.max(box.top - (y + clear), y - clear - box.bottom, 0);
+    const weight = 1 - MathUtils.smoothstep(gap, 0, reach);
+    if (weight <= 0) continue;
+    const need = x < box.left ? Math.min(0, box.left - clear - x) : Math.max(0, box.right + clear - x);
+    if (Math.abs(need * weight) > Math.abs(push)) push = need * weight;
+  }
+  return push;
+}
+
 export function createSolver(startIndex = 0) {
-  const state = { p: clamp(startIndex, 0, LAST), tiltX: 0, tiltY: 0 };
+  const state = { p: clamp(startIndex, 0, LAST), tiltX: 0, tiltY: 0, push: 0 };
   const phase = [0.9, 2.2]; // spin of A and B, radians; any start works
   let time = 0;
   const out: SolverOutput = {
@@ -138,7 +176,15 @@ export function createSolver(startIndex = 0) {
     out.x = lerp(p0.x, p1.x, t);
     out.y = lerp(p0.y, p1.y, t);
     out.r = lerp(p0.r, p1.r, t);
-    out.dim = lerp(from.dim, to.dim, t);
+    const lead = to.dim > from.dim ? clamp(f / DIM_LEAD, 0, 1) : clamp((f - 1 + DIM_LEAD) / DIM_LEAD, 0, 1);
+    out.dim = lerp(from.dim, to.dim, lead * lead * (3 - 2 * lead));
+
+    // Keep the core out of text; nothing to avoid once the logo is on its stage.
+    const clear = LOGO.coreRadius * out.r + AVOID_MARGIN;
+    const push = (1 - logo) * avoidText(out.x, out.y, clear, input.avoid ?? [], AVOID_REACH * input.viewport.h);
+    if (input.snap) state.push = push;
+    else if (dt > 0) damp(state, 'push', push, PUSH_TIME, dt, PUSH_SPEED * input.viewport.w);
+    out.x += state.push;
     out.fps = POSES[Math.round(state.p)].fps;
 
     const sway = lerp(from.sway, to.sway, t);

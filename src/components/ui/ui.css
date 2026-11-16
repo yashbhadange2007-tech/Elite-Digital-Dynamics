@@ -40,6 +40,13 @@
     margin-block-end: var(--space-7);
   }
 
+  /* Eyebrow, heading and lead: laid out exactly as direct children of the header. */
+  .ui-section-header-text {
+    display: grid;
+    justify-items: inherit;
+    row-gap: inherit;
+  }
+
   @media (min-width: 64rem) {
     .ui-section-header {
       row-gap: var(--space-5);
@@ -124,6 +131,7 @@
     transition:
       background-color var(--dur-1) var(--ease-out),
       border-color var(--dur-1) var(--ease-out),
+      box-shadow var(--dur-1) var(--ease-out),
       scale var(--dur-1) var(--ease-out);
   }
 
@@ -157,10 +165,16 @@
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
   }
 
+  /* Backed with the lite glass fill so a ring passing behind never cuts through the label;
+     transparent inside a panel, which already gives it a backing. */
   .ui-btn[data-variant='ghost'] {
     border-color: var(--color-hairline-strong);
-    background-color: transparent;
+    background-color: var(--glass-fill-lite);
     color: var(--color-text);
+  }
+
+  .ui-glass .ui-btn[data-variant='ghost'] {
+    background-color: transparent;
   }
 
   @media (hover: hover) {
@@ -168,8 +182,9 @@
       background-color: var(--color-ember-500);
     }
 
+    /* An inset shadow paints over the backing, so the hover tint layers on whatever fill is there. */
     .ui-btn[data-variant='ghost']:not([aria-disabled='true']):hover {
-      background-color: rgb(255 255 255 / 0.06);
+      box-shadow: inset 0 0 0 100vmax rgb(255 255 255 / 0.06);
     }
 
     .ui-btn:not([aria-disabled='true']):hover .ui-btn-icon {

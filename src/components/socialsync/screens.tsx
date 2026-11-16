@@ -3,6 +3,7 @@
 import { FacebookLogo } from '@phosphor-icons/react/dist/ssr/FacebookLogo';
 import { ImageSquare } from '@phosphor-icons/react/dist/ssr/ImageSquare';
 import { InstagramLogo } from '@phosphor-icons/react/dist/ssr/InstagramLogo';
+import { Warning } from '@phosphor-icons/react/dist/ssr/Warning';
 import { YoutubeLogo } from '@phosphor-icons/react/dist/ssr/YoutubeLogo';
 import { useEffect, useState, type Dispatch, type ReactNode } from 'react';
 import {
@@ -423,6 +424,7 @@ function PreviewStage({ s, dispatch }: ScreenProps) {
       </p>
       {blocker ? (
         <p id="ss-blocker" className={styles.blocker}>
+          <Warning weight="fill" aria-hidden="true" />
           {blocker}
         </p>
       ) : null}

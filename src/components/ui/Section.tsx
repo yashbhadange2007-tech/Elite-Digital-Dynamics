@@ -61,11 +61,15 @@ export function Section({
       <Container className={containerClassName}>
         <header className={cn('ui-section-header', headerClassName)}>
           {above}
-          {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-          <Heading level={headingLevel} id={titleId}>
-            {title}
-          </Heading>
-          {lead ? <p className="ui-lead">{lead}</p> : null}
+          {/* The text sits on the scene without a panel, so it gets the text scrim (DESIGN.md 3).
+              `above` stays outside it: the contact logo stage is where the rings land, undimmed. */}
+          <div className="ui-section-header-text text-scrim">
+            {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+            <Heading level={headingLevel} id={titleId}>
+              {title}
+            </Heading>
+            {lead ? <p className="ui-lead">{lead}</p> : null}
+          </div>
         </header>
         {children}
       </Container>

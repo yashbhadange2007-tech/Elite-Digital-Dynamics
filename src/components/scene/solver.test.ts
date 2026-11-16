@@ -2,8 +2,8 @@ import { Quaternion, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { POSE_ORDER } from '@/lib/scroll-store';
 import { LOGO } from './geometry';
-import { POSES, REACH_UP } from './poses';
-import { createSolver, MAX_SPEED, SETTLE_RATE, type SolverInput } from './solver';
+import { POSES, REACH_UP, SHORT_MAX } from './poses';
+import { AVOID_MARGIN, createSolver, MAX_SPEED, SETTLE_RATE, type SolverInput } from './solver';
 
 const LAST = POSES.length - 1;
 const DEG = 180 / Math.PI;
@@ -151,9 +151,11 @@ describe.each([
       expect(out.r).toBeCloseTo(stage.size * LOGO.radiusInBox, 2);
     } else {
       expect(out.x).toBeCloseTo(at.x * viewport.w, 2);
-      const r = at.size * Math.min(viewport.w, viewport.h);
+      const short = viewport.h < SHORT_MAX ? at.short : undefined;
+      const r = Math.min(at.size * Math.min(viewport.w, viewport.h) * (short?.scale ?? 1), at.maxR ?? Infinity);
       expect(out.r).toBeCloseTo(r, 2);
-      expect(out.y).toBeCloseTo(Math.max(at.y * viewport.h, at.below === undefined ? 0 : at.below + REACH_UP * r), 2);
+      const y = short ? short.y * viewport.h : Math.max(at.y * viewport.h, at.below === undefined ? 0 : at.below + REACH_UP * r);
+      expect(out.y).toBeCloseTo(y, 2);
     }
     expect(out.a.x).toBeCloseTo(at.a?.[0] ?? 0, 3);
     expect(out.a.y).toBeCloseTo(at.a?.[1] ?? 0, 3);
@@ -222,5 +224,30 @@ describe('pointer', () => {
     for (let n = 0; n < 60; n++) touch.step({ dt: 1 / 60, poseIndex: 0, pointer: null, viewport, stage: null });
     expect(touch.out.tiltX).toBe(0);
     expect(touch.out.tiltY).toBe(0);
+  });
+});
+
+describe('text', () => {
+  it('keeps the core clear of text beside it, without a jump when the text appears', () => {
+    const viewport = { w: 375, h: 812 };
+    const step = (solver: ReturnType<typeof createSolver>, avoid: SolverInput['avoid']) =>
+      solver.step({ dt: 1 / 60, poseIndex: 1, pointer: null, viewport, stage: null, avoid });
+    const solver = createSolver(1);
+    for (let n = 0; n < 60; n++) step(solver, []);
+    const free = solver.out.x;
+    const clear = LOGO.coreRadius * solver.out.r + AVOID_MARGIN;
+    // A heading across the core's line, as wide as the column.
+    const heading = [{ left: 19, right: 356, top: solver.out.y - 20, bottom: solver.out.y + 20 }];
+    let previous = free;
+    for (let n = 0; n < 120; n++) {
+      step(solver, heading);
+      expect(Math.abs(solver.out.x - previous)).toBeLessThanOrEqual(2 * viewport.w * (1 / 60) * 1.001);
+      previous = solver.out.x;
+    }
+    expect(solver.out.x).toBeCloseTo(356 + clear, 0);
+    // Far above the core it no longer matters.
+    const far = [{ left: 19, right: 356, top: -400, bottom: -360 }];
+    for (let n = 0; n < 120; n++) step(solver, far);
+    expect(solver.out.x).toBeCloseTo(free, 1);
   });
 });

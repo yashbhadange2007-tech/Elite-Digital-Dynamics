@@ -9,7 +9,7 @@ import { LOGO, makeRing } from './geometry';
 import { CORE_LIGHT, makeCoreMaterial, makeEnvironment, makeHaloMaterial, makeRingMaterial } from './materials';
 import { createController, HALF_RATE_GAP, startTier, TIERS } from './quality';
 import type { SceneDebug } from './SceneLayer';
-import { createSolver } from './solver';
+import { createSolver, type Box } from './solver';
 
 /**
  * The live scene: the canvas, the two rings and the core, and the frame loop. Loaded on demand by
@@ -123,15 +123,32 @@ function createEngine(root: RootState, options: Omit<RigProps, 'still'>) {
   };
   if (finePointer) window.addEventListener('pointermove', onMove, { passive: true });
 
-  // The logo stage's place in the document, measured when the page changes size, never per frame.
+  // The logo stage's place in the document, and the text the core keeps clear of, measured when
+  // the page changes size, never per frame.
   let stage: { x: number; y: number; size: number } | null = null;
+  let texts: Box[] = [];
+  const avoid: Box[] = [];
   let measureFrame = 0;
   const measure = () => {
     measureFrame = 0;
+    const { scrollX, scrollY } = window;
     const rect = document.querySelector('[data-logo-stage]')?.getBoundingClientRect();
-    stage = rect
-      ? { x: rect.left + window.scrollX + rect.width / 2, y: rect.top + window.scrollY + rect.height / 2, size: rect.width }
-      : null;
+    stage = rect ? { x: rect.left + scrollX + rect.width / 2, y: rect.top + scrollY + rect.height / 2, size: rect.width } : null;
+    // Text with no panel behind it: each section's heading and the eyebrow and paragraphs beside it.
+    // The text's own extent (a range), not its box, so a short line does not push the core far.
+    texts = [];
+    const range = document.createRange();
+    for (const heading of document.querySelectorAll('[data-pose] :is(h1, h2)')) {
+      for (const el of heading.parentElement?.children ?? []) {
+        if (!el.matches('h1, h2, p') || el.closest('.ui-glass, [data-variant]')) continue;
+        range.selectNodeContents(el);
+        const box = range.getBoundingClientRect();
+        if (box.width < 4 || box.height < 4) continue;
+        texts.push({ left: box.left + scrollX, top: box.top + scrollY, right: box.right + scrollX, bottom: box.bottom + scrollY });
+      }
+    }
+    avoid.length = 0;
+    for (const text of texts) avoid.push({ ...text });
   };
   const scheduleMeasure = () => {
     measureFrame ||= requestAnimationFrame(measure);
@@ -145,6 +162,12 @@ function createEngine(root: RootState, options: Omit<RigProps, 'still'>) {
   const update = (delta: number) => {
     const started = performance.now();
     const { width, height } = root.get().size;
+    texts.forEach((text, k) => {
+      avoid[k].left = text.left - window.scrollX;
+      avoid[k].right = text.right - window.scrollX;
+      avoid[k].top = text.top - window.scrollY;
+      avoid[k].bottom = text.bottom - window.scrollY;
+    });
     const out = solver.step({
       dt: still ? 0 : delta,
       poseIndex: still ? 0 : (lockPose ?? scrollState.poseIndex),
@@ -154,6 +177,7 @@ function createEngine(root: RootState, options: Omit<RigProps, 'still'>) {
       // window.scrollY, not scrollState.y: the store updates later in the frame, and one frame of
       // lag would let the logo slide on its stage while the page scrolls.
       stage: stage && { x: stage.x - window.scrollX, y: stage.y - window.scrollY, size: stage.size },
+      avoid,
     });
 
     const unit = unitsPerPx(height);

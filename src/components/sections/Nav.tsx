@@ -46,7 +46,7 @@ export default function Nav() {
         {/* The logo gets its own capsule (never blurred), so it stays readable over the page text. */}
         <Link href="/" className={cn(pill(false), '-ml-1 inline-flex items-center lg:-ml-3 lg:px-3')}>
           {/* `lazy` on both: the one hidden by CSS is then never downloaded. */}
-          <Logo variant="horizontal" decorative loading="lazy" className="hidden lg:block" />
+          <Logo variant="horizontal" height={40} decorative loading="lazy" className="hidden lg:block" />
           <Logo variant="mark" decorative loading="lazy" className="lg:hidden" />
           <VisuallyHidden>Elite Digital Dynamics, home</VisuallyHidden>
         </Link>

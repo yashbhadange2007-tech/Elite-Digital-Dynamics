@@ -391,7 +391,7 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: 0.625rem;
-    min-block-size: 2.5rem;
+    min-block-size: 2.75rem;
     padding-inline: 0.75rem;
     border-radius: 0.625rem;
     color: var(--ss-on-dark-muted);
@@ -975,13 +975,23 @@
 }
 
 .blocker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
   padding: 0.5rem 0.75rem;
-  border-inline-start: 3px solid var(--ss-yt);
+  border: 1px solid color-mix(in srgb, var(--ss-yt) 40%, transparent);
   border-radius: 0.5rem;
   background-color: var(--ss-yt-soft);
   font-size: 0.8125rem;
   font-weight: 700;
+}
+
+.blocker svg {
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  color: var(--ss-yt);
 }
 
 .preview {

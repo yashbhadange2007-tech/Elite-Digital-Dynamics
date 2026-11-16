@@ -31,7 +31,7 @@ export default function Work({ stub }: WorkProps) {
     <Section id="work" pose="work" title="Work you can open right now." lead="Three live client websites. Browse each one here, or open the full site.">
       <fieldset className="mb-6 min-w-0 lg:hidden">
         <legend className="visually-hidden">Choose a site to preview</legend>
-        <div className="-m-1.5 flex gap-2 overflow-x-auto p-1.5 [scrollbar-width:none]">
+        <div className="flex flex-wrap gap-2">
           {SITES.map((site) => (
             <label
               key={site.slug}
