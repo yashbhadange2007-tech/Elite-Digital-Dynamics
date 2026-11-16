@@ -118,7 +118,7 @@ test.describe('logo stage (E8)', () => {
     await page.evaluate(() => (document.documentElement.dataset.scene = 'poster'));
     await expect(mark).toBeVisible();
 
-    const tagline = page.getByText('Your Vision, Our Innovation', { exact: true });
+    const tagline = page.locator('#contact').getByText('Your Vision, Our Innovation', { exact: true });
     expect((await tagline.boundingBox())!.y).toBeGreaterThanOrEqual(box.y + box.height);
   });
 });

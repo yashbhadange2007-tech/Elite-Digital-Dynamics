@@ -36,7 +36,9 @@ export default function Footer() {
         </div>
 
         <nav aria-label="Footer" className="md:col-span-4 lg:col-span-3">
-          <ul className="grid justify-items-start gap-2">
+          {/* Two columns on phones keep the footer shorter than the screen under the nav, so the
+              lockup clears the sticky nav at the end of the page. */}
+          <ul className="grid grid-cols-2 justify-items-start gap-x-6 gap-y-2 md:grid-cols-1">
             {[...NAV_LINKS, CTA].map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className={LINK}>

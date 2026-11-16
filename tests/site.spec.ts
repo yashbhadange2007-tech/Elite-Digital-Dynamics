@@ -25,9 +25,21 @@ for (const path of PAGES) {
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).toContain('connect-src');
     expect(csp).toContain('https://api.web3forms.com');
-    expect(csp).toContain('frame-src');
+    expect(csp).toContain("frame-src 'none'");
     expect(headers['x-content-type-options']).toBe('nosniff');
     expect(headers['strict-transport-security']).toBeTruthy();
+
+    // Component styles must win over Tailwind's reset. The production build orders stylesheets by
+    // import order, and a component CSS module loaded first once flattened the whole page.
+    const firstLayer = await page.evaluate(() => {
+      for (const sheet of document.styleSheets) {
+        for (const rule of sheet.cssRules) if ('name' in rule || 'nameList' in rule) return (rule as CSSLayerBlockRule).name;
+      }
+      return null;
+    });
+    expect(firstLayer, 'first CSS layer seen').not.toBe('components');
+    const h1 = page.locator('main h1').first();
+    expect(parseFloat(await h1.evaluate((el) => getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(32);
 
     // Walk the page so lazy sections (client frames, demo) mount under the policy.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);

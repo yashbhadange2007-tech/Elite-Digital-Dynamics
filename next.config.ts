@@ -27,19 +27,14 @@ const visitRedirects = (sites as { slug: string; url: string }[]).map(({ slug, u
  * visitor input and loads no third-party script. Move to a nonce in proxy.ts if either changes.
  */
 const production = process.env.NODE_ENV === 'production';
-// Only sites that are actually framed (a site in screenshot mode in both frames needs no frame-src).
-const framedOrigins = (sites as { url: string; mode?: Record<string, string> }[])
-  .filter((s) => !s.mode || Object.values(s.mode).some((m) => m !== 'screenshot'))
-  .map((s) => new URL(s.url).origin);
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  // Framed sites too: SitePreview pings them to detect an unreachable host before showing the frame.
-  `connect-src 'self' https://api.web3forms.com ${framedOrigins.join(' ')}`.trim(),
-  `frame-src ${framedOrigins.join(' ') || "'none'"}`,
+  "connect-src 'self' https://api.web3forms.com",
+  "frame-src 'none'",
   "worker-src 'self' blob:",
   "media-src 'self'",
   "manifest-src 'self'",

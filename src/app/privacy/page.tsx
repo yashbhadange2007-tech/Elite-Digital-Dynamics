@@ -22,8 +22,8 @@ const SECTIONS = [
     body: 'Only to reply to your enquiry and to talk about your project. We do not sell it or pass it to advertisers.',
   },
   {
-    title: 'Live previews of client websites.',
-    body: 'The "Our work" section loads real client websites inside this page. When a preview loads, your browser connects to that website directly, as if you had opened it, and that website may set its own cookies.',
+    title: 'Links to client websites.',
+    body: 'The "Our work" section shows still pictures of client websites. Nothing from those websites loads on this page. If you open one, it opens in a new tab under that website\'s own privacy terms.',
   },
   {
     title: 'Cookies and tracking.',

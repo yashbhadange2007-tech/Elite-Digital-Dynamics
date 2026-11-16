@@ -61,9 +61,9 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 ### Our work: client sites
 - No eyebrow.
 - H2: **Work you can open right now.**
-- Lead: Three live client websites. Browse each one here, or open the full site.
-- Per site: device frame with the business name in the address bar, name as h3, one-line caption, button **Open live site**.
-- Names and captions: section 6.
+- Lead: Three live client websites and an app we built. Each site opens in a new tab.
+- One link card per project (owner change, 2026-11-16): first-screen picture, name as h3, one line, city, 2 or 3 tags for what we built, label **Visit site** with an arrow. Client cards open `/visit/<slug>` in a new tab; the SocialSync card (**See the demo**) goes to `#demo`. No frames.
+- Names, lines and tags: section 6 and `src/components/work/sites.data.json`.
 
 ### Our work: SocialSync demo
 - Eyebrow: `App we built`
@@ -213,18 +213,16 @@ Rules:
 
 ## 6. Client sites (measured by the scout, full evidence in `docs/research/sites.md`)
 
-| Order | Name (address bar and h3) | Caption | Phone frame | Laptop frame |
+| Order | Name (h3) | Line | City | Tags |
 |---|---|---|---|---|
-| 1 | Hotel Orient Elite | Central Solapur hotel: rooms, vegetarian restaurant, rooftop cafe and event hall. | screenshot | screenshot |
-| 2 | Goodlife Fitness | Premium gym in Murarji Peth, Solapur, with boxing, yoga, steam and spa. | interactive | interactive |
-| 3 | Goodlife Fitness Club | 24-hour weights-and-cardio gym at Sai Trade Center, Solapur. | interactive | interactive |
+| 1 | Hotel Orient Elite | Hotel with rooms, a vegetarian restaurant, a rooftop cafe and an event hall. | Solapur | Website · WhatsApp booking form · Rooms and dining |
+| 2 | Goodlife Fitness | Premium gym in Murarji Peth with boxing, yoga, steam and spa. | Solapur | Website · WhatsApp enquiry form · Facilities showcase |
+| 3 | Goodlife Fitness Club | 24-hour weights and cardio gym at Sai Trade Center. | Solapur | Website · Call and WhatsApp bar · Trainer profiles |
+| 4 | SocialSync | Scheduling app for IPMH, a physiotherapy and osteopathy clinic. | Pune | Custom web app · Instagram, Facebook and YouTube · Scheduled posts |
 
-Why these modes:
-- **The tall iframe fails on all three sites.** Each hero is `min-height: 100vh`, so in a tall iframe the hero grows to the iframe's height and the rest of the page is cut off. No height works (document height is always iframe height plus a constant). The tall mode stays in the code for the day the client sites cap their hero height when framed.
-- **Goodlife Fitness and Goodlife Fitness Club: interactive.** They render correctly at normal height, cost 1.75 MB and 0.97 MB on mount, and hand scrolling back to our page at both ends (wheel and touch).
-- **Hotel Orient Elite: screenshot.** It frames and renders, but it downloads 41.3 MB on every mount (17 PNG photos and a video, none lazy) and its smooth-scroll library never gives the mouse wheel back to our page. Both break the owner's rules (phones first; scrolling must not get stuck). In screenshot mode the visitor still scrolls the preview and a tap opens the real site.
+Every fact comes from `docs/research/sites.md` (what is on each page) or the brief (SocialSync). The pictures are the top 1280x800 of the scout's desktop captures, and the SocialSync picture is our own demo.
 
-Layout order: the hotel takes the laptop frame on desktop and is the first tab on phones, so nothing live loads on a phone until the visitor picks a Goodlife tab.
+Frames were dropped by the owner: the client pages are heavy, frames trap scrolling, and visitors should stay on our site until they choose to leave.
 
 The two Goodlife sites are different businesses' pages (different address, phone, hours and offer), and the first also calls itself "Goodlife Fitness Club" in its footer, so the captions carry the difference: place and purpose.
 

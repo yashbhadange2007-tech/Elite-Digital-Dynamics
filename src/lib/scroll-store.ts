@@ -101,7 +101,9 @@ function measure(): void {
     if (pose < 0) continue;
     found.add(el);
     const rect = el.getBoundingClientRect();
-    entries.push({ centre: rect.top + scrollY + rect.height / 2, pose });
+    // Centre of the anchor's first screen, not of the whole element: a tall section's pose is then
+    // in place by the time its heading reaches the top, instead of rings crossing the heading.
+    entries.push({ centre: rect.top + scrollY + Math.min(rect.height, innerHeight) / 2, pose });
   }
 
   entries.sort((a, b) => a.centre - b.centre);

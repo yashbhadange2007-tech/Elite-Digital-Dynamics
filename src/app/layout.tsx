@@ -1,3 +1,7 @@
+// First import, on purpose: the production build emits stylesheets in import order, and CSS layers
+// stack in the order first seen. A component's CSS module ahead of this file would declare
+// `@layer components` before Tailwind's `base`, and the reset would then beat every component style.
+import './globals.css';
 import type { ReactNode } from 'react';
 import Footer from '@/components/sections/Footer';
 import Nav from '@/components/sections/Nav';
@@ -6,7 +10,6 @@ import { AppInit } from '@/components/ui/AppInit';
 import { SkipLinks } from '@/components/ui/SkipLinks';
 import { manrope } from '@/lib/fonts';
 import { MOTION_BOOT_SCRIPT } from '@/lib/quality-store';
-import './globals.css';
 
 // Owned by the SEO agent (src/components/seo/metadata.ts).
 export { metadata, viewport } from '@/components/seo/metadata';

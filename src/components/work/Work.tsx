@@ -1,96 +1,98 @@
-'use client';
-
+import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr/ArrowUpRight';
-import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
-import { DeviceFrame } from '@/components/ui/DeviceFrame';
+import Image from 'next/image';
+import type { ReactNode } from 'react';
 import { Heading } from '@/components/ui/Heading';
 import { Section } from '@/components/ui/Section';
-import { cn } from '@/lib/cn';
-import { useMediaQuery } from '@/lib/hooks';
-import { SitePreview, type SitePreviewProps } from './SitePreview';
-import { SITES } from './sites.config';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import sites from './sites.data.json';
 
-export type WorkProps = {
-  /** Preview route only: point the first site's frames at a stub page in a chosen mode. */
-  stub?: Pick<SitePreviewProps, 'url' | 'mode' | 'height'>;
+type Card = {
+  slug: string;
+  href: string;
+  external: boolean;
+  name: string;
+  line: string;
+  city: string;
+  tags: string[];
+  action: string;
+  icon: ReactNode;
 };
 
-/**
- * "Our work": three live client sites in device frames (DESIGN.md 8).
- * Below 1024px: a segmented control and one phone frame for the selected site; the other cards are
- * hidden and their previews are not rendered, so only the selected site can mount an iframe.
- * From 1024px: laptop frame for the first site, phone frames for the other two, bottoms aligned.
- * (Server render and hydration use the phone layout's previews; the CSS layout is right from the start.)
- */
-export default function Work({ stub }: WorkProps) {
-  const [selected, setSelected] = useState(SITES[0].slug);
-  const wide = useMediaQuery('(min-width: 64rem)');
+/** Client sites open through `/visit/<slug>` (next.config.ts), so no hosting domain ever shows. */
+const CARDS: Card[] = [
+  ...sites.map((s) => ({
+    slug: s.slug,
+    href: `/visit/${s.slug}`,
+    external: true,
+    name: s.name,
+    line: s.line,
+    city: s.city,
+    tags: s.tags,
+    action: 'Visit site',
+    icon: <ArrowUpRight aria-hidden />,
+  })),
+  {
+    // No public site (the real app needs a login): the card goes to the demo just below.
+    slug: 'socialsync',
+    href: '#demo',
+    external: false,
+    name: 'SocialSync',
+    line: 'Scheduling app for IPMH, a physiotherapy and osteopathy clinic.',
+    city: 'Pune',
+    tags: ['Custom web app', 'Instagram, Facebook and YouTube', 'Scheduled posts'],
+    action: 'See the demo',
+    icon: <ArrowDown aria-hidden />,
+  },
+];
 
+/** "Our work": one link card per project. The whole card is the link. */
+export default function Work() {
   return (
-    <Section id="work" pose="work" title="Work you can open right now." lead="Three live client websites. Browse each one here, or open the full site.">
-      <fieldset className="mb-6 min-w-0 lg:hidden">
-        <legend className="visually-hidden">Choose a site to preview</legend>
-        <div className="flex flex-wrap gap-2">
-          {SITES.map((site) => (
-            <label
-              key={site.slug}
-              className="flex min-h-11 flex-none cursor-pointer items-center rounded-pill border border-hairline-strong px-5 text-small font-medium whitespace-nowrap text-text-muted transition-colors duration-1 has-checked:border-ember-600 has-checked:bg-ember-600 has-checked:text-white has-focus-visible:outline-2 has-focus-visible:outline-offset-3 has-focus-visible:outline-focus"
+    <Section
+      id="work"
+      pose="work"
+      title="Work you can open right now."
+      lead="Three live client websites and an app we built. Each site opens in a new tab."
+    >
+      <ul className="grid gap-6 md:grid-cols-2 lg:gap-8">
+        {CARDS.map((card) => (
+          <li key={card.slug} className="grid">
+            <a
+              href={card.href}
+              {...(card.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              data-work-card={card.slug}
+              className="ui-glass group flex flex-col gap-4 rounded-panel p-4 transition-colors duration-2 hover:border-hairline-strong focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-focus md:p-5"
             >
-              <input
-                type="radio"
-                name="work-site"
-                value={site.slug}
-                checked={selected === site.slug}
-                onChange={() => setSelected(site.slug)}
-                className="sr-only"
+              <Image
+                src={`/work/${card.slug}.webp`}
+                alt={`First screen of ${card.name}`}
+                width={960}
+                height={600}
+                sizes="(min-width: 48rem) 50vw, 100vw"
+                className="aspect-[16/10] w-full rounded-card border border-hairline object-cover object-top"
               />
-              {site.name}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <ul className="lg:grid lg:grid-cols-[minmax(0,58fr)_minmax(0,21fr)_minmax(0,21fr)] lg:gap-x-8">
-        {SITES.map((site, index) => {
-          const preview = index === 0 ? stub : undefined;
-          const chosen = site.slug === selected;
-          return (
-            <li
-              key={site.slug}
-              className={cn(
-                'mx-auto max-w-[20.5rem] lg:row-span-2 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[minmax(0,1fr)] lg:grid-rows-subgrid',
-                !chosen && 'max-lg:hidden',
-              )}
-            >
-              {index === 0 ? (
-                <>
-                  <DeviceFrame variant="phone" addressLabel={site.addressLabel} className="lg:hidden">
-                    {!wide && chosen ? <SitePreview site={site} device="phone" {...preview} /> : null}
-                  </DeviceFrame>
-                  <DeviceFrame variant="laptop" addressLabel={site.addressLabel} className="self-end max-lg:hidden">
-                    {wide ? <SitePreview site={site} device="laptop" {...preview} /> : null}
-                  </DeviceFrame>
-                </>
-              ) : (
-                <DeviceFrame variant="phone" addressLabel={site.addressLabel} className="self-end">
-                  {wide || chosen ? <SitePreview site={site} device="phone" /> : null}
-                </DeviceFrame>
-              )}
-              <div className="text-scrim mt-5 grid content-start gap-2">
-                <Heading level={3} className="lg:text-[1.375rem]">
-                  {site.name}
-                </Heading>
-                <p className="text-text-muted">{site.caption}</p>
-                <div className="mt-2">
-                  <Button href={`/visit/${site.slug}`} external variant="ghost" icon={<ArrowUpRight />}>
-                    Open live site
-                  </Button>
-                </div>
+              <div className="flex flex-1 flex-col gap-2 px-1">
+                <Heading level={3}>{card.name}</Heading>
+                <p className="text-text-muted">
+                  {card.line} <span className="text-text">{card.city}.</span>
+                </p>
+                <ul className="mt-1 flex flex-wrap gap-2" aria-label="What we built">
+                  {card.tags.map((tag) => (
+                    <li key={tag} className="rounded-pill border border-hairline px-3 py-1 text-small text-text-muted">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+                <span className="mt-auto inline-flex min-h-11 self-start pt-2 items-center gap-2 font-medium text-salmon">
+                  {card.action}
+                  <span className="transition-transform duration-2 group-hover:translate-x-0.5 [&_svg]:size-5">{card.icon}</span>
+                  {card.external ? <VisuallyHidden> (opens in new tab)</VisuallyHidden> : null}
+                </span>
               </div>
-            </li>
-          );
-        })}
+            </a>
+          </li>
+        ))}
       </ul>
     </Section>
   );

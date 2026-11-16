@@ -66,7 +66,8 @@ export const POSES: readonly Pose[] = [
     // Flat and concentric, facing the viewer, cropped by the screen edge, behind the panel.
     id: 'services',
     phone: { x: 0.5, y: 0.74, size: 0.56 },
-    desktop: { x: 0.03, y: 0.56, size: 0.44 },
+    // Low and left, so the rings' path from the hero stays below the section heading.
+    desktop: { x: 0.02, y: 0.76, size: 0.38 },
     dim: 0.55,
     fps: 60,
     tiltA: [0, 0, 0],
@@ -118,7 +119,7 @@ export const POSES: readonly Pose[] = [
     // Small gyroscope to one side.
     id: 'faq',
     // Phone: in the corner, right of the heading's line.
-    phone: { x: 0.95, y: 0.13, size: 0.17 },
+    phone: { x: 1.05, y: 0.11, size: 0.14 },
     desktop: { x: 0.97, y: 0.5, size: 0.2 },
     dim: 0.65,
     fps: 60,

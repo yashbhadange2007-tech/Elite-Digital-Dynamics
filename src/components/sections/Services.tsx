@@ -21,14 +21,14 @@ export default function Services() {
             return (
               <li
                 key={service.id}
-                className="grid gap-x-8 gap-y-4 border-b border-hairline py-8 first:pt-0 last:border-b-0 last:pb-0 lg:grid-cols-12 lg:py-10"
+                className="grid gap-x-8 gap-y-4 border-b border-hairline py-8 first:pt-0 last:border-b-0 last:pb-0 md:grid-cols-12 md:gap-y-6 lg:py-10"
               >
-                <NumberLabel n={index + 1} aria-hidden className="lg:col-span-1 lg:pt-2" />
-                <div className="grid content-start gap-2 lg:col-span-5">
+                <NumberLabel n={index + 1} aria-hidden className="md:col-span-12 lg:col-span-1 lg:pt-2" />
+                <div className="grid content-start gap-2 md:col-span-6 lg:col-span-5">
                   <Heading level={3}>{service.name}</Heading>
                   <p className="max-w-[40ch] text-text-muted">{promise}</p>
                 </div>
-                <div className="grid content-start gap-4 lg:col-span-6 lg:pt-1">
+                <div className="grid content-start gap-4 md:col-span-6 lg:pt-1">
                   <ul className="grid list-disc gap-2 pl-5 marker:text-salmon">
                     {deliverables.map((item) => (
                       <li key={item}>{item}</li>

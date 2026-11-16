@@ -8,14 +8,8 @@ import { test as base, expect, type Page } from '@playwright/test';
  * Framed client sites load their own third-party files; those belong to them and are ignored.
  */
 
-// Origins our own page may reach: the three framed client sites and the form API (always mocked in tests).
-const ALLOWED_HOSTS = [
-  'hotelorientelite.co.in',
-  'www.hotelorientelite.co.in',
-  'goodlife-fitness-website.vercel.app',
-  'goodlife-fitness-club.vercel.app',
-  'api.web3forms.com',
-];
+// The only origin our own page may reach: the form API (always mocked in tests).
+const ALLOWED_HOSTS = ['api.web3forms.com'];
 
 type Options = {
   /** Extra origins a spec may reach, e.g. made-up hosts it fulfils with page.route(). */
