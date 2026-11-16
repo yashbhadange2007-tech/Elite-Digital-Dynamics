@@ -197,6 +197,9 @@
   body > footer {
     position: relative;
     z-index: var(--z-content);
+    /* Decorative bleed (text scrims, glows) must never make the page scroll sideways.
+       `clip`, not `hidden`: no scroll container, so sticky children keep working. */
+    overflow-x: clip;
   }
 
   body > header {
