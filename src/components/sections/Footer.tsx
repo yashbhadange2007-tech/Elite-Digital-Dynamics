@@ -2,42 +2,59 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Logo } from '@/components/ui/Logo';
 import { MotionToggle } from '@/components/ui/MotionToggle';
+import { site } from '@/lib/site';
+import { CTA, FOOTER, NAV_LINKS } from './content';
+
+// Pill links pulled left by their own padding, so the text lines up with the column edge.
+const LINK = 'ui-pill-link -ml-4';
 
 /**
- * STUB (foundation). Agent C replaces this with the real footer (DESIGN.md 7, SPEC.md):
- * stacked lockup, link and contact columns, bottom row.
- * Default export, rendered by the root layout on every page, so links are `/#id`.
+ * Footer (DESIGN.md 7, SPEC.md). Rendered by the root layout on every page, so links are `/#id`.
+ * Stacked lockup (the Logo adds the company name as real text), links, the contact repeat, then
+ * the bottom row: copyright line, Privacy and the motion control. Hairline on top, no glass.
  */
-const LINKS = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#work', label: 'Work' },
-  { href: '/#process', label: 'Process' },
-  { href: '/#faq', label: 'FAQ' },
-  { href: '/#contact', label: 'Start a project' },
-  { href: '/privacy', label: 'Privacy' },
-];
-
 export default function Footer() {
   return (
     <footer className="border-t border-hairline">
-      <Container className="flex flex-col gap-8 py-12">
-        <div>
-          <Logo variant="stacked" loading="lazy" className="h-[120px] w-auto md:h-[150px]" />
+      <Container className="grid gap-y-10 py-12 lg:grid-cols-12 lg:gap-x-8 lg:py-16">
+        <div className="lg:col-span-5">
+          {/* The artwork is centred in a wider box: 21.7% of its width is empty on each side.
+              The negative margin puts the visible lockup on the column edge. */}
+          <Logo
+            variant="stacked"
+            loading="lazy"
+            className="-ml-[44px] h-[120px] w-auto max-w-none lg:-ml-[55px] lg:h-[150px]"
+          />
         </div>
-        <nav aria-label="Footer">
-          <ul className="flex flex-wrap gap-x-2">
-            {LINKS.map((link) => (
+
+        <nav aria-label="Footer" className="lg:col-span-3">
+          <ul className="grid justify-items-start gap-2">
+            {[...NAV_LINKS, CTA].map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="ui-pill-link">
+                <Link href={link.href} className={LINK}>
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="text-small text-text-muted">© 2026 Elite Digital Dynamics, Pune.</p>
-          <MotionToggle />
+
+        <address className="grid content-start justify-items-start gap-2 not-italic lg:col-span-4">
+          <a href={site.phones[0].tel} className={LINK}>
+            {site.phones[0].display}
+          </a>
+          <a href={site.mailto} className={LINK}>
+            {site.email}
+          </a>
+          <p className="pt-2 text-text-muted">{site.address.full}</p>
+        </address>
+
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-6 lg:col-span-12">
+          <p className="text-small text-text-muted">{FOOTER.line}</p>
+          <Link href={FOOTER.privacy.href} className={LINK}>
+            {FOOTER.privacy.label}
+          </Link>
+          <MotionToggle className="-ml-4 sm:ml-auto" />
         </div>
       </Container>
     </footer>
