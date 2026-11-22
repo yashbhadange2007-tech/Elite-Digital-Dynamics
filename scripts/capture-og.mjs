@@ -3,6 +3,7 @@
 // Run: node scripts/capture-og.mjs
 import { readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import sharp from 'sharp';
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const root = new URL('../', import.meta.url);
@@ -34,8 +35,12 @@ const loaded = await page.evaluate(async () => {
   return [...document.fonts].map((f) => `${f.family}:${f.status}`);
 });
 if (!loaded.includes('Manrope:loaded')) throw new Error(`Manrope did not load: ${loaded}`);
-await page.screenshot({ path: new URL('src/app/opengraph-image.png', root).pathname });
+const shot = await page.screenshot();
 await browser.close();
+// A 256-colour PNG: a fifth of the size, and still a PNG, which every share preview accepts.
+await sharp(shot)
+  .png({ palette: true, quality: 92, effort: 10, colours: 256, dither: 1 })
+  .toFile(new URL('src/app/opengraph-image.png', root).pathname);
 
 await writeFile(
   new URL('src/app/opengraph-image.alt.txt', root),

@@ -72,7 +72,17 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    return production ? [{ source: '/(.*)', headers: securityHeaders }] : [];
+    return production
+      ? [
+          { source: '/(.*)', headers: securityHeaders },
+          // 190 frames and a clip that change only when scripts/build-sculpture.py is run again:
+          // keep them for a week, and serve the old copy while checking for a new one after that.
+          {
+            source: '/sculpture/:path*',
+            headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=2592000' }],
+          },
+        ]
+      : [];
   },
 };
 

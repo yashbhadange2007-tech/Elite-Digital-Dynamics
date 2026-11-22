@@ -24,7 +24,7 @@ SRC = os.path.join(ROOT, 'source-media')
 OUT = os.path.join(ROOT, 'public', 'sculpture')
 
 DESKTOP = dict(w=1920, h=1080, out_w=1440, out_h=810, quality=46, poster_w=1600, poster_q=80)
-PHONE = dict(w=1080, h=1920, last_frame=64, crop=(1080, 1200, 0, 380), out_w=720, out_h=800, crf=27)
+PHONE = dict(w=1080, h=1920, last_frame=64, crop=(1080, 1200, 0, 380), out_w=720, out_h=800, crf=23)
 CORNER = 240  # the watermark lives inside this bottom-right box
 
 
