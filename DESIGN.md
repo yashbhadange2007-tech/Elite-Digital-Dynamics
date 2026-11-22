@@ -32,7 +32,7 @@ Sampled from the sculpture frames: frame edge `#01070C` to `#050F18`, nebula `#0
 | `--color-focus` | `#FFFFFF` | focus ring |
 | `--color-error` | `#FFC46B` | error text and border (always with an icon and words) |
 | `--color-success` | `#7FE3C0` | success text and icon only |
-| `--glass-fill` | `rgb(9 18 34 / 0.62)` | real glass (with blur) |
+| `--glass-fill` | `rgb(9 18 34 / 0.72)` | real glass (with blur); raised from 0.62 after the contrast sampler measured a pink link at 4.36 |
 | `--glass-fill-lite` | `rgb(8 14 27 / 0.8)` | lite glass (no blur): still translucent, the sculpture shows through |
 | `--glass-blur` | `20px` | real glass only |
 | `--field-fill` | `rgb(143 212 255 / 0.05)` | form fields |

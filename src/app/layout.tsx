@@ -7,6 +7,7 @@ import Footer from '@/components/sections/Footer';
 import Nav from '@/components/sections/Nav';
 import JsonLd from '@/components/seo/JsonLd';
 import { AppInit } from '@/components/ui/AppInit';
+import { Intro } from '@/components/ui/Intro';
 import { SkipLinks } from '@/components/ui/SkipLinks';
 import { manrope } from '@/lib/fonts';
 import { MOTION_BOOT_SCRIPT } from '@/lib/quality-store';
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <Footer />
         <JsonLd />
+        <Intro />
         <AppInit />
       </body>
     </html>

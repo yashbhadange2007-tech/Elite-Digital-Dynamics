@@ -47,7 +47,7 @@
   --color-white: #FFFFFF;
 
   /* ---- Glass and form fields (DESIGN.md 2 and 6) ---- */
-  --glass-fill: rgb(9 18 34 / 0.62);
+  --glass-fill: rgb(9 18 34 / 0.72);
   --glass-fill-lite: rgb(8 14 27 / 0.8);
   --glass-blur: 20px;
   --field-fill: rgb(143 212 255 / 0.05);
@@ -340,6 +340,115 @@
         linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
+    }
+  }
+
+  /* ---- Intro (DESIGN.md 9): 1.5 s, once per session, CSS only ----
+     Shown only while <html data-intro="play">, which the head script sets and removes. */
+  .intro {
+    display: none;
+  }
+
+  html[data-intro='play'][data-motion='full'] .intro {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-intro);
+    display: grid;
+    place-items: center;
+    pointer-events: none; /* the first tap goes through to the page and ends the intro */
+    animation: intro-end 1ms linear 1500ms forwards;
+  }
+
+  /* The cover fades on its own, so the wordmark is still visible while it travels to the nav. */
+  .intro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-bg);
+    animation: intro-cover 500ms var(--ease-in-out) 850ms forwards;
+  }
+
+  .intro-mark {
+    position: relative;
+    display: flex;
+    gap: 0.9em;
+    padding-block-end: 0.9em;
+    font-size: clamp(0.8rem, 3.6vw, 1.75rem);
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    animation: intro-settle 650ms var(--ease-in-out) 850ms forwards;
+  }
+
+  .intro-word[data-strong] {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .intro-letter {
+    display: inline-block;
+    opacity: 0;
+    translate: 0 0.5em;
+    animation: intro-letter 420ms var(--ease-out) forwards;
+    animation-delay: calc(var(--i) * 14ms);
+  }
+
+  .intro-line {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 40%;
+    block-size: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-pink), transparent);
+    opacity: 0;
+    animation: intro-sweep 520ms var(--ease-in-out) 420ms forwards;
+  }
+
+  @keyframes intro-letter {
+    to {
+      opacity: 1;
+      translate: 0;
+    }
+  }
+
+  @keyframes intro-sweep {
+    0% {
+      opacity: 0;
+      translate: -40% 0;
+    }
+    20%,
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      translate: 190% 0;
+    }
+  }
+
+  /* Toward the nav logo: top left of the page container. */
+  @keyframes intro-settle {
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      scale: 0.5;
+      translate: calc(-50vw + max(var(--page-gutter), (100vw - var(--container-page)) / 2 + var(--page-gutter)) + 5rem)
+        calc(-50dvh + var(--nav-h) / 2);
+    }
+  }
+
+  @keyframes intro-cover {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes intro-end {
+    to {
+      visibility: hidden;
     }
   }
 

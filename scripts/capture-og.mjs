@@ -11,18 +11,18 @@ const read = (path, enc) => readFile(new URL(path, root), enc);
 const font = (await read('src/fonts/Manrope-Variable.woff2')).toString('base64');
 const mark = await read('public/brand/edd-mark.svg', 'utf8');
 
-// Values from DESIGN.md: --color-bg, the .page-glow gradient, --color-text, --color-salmon.
+// Values from DESIGN.md: --color-bg, the .page-glow gradient, --color-text, --color-blue-300.
 const html = `<!doctype html><html><head><style>
 @font-face { font-family: Manrope; src: url(data:font/woff2;base64,${font}) format('woff2'); font-weight: 200 800; }
 * { margin: 0; }
-body { width: 1200px; height: 630px; overflow: hidden; background: #080505; font-family: Manrope; color: #F6F1EF;
+body { width: 1200px; height: 630px; overflow: hidden; background: #05070D; font-family: Manrope; color: #FFFFFF;
   display: flex; align-items: center; gap: 56px; padding-inline: 96px 72px; box-sizing: border-box; position: relative; }
 body::before { content: ''; position: absolute; left: 252px; top: 315px; width: 1100px; height: 1100px; translate: -50% -50%;
-  background: radial-gradient(closest-side, rgb(196 36 21 / 0.42) 0%, rgb(122 20 13 / 0.26) 30%, rgb(58 10 6 / 0.12) 58%, transparent 78%); }
+  background: radial-gradient(closest-side, rgb(56 182 255 / 0.2) 0%, rgb(20 50 90 / 0.4) 32%, rgb(14 34 64 / 0.2) 58%, transparent 78%); }
 svg { width: 312px; height: 312px; flex: none; position: relative; }
 div { position: relative; }
 h1 { font-size: 84px; font-weight: 300; line-height: 1.05; letter-spacing: -0.03em; }
-p { margin-top: 28px; font-size: 34px; font-weight: 500; color: #FF8A6B; }
+p { margin-top: 28px; font-size: 34px; font-weight: 500; color: #8FD4FF; }
 </style></head><body>${mark}<div><h1>Elite Digital<br>Dynamics</h1><p>Your Vision, Our Innovation</p></div></body></html>`;
 
 const browser = await chromium.launch();
@@ -39,6 +39,6 @@ await browser.close();
 
 await writeFile(
   new URL('src/app/opengraph-image.alt.txt', root),
-  'Elite Digital Dynamics: two red rings around a glowing core. Your Vision, Our Innovation.',
+  'Elite Digital Dynamics: two blue rings around a glowing pink core. Your Vision, Our Innovation.',
 );
 console.log('src/app/opengraph-image.png', loaded);

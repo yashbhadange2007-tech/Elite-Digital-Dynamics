@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Elite Digital Dynamics"><defs>
   <linearGradient id="ringm" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF8A6B"/><stop offset=".45" stop-color="#C42415"/><stop offset="1" stop-color="#7A140D"/>
+    <stop offset="0" stop-color="#8FD4FF"/><stop offset=".45" stop-color="#38B6FF"/><stop offset="1" stop-color="#1560C0"/>
   </linearGradient>
   <linearGradient id="innerm" x1="44" y1="20" x2="20" y2="44" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#C42415"/>
+    <stop offset="0" stop-color="#8FD4FF"/><stop offset="1" stop-color="#38B6FF"/>
   </linearGradient>
   <radialGradient id="corem" cx="30.6" cy="30.4" r="7.6" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FFD9CC"/><stop offset=".45" stop-color="#FF3B1F"/><stop offset="1" stop-color="#C42415"/>
+    <stop offset="0" stop-color="#FFD6EA"/><stop offset=".45" stop-color="#FF2E93"/><stop offset="1" stop-color="#C41572"/>
   </radialGradient>
   <radialGradient id="glowm" cx="32" cy="32" r="16" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF3B1F" stop-opacity=".55"/><stop offset="1" stop-color="#FF3B1F" stop-opacity="0"/>
+    <stop offset="0" stop-color="#FF2E93" stop-opacity=".55"/><stop offset="1" stop-color="#FF2E93" stop-opacity="0"/>
   </radialGradient>
 </defs><circle cx="32" cy="32" r="16" fill="url(#glowm)"/><path d="M53.44 27.05A22 22 0 1 1 36.95 10.56" fill="none" stroke="url(#ringm)" stroke-width="6.4" stroke-linecap="round"/><path d="M19.69 34.17A12.5 12.5 0 1 1 29.83 44.31" fill="none" stroke="url(#innerm)" stroke-width="3.6" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="url(#corem)"/></svg>

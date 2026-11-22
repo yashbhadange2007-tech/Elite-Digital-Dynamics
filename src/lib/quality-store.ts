@@ -129,12 +129,24 @@ export function toggleMotion(): void {
   set({ motion: next });
 }
 
+/** sessionStorage key: set once the intro has been shown in this browser session. */
+export const INTRO_STORAGE_KEY = 'edd-intro';
+
 /**
- * Inline script for `<head>`. Sets `data-motion` before first paint with the same rule as
- * `initMotionPreference()`, so a paused or reduced-motion visitor never sees a moving first frame.
+ * Inline script for `<head>`. Two jobs, both before first paint:
+ *
+ * 1. Sets `data-motion` with the same rule as `initMotionPreference()`, so a paused or
+ *    reduced-motion visitor never sees a moving first frame.
+ * 2. Starts the intro (`data-intro="play"`, styled in globals.css) once per browser session and
+ *    only when motion is allowed. The first tap, key, wheel or scroll ends it at once; a timer
+ *    ends it after the 1.5 s animation. If session storage is blocked there is no intro.
  */
-export const MOTION_BOOT_SCRIPT = `(function(){var s=null;try{s=localStorage.getItem(${JSON.stringify(
+export const MOTION_BOOT_SCRIPT = `(function(){var d=document.documentElement,s=null;try{s=localStorage.getItem(${JSON.stringify(
   MOTION_STORAGE_KEY,
 )})}catch(e){}var m=s==='still'||s==='full'?s:window.matchMedia&&matchMedia(${JSON.stringify(
   REDUCED_MOTION_QUERY,
-)}).matches?'still':'full';document.documentElement.setAttribute('data-motion',m)})()`;
+)}).matches?'still':'full';d.setAttribute('data-motion',m);try{if(m==='full'&&!sessionStorage.getItem(${JSON.stringify(
+  INTRO_STORAGE_KEY,
+)})){sessionStorage.setItem(${JSON.stringify(
+  INTRO_STORAGE_KEY,
+)},'1');d.setAttribute('data-intro','play');var v=['pointerdown','keydown','wheel','touchstart','scroll'],o={capture:true,passive:true},x=function(){d.removeAttribute('data-intro');v.forEach(function(n){removeEventListener(n,x,o)})};v.forEach(function(n){addEventListener(n,x,o)});setTimeout(x,1600)}}catch(e){}})()`;

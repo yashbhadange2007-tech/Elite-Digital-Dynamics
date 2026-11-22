@@ -16,8 +16,9 @@ const LINK = 'ui-pill-link -ml-2 px-2';
  * Hairline on top, no glass.
  */
 export default function Footer() {
+  // Mostly opaque: the small links here must not depend on what the sculpture is doing behind.
   return (
-    <footer className="border-t border-hairline">
+    <footer className="border-t border-hairline bg-bg/85">
       <Container className="grid gap-y-10 py-12 md:grid-cols-12 md:gap-x-8 lg:py-16">
         <div className="md:col-span-12 lg:col-span-5">
           {/* The artwork is centred in a wider box: 21.7% of its width is empty on each side.

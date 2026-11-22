@@ -10,13 +10,6 @@ import { defineConfig } from '@playwright/test';
  * Failure artefacts (untracked) go to test-results/<run>/, see RUN below.
  */
 
-// No GPU in CI or in the build container: software WebGL through ANGLE + SwiftShader.
-export const WEBGL_ARGS = [
-  '--use-angle=swiftshader',
-  '--enable-unsafe-swiftshader',
-  '--ignore-gpu-blocklist',
-];
-
 // Playwright empties its output folder when a run starts. Several agents run their own spec at the
 // same time, so each run gets its own folder, named after the spec file given on the command line.
 // The env var keeps the main process and its workers on the same value.
@@ -40,7 +33,8 @@ export default defineConfig({
     video: 'off',
     screenshot: 'only-on-failure',
     navigationTimeout: 30_000,
-    launchOptions: { args: WEBGL_ARGS },
+    // Lets the phone clip autoplay in headless Chromium the way a muted inline video does on a phone.
+    launchOptions: { args: ['--autoplay-policy=no-user-gesture-required'] },
   },
   projects: [
     {

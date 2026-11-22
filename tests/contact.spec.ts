@@ -97,13 +97,11 @@ async function expectEntriesKept(page: Page) {
   for (const [key, value] of Object.entries(VISITOR)) await expect(field[key as keyof typeof VISITOR](page)).toHaveValue(value);
 }
 
-test.describe('logo stage (E8)', () => {
-  test('one square stage with the 2D mark as the fallback, tagline under it', async ({ page }) => {
+test.describe('logo mark (E8)', () => {
+  test('one square mark that anchors the last sculpture pose, tagline under it', async ({ page }) => {
     await open(page);
-    const stage = page.locator('[data-logo-stage]');
+    const stage = page.locator('[data-pose="contact"]');
     await expect(stage).toHaveCount(1);
-    await expect(stage).toHaveAttribute('data-pose', 'contact');
-    await expect(page.locator('[data-pose="contact"]')).toHaveCount(1);
     await expect(page.locator('#contact')).not.toHaveAttribute('data-pose');
 
     const size = (page.viewportSize()?.width ?? 0) >= 1024 ? 220 : 168;
@@ -112,10 +110,6 @@ test.describe('logo stage (E8)', () => {
 
     const mark = stage.locator('img');
     await expect(mark).toHaveAttribute('src', '/brand/edd-mark.svg');
-    await expect(mark).toBeVisible();
-    await page.evaluate(() => (document.documentElement.dataset.scene = 'live'));
-    await expect(mark).toBeHidden();
-    await page.evaluate(() => (document.documentElement.dataset.scene = 'poster'));
     await expect(mark).toBeVisible();
 
     const tagline = page.locator('#contact').getByText('Your Vision, Our Innovation', { exact: true });

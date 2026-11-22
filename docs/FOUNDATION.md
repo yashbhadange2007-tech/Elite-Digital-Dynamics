@@ -1,5 +1,7 @@
 # Foundation: what is built and how to code against it
 
+> **November 2026 update.** The owner replaced the real-time WebGL ring scene with a pre-rendered video sculpture and the red theme with navy, electric blue and hot pink. Everything in this file about three.js, React Three Fiber, quality tiers, the logo stage, `data-scene` and ring colours is history. Current truth: `DESIGN.md` (sections 1 to 3 and 9), `SPEC.md` section 5 and `src/components/sculpture/`.
+
 Verified by the orchestrator on the committed state: `eslint .` clean, `tsc --noEmit` clean, 28 unit tests pass, `next build` passes (routes `/`, `/_not-found`, `/privacy`; no preview routes in production), Manrope loads from our own origin, zero console errors and zero off-site requests on `/` and the previews, WebGL renders in headless Chromium with the flags below, `/visit/<slug>` answers 307.
 
 **The source is the contract.** Every file in `src/lib` and `src/components/ui` has doc comments on its exports and props. Read the file you use before you use it. This page is the map.

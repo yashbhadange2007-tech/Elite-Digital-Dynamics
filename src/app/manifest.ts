@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: site.name,
     short_name: 'Elite Digital',
     description:
-      'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.',
+      'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for businesses.',
     start_url: '/',
     display: 'standalone',
     background_color: '#05070D', // --color-bg

@@ -69,6 +69,7 @@ test('hero fits the first screen at 360, 375, 768 and 1440', async ({ page }) =>
       hero.getByRole('heading', { level: 1 }),
       hero.locator('p.ui-lead'),
       hero.getByRole('link', { name: 'Start a project' }),
+      hero.getByRole('link', { name: /^WhatsApp us/ }),
       hero.getByRole('link', { name: 'See our work' }),
     ];
     for (const part of parts) {

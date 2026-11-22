@@ -14,7 +14,7 @@ test.describe.configure({ retries: 1 }); // the dev server is shared: a hot relo
 const CLIENT = /^https:\/\/(www\.)?(hotelorientelite\.co\.in|goodlife-fitness-website\.vercel\.app|goodlife-fitness-club\.vercel\.app)\//;
 
 async function openWork(page: Page) {
-  await page.goto('/?scene=off');
+  await page.goto('/');
   await page.locator('#work').evaluate((el) => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
 }
 
@@ -51,7 +51,7 @@ test('clicking a client card opens the site in a new tab and keeps our page', as
   const [popup] = await Promise.all([context.waitForEvent('page'), card(page, site.slug).click()]);
   await popup.waitForLoadState();
   expect(popup.url()).toBe(`${site.url}/`);
-  expect(page.url()).toContain('/?scene=off');
+  expect(page.url()).toContain('/');
   await popup.close();
 });
 
@@ -66,7 +66,7 @@ test('SocialSync card goes to the demo on this page', async ({ page }) => {
 });
 
 test('no iframe anywhere, previews are small and lazy', async ({ page }) => {
-  await page.goto('/?scene=off');
+  await page.goto('/');
   const height = await page.evaluate(() => document.documentElement.scrollHeight);
   for (let y = 0; y < height; y += 700) {
     await page.evaluate((top) => window.scrollTo(0, top), y);

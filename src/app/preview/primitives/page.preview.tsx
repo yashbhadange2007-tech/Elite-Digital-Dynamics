@@ -125,7 +125,7 @@ export default function PrimitivesPreview() {
             </Row>
           ))}
           <Row label="lead, 17 to 20px">
-            <p className="ui-lead">Websites, apps and automation for local businesses in Pune.</p>
+            <p className="ui-lead">Websites, apps and automation for businesses in Pune.</p>
           </Row>
           <Row label="body, 16px, line height 1.6">
             <p className="max-w-measure">

@@ -37,7 +37,8 @@ export default function Nav() {
     cn(
       'rounded-pill border p-1 transition-colors duration-1',
       scrolled ? 'ui-glass border-hairline-strong' : 'border-transparent',
-      scrolled && (blurs ? 'in-data-[glass=lite]:bg-navy-950' : 'bg-navy-950'),
+      // Denser than a panel: the pill also passes over the demo's light screens.
+      scrolled && (blurs ? 'bg-navy-950/85 in-data-[glass=lite]:bg-navy-950' : 'bg-navy-950'),
     );
 
   return (
