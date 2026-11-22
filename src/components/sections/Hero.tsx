@@ -33,7 +33,7 @@ export default function Hero() {
           </Heading>
           <p className="ui-lead text-balance">{HERO.line}</p>
           <div className="mt-2 flex w-full flex-wrap items-center gap-3 sm:w-auto">
-            <Button href="#contact" size="lg" icon={<ArrowRight />} className="max-sm:grow">
+            <Button href="#contact" size="lg" icon={<ArrowRight className="max-sm:hidden" />} className="max-sm:grow max-sm:px-4">
               {CTA.label}
             </Button>
             <Button
@@ -42,11 +42,11 @@ export default function Hero() {
               size="lg"
               variant="ghost"
               icon={<WhatsappLogo />}
-              className="max-sm:grow"
+              className="max-sm:grow max-sm:px-4"
             >
               {HERO.whatsapp}
             </Button>
-            <a href={HERO.work.href} className="ui-link inline-flex min-h-11 items-center gap-2 px-2 font-medium max-sm:w-full">
+            <a href={HERO.work.href} className="ui-link inline-flex min-h-11 items-center gap-2 pr-2 font-medium max-sm:w-full sm:pl-2">
               {HERO.work.label}
               <ArrowDown aria-hidden="true" className="size-5" />
             </a>

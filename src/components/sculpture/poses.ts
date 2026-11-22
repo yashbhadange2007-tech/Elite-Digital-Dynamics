@@ -15,7 +15,7 @@ export const DESKTOP_POSES: readonly Pose[] = [
   { x: 2, y: 16, scale: 1.1, opacity: 0.26 }, // low, behind the services panel, clear of the heading
   { x: 14, y: 10, scale: 1.3, opacity: 0.2 }, // large and faint behind the work cards
   { x: 10, y: 8, scale: 0.95, opacity: 0.22 }, // behind the demo frame, clear of the text on the left
-  { x: -24, y: 18, scale: 1.2, opacity: 0.18 }, // low left under the process rail
+  { x: 16, y: 24, scale: 1.1, opacity: 0.16 }, // bottom right, below the process steps
   { x: 12, y: 4, scale: 1.05, opacity: 0.24 }, // behind the FAQ panel
   { x: 6, y: 8, scale: 1.3, opacity: 0.2 }, // behind the enquiry form
 ];
@@ -26,7 +26,7 @@ export const PHONE_POSES: readonly Pose[] = [
   { x: 0, y: -6, scale: 1.25, opacity: 0.22 },
   { x: 0, y: 4, scale: 1.4, opacity: 0.2 },
   { x: 0, y: -2, scale: 1.2, opacity: 0.22 },
-  { x: 0, y: 6, scale: 1.35, opacity: 0.2 },
+  { x: 0, y: 18, scale: 1.3, opacity: 0.16 }, // low and at its dimmest: the steps are bare text
   { x: 0, y: -4, scale: 1.25, opacity: 0.22 },
   { x: 0, y: 2, scale: 1.45, opacity: 0.2 },
 ];

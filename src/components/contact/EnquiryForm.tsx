@@ -227,7 +227,7 @@ export function EnquiryForm({ accessKey, timeoutMs }: EnquiryFormProps) {
           error={errors.message}
           className="md:col-span-2"
         >
-          <textarea {...aria('message', true)} rows={4} maxLength={MESSAGE_MAX} className={`${control} min-h-32 py-3.5`} />
+          <textarea {...aria('message', true)} rows={3} maxLength={MESSAGE_MAX} className={`${control} min-h-26 py-3.5`} />
         </Field>
       </div>
 

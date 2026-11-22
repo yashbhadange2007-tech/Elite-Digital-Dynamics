@@ -104,7 +104,7 @@ test.describe('logo mark (E8)', () => {
     await expect(stage).toHaveCount(1);
     await expect(page.locator('#contact')).not.toHaveAttribute('data-pose');
 
-    const size = (page.viewportSize()?.width ?? 0) >= 1024 ? 220 : 168;
+    const size = (page.viewportSize()?.width ?? 0) >= 1024 ? 80 : 64;
     const box = (await stage.boundingBox())!;
     expect([box.width, box.height]).toEqual([size, size]);
 

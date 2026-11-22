@@ -93,7 +93,7 @@ One family: **Manrope variable**, self-hosted (`--font-sans`). The logo wordmark
 
 ## 5. Space, shape, layers
 - Spacing scale (px): 4, 8, 12, 16, 24, 32, 48, 64, 96, 128. Tokens `--space-1` to `--space-10`.
-- Section padding-block: `clamp(4.5rem, 3rem + 7vw, 8.5rem)`. Hero top padding: nav height + `clamp(2rem, 6vw, 5rem)` (never more than 6rem above the eyebrow on desktop).
+- Section padding-block: `clamp(4.5rem, 3rem + 5vw, 6.5rem)` (lowered in the critique round: content was starting 380px down a 900px screen). Hero top padding: nav height + `clamp(2rem, 6vw, 5rem)` (never more than 6rem above the eyebrow on desktop).
 - Container: max `75rem` (1200px); gutter `clamp(1rem, 5vw, 2.5rem)`.
 - Radii (one documented rule, used everywhere): `--radius-panel: clamp(1.25rem, 1rem + 1vw, 1.75rem)` for glass panels and device frames; `--radius-card: 0.875rem` for fields, rows and inner tiles; `--radius-pill: 999px` for every button, chip and the nav.
 - `--nav-h`: `4rem` phone, `4.5rem` from 1024px.
@@ -127,7 +127,7 @@ Blur budget: at most the nav pill and **one** `primary` panel blur in any viewpo
 **Nav**
 - Sticky, transparent at the top of the page. After 24px of scroll the links and button sit in one glass pill (the nav's blur).
 - Desktop: lockup left (height 32px), four links centre-right (pill hit areas, 44px high, muted text; white with a blue hairline border on hover and focus), primary button `md` right. One line at 1024.
-- Phone: mark only (36px), primary button `md`, menu button (44px, icon). Menu is a full-width glass sheet under the nav with the four links (56px rows), then Call and WhatsApp. Closes on link tap, Escape and outside tap. Use native `popover` or `<dialog>` semantics.
+- Phone: at the top of the page the full lockup (32px high) and the menu button, so the first screen names the company and has one pink button (the hero's). After 24px of scroll: mark only (36px), primary button `md`, menu button (44px, icon). Menu is a full-width glass sheet under the nav with the four links (56px rows), then Call and WhatsApp. Closes on link tap, Escape and outside tap. Use native `popover` or `<dialog>` semantics.
 
 **Section header**: h2, then lead under it (stacked, left aligned, never headline-left / paragraph-right). Space below: 48px phone, 64px desktop.
 
@@ -141,7 +141,7 @@ Blur budget: at most the nav pill and **one** `primary` panel blur in any viewpo
 
 **FAQ**: native `<details name="faq">` (one open at a time), summary row 64px min height with the question in h3 size and a plus icon that rotates 45deg when open; answer in muted body text, max `58ch`. One hairline between items.
 
-**Form fields**: label above (`--text-small`, weight 500, `--color-text`), field 52px high (textarea min 128px), fill `--field-fill`, border `--field-border`, radius `--radius-card`, padding-inline 16px, text `--color-text`, 16px font (prevents iOS zoom). Hover border `rgb(255 255 255 / 0.28)`. Focus: border `--color-pink` plus the focus outline. Error: border `--color-error`, message below in `--color-error` with a warning icon. Helper text muted, `--text-small`. Native `<select>` with `color-scheme: dark` and a caret icon. No placeholder used as a label.
+**Form fields**: label above (`--text-small`, weight 500, `--color-text`), field 52px high (textarea min 104px), fill `--field-fill`, border `--field-border`, radius `--radius-card`, padding-inline 16px, text `--color-text`, 16px font (prevents iOS zoom). Hover border `rgb(255 255 255 / 0.28)`. Focus: border `--color-pink` plus the focus outline. Error: border `--color-error`, message below in `--color-error` with a warning icon. Helper text muted, `--text-small`. Native `<select>` with `color-scheme: dark` and a caret icon. No placeholder used as a label.
 
 **Contact block**: a flat list (not cards): icon, label, value. Phone numbers and email are large tap targets (56px rows). WhatsApp is a ghost button with the WhatsApp icon.
 
@@ -163,7 +163,7 @@ Blur budget: at most the nav pill and **one** `primary` panel blur in any viewpo
 | Work: SocialSync | Eyebrow, h2, two short paragraphs; then the phone frame centred with the demo; step chips and Pause tour under the frame (wrap to two rows). | Text in 4 columns left (sticky while the demo is in view), demo right in a laptop frame (8 columns); chips and Pause above the frame. |
 | How we work | Vertical rail: a 1px blue-tinted line at the left, five steps hanging off it (number, verb as h3, one sentence). No panel. | Horizontal rail: one hairline across, five equal columns hanging under it, each with number, verb, sentence. No cards. |
 | FAQ | h2, then the accordion full width inside one glass panel (lite). | Two columns: h2 sticky left (4 cols), accordion right (8 cols) inside one panel. |
-| Contact | Logo mark (168px square), tagline and h2, all centred (the only centred heading on the page), then the contact block, then the form in a `primary` glass panel. Submit buttons full width. | Left 5 columns: logo mark (220px square), tagline, h2, lead and contact block. Right 7 columns: the form in the `primary` glass panel. |
+| Contact | Logo mark (64px), tagline and h2, left aligned like every other heading, then the contact block, then the form in a `primary` glass panel. Submit buttons full width. | Left 5 columns: logo mark (80px), tagline, h2, lead and contact block. Right 7 columns: the form in the `primary` glass panel. |
 | Footer | Stacked lockup, links, contact, bottom row, single column. | Lockup left, two link columns right, bottom row. |
 
 Privacy and 404: single column, max `44rem`, static CSS glow top-right, no sculpture, same nav and footer.

@@ -100,7 +100,11 @@ test('nav: one line, at most 72px, glass pill after scrolling', async ({ page })
         return { name: el.textContent, left: r.left, right: r.right, centre: r.top + r.height / 2 };
       }),
     );
-    expect(items.length, `items in the bar at ${width}`).toBe(width >= 1024 ? 6 : 3);
+    // Phones and tablets, top of the page: the full lockup and the menu button. The pink button
+    // joins after scrolling, because the hero has its own right below (one pink button per screen).
+    expect(items.length, `items in the bar at ${width}`).toBe(width >= 1024 ? 6 : 2);
+    const navCta = header.getByRole('link', { name: 'Start a project' });
+    if (width < 1024) await expect(navCta).toBeHidden();
     for (const [index, item] of items.entries()) {
       expect(Math.abs(item.centre - items[0].centre), `${item.name} on the nav line`).toBeLessThanOrEqual(2);
       expect(item.left).toBeGreaterThanOrEqual(0);
@@ -117,6 +121,8 @@ test('nav: one line, at most 72px, glass pill after scrolling', async ({ page })
     const isPill = await pill.evaluate((el) => parseFloat(getComputedStyle(el).borderRadius) >= el.getBoundingClientRect().height / 2);
     expect(isPill, 'pill shape').toBe(true);
     expect((await header.boundingBox())!.height, 'no height change when the pill appears').toBe(box.height);
+    await expect(navCta).toBeVisible();
+    expect((await navCta.boundingBox())!.x + (await navCta.boundingBox())!.width).toBeLessThanOrEqual(width);
   }
 });
 
@@ -170,6 +176,8 @@ for (const start of ['/', '/privacy']) {
         await menuButton(page).click();
         await menu(page).getByRole('link', { name: target.label }).click();
       } else {
+        // On phones the nav's button appears once the page has scrolled past the hero's own.
+        if (!isDesktop(page)) await page.evaluate(() => window.scrollTo({ top: 120, behavior: 'instant' }));
         await header.getByRole('link', { name: target.label }).click();
       }
       await expect(page).toHaveURL(new RegExp(`/#${target.id}$`));

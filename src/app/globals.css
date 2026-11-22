@@ -113,7 +113,7 @@
   --container-measure: 62ch; /* max-w-measure: body and lead copy */
 
   --page-gutter: clamp(1rem, 5vw, 2.5rem);
-  --section-pad: clamp(4.5rem, 3rem + 7vw, 8.5rem);
+  --section-pad: clamp(4.5rem, 3rem + 5vw, 6.5rem);
   --nav-h: 4rem; /* 4.5rem from 64rem, see :root below */
 
   /* ---- Shape (DESIGN.md 5): one rule, used everywhere ---- */
