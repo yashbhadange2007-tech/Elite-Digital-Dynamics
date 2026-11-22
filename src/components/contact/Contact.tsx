@@ -6,8 +6,8 @@ import { ContactBlock } from './ContactBlock';
 import { EnquiryForm, type EnquiryFormProps } from './EnquiryForm';
 
 /**
- * Enquiry and contact (SPEC.md, DESIGN.md 8). The section has no pose: the logo stage carries
- * `data-pose="contact"` and is where the 3D rings land as the logo (ARCHITECTURE.md 9.13).
+ * Enquiry and contact (SPEC.md, DESIGN.md 8). The logo mark above the heading carries
+ * `data-pose="contact"`, the scroll anchor for the sculpture's last pose.
  * Phones: header centred, then the contact block, then the form. From 1024px: header and contact
  * block in the left 5 columns, the form in the right 7.
  */
@@ -19,8 +19,8 @@ export default function Contact({
     <Section
       id="contact"
       above={
-        <div data-logo-stage data-pose="contact" className="size-[168px] lg:size-[220px]">
-          <Logo variant="mark" decorative loading="lazy" className="size-full scene-live:invisible" />
+        <div data-pose="contact" className="size-[168px] lg:size-[220px]">
+          <Logo variant="mark" decorative loading="lazy" className="size-full" />
         </div>
       }
       eyebrow={site.taglineDisplay}

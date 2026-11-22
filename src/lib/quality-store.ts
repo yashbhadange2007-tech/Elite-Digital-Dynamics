@@ -1,19 +1,16 @@
 /**
- * Rendering quality shared by the scene, the glass panels and anything that animates.
+ * Rendering settings shared by the sculpture, the glass panels and anything that animates.
  * A tiny external store: read it with `useQuality()` (src/lib/hooks.ts) or `getQuality()`.
  *
- *   tier    0..3, driven by the scene's quality controller. 0 means the render loop is stopped
- *           (also the value before the scene has started).
- *   glass   'lite' (opaque fill, no blur, the default) or 'real' (backdrop blur on primary panels).
- *           Mirrored to `<html data-glass>`.
+ *   glass   'lite' (translucent fill, no blur, the default) or 'real' (backdrop blur on primary
+ *           panels). Decided once by `initGlass()`. Mirrored to `<html data-glass>`.
  *   motion  'full' or 'still' (reduced motion or the visitor paused it).
  *           Mirrored to `<html data-motion>`.
  */
 
-export type Tier = 0 | 1 | 2 | 3;
 export type GlassMode = 'lite' | 'real';
 export type MotionMode = 'full' | 'still';
-export type Quality = { readonly tier: Tier; readonly glass: GlassMode; readonly motion: MotionMode };
+export type Quality = { readonly glass: GlassMode; readonly motion: MotionMode };
 
 /** localStorage key. Holds 'still' or 'full', only while the visitor's choice differs from the OS setting. */
 export const MOTION_STORAGE_KEY = 'edd-motion';
@@ -21,7 +18,7 @@ export const MOTION_STORAGE_KEY = 'edd-motion';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 /** What the server renders: `<html data-glass="lite" data-motion="full">`. */
-const SERVER_QUALITY: Quality = Object.freeze({ tier: 0, glass: 'lite', motion: 'full' });
+const SERVER_QUALITY: Quality = Object.freeze({ glass: 'lite', motion: 'full' });
 
 let state: Quality = SERVER_QUALITY;
 const listeners = new Set<() => void>();
@@ -51,18 +48,28 @@ function syncDom(): void {
 
 function set(patch: Partial<Quality>): void {
   const next = { ...state, ...patch };
-  const changed = next.tier !== state.tier || next.glass !== state.glass || next.motion !== state.motion;
+  const changed = next.glass !== state.glass || next.motion !== state.motion;
   if (changed) state = Object.freeze(next);
   syncDom();
   if (changed) for (const listener of listeners) listener();
 }
 
-export function setTier(tier: Tier): void {
-  set({ tier });
-}
-
 export function setGlass(glass: GlassMode): void {
   set({ glass });
+}
+
+/**
+ * Real glass only where a blur is cheap: a wide screen with a mouse, and a browser that supports
+ * `backdrop-filter`. Phones and tablets keep the lite fill, because a blur over the playing
+ * sculpture clip costs frames there (DESIGN.md 6).
+ */
+export function initGlass(): void {
+  if (typeof window === 'undefined') return;
+  const roomy = window.matchMedia?.('(min-width: 64rem) and (hover: hover) and (pointer: fine)').matches;
+  const blurs =
+    typeof CSS !== 'undefined' &&
+    (CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)'));
+  set({ glass: roomy && blurs ? 'real' : 'lite' });
 }
 
 /** Sets the motion mode without saving it. `toggleMotion()` is the visitor-facing action. */

@@ -8,7 +8,7 @@ export type NumberLabelProps = {
   'aria-hidden'?: boolean;
 };
 
-/** The 01 to 05 label of a service or a step: salmon, tabular figures (DESIGN.md 4). */
+/** The 01 to 05 label of a service or a step: light blue, tabular figures (DESIGN.md 4). */
 export function NumberLabel({ n, className, 'aria-hidden': ariaHidden }: NumberLabelProps) {
   const text = typeof n === 'number' ? String(n).padStart(2, '0') : n;
   return (

@@ -22,8 +22,8 @@ export { metadata, viewport } from '@/components/seo/metadata';
  *   suppressHydrationWarning.
  * - data-scroll-behavior="smooth" tells Next to jump (not glide) to the top on route changes
  *   while the CSS keeps smooth scrolling for in-page anchors.
- * - Layer order, back to front: glow (0), scene canvas (1, mounted by page.tsx), scrim (2),
- *   content (10), nav (50), skip links (100).
+ * - Layer order, back to front: glow (0), sculpture (1, mounted by page.tsx), scrim (2),
+ *   content (10), nav (50), skip links (100), intro (200).
  */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

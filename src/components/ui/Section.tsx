@@ -12,7 +12,7 @@ export type SectionProps = {
   pose?: PoseId;
   /** Block at the very top of the header, above the eyebrow (the contact section's logo stage). */
   above?: ReactNode;
-  /** Small salmon line above the heading (hero, SocialSync, and the tagline in contact). */
+  /** Small light-blue line above the heading (hero, SocialSync, and the tagline in contact). */
   eyebrow?: ReactNode;
   title: ReactNode;
   /** One paragraph under the heading (muted, at most 62ch). */
@@ -61,7 +61,7 @@ export function Section({
       <Container className={containerClassName}>
         <header className={cn('ui-section-header', headerClassName)}>
           {above}
-          {/* The text sits on the scene without a panel, so it gets the text scrim (DESIGN.md 3).
+          {/* The text sits on the sculpture without a panel, so it gets the text scrim (DESIGN.md 3).
               `above` stays outside it: the contact logo stage is where the rings land, undimmed. */}
           <div className="ui-section-header-text text-scrim">
             {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}

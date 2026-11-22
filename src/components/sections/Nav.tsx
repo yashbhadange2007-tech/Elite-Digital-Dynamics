@@ -37,7 +37,7 @@ export default function Nav() {
     cn(
       'rounded-pill border p-1 transition-colors duration-1',
       scrolled ? 'ui-glass border-hairline-strong' : 'border-transparent',
-      scrolled && (blurs ? 'in-data-[glass=lite]:bg-ember-950' : 'bg-ember-950'),
+      scrolled && (blurs ? 'in-data-[glass=lite]:bg-navy-950' : 'bg-navy-950'),
     );
 
   return (
@@ -78,7 +78,7 @@ export default function Nav() {
           <div
             id={MENU_ID}
             popover="auto"
-            className="ui-glass fixed inset-auto inset-x-(--page-gutter) top-(--nav-h) m-0 hidden max-h-[calc(100dvh-var(--nav-h)-1rem)] w-auto overflow-auto bg-ember-950 p-2 text-text open:block lg:hidden!"
+            className="ui-glass fixed inset-auto inset-x-(--page-gutter) top-(--nav-h) m-0 hidden max-h-[calc(100dvh-var(--nav-h)-1rem)] w-auto overflow-auto bg-navy-950 p-2 text-text open:block lg:hidden!"
             onToggle={(event) => {
               const isOpen = event.newState === 'open';
               setOpen(isOpen);

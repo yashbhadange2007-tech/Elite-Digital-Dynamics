@@ -1,21 +1,21 @@
 import Contact from '@/components/contact/Contact';
-import SceneLayer from '@/components/scene/SceneLayer';
 import Faq from '@/components/sections/Faq';
 import Hero from '@/components/sections/Hero';
 import Process from '@/components/sections/Process';
 import Services from '@/components/sections/Services';
+import SculptureLayer from '@/components/sculpture/SculptureLayer';
 import SocialSyncShowcase from '@/components/socialsync/SocialSyncShowcase';
 import Work from '@/components/work/Work';
 
 /**
- * The home page. Frozen after the foundation pass: it only fixes the section order.
- * Each area's agent replaces the default export of its own entry file.
+ * The home page: the sculpture layer, then the sections in reading order (what we do, proof,
+ * how we work, questions, contact).
  * Nav, Footer, glow and scrim come from the root layout.
  */
 export default function HomePage() {
   return (
     <>
-      <SceneLayer />
+      <SculptureLayer />
       <main id="main">
         <Hero />
         <Services />

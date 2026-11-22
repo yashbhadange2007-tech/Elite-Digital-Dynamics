@@ -24,7 +24,7 @@ const id = (field: FieldName) => `enquiry-${field}`;
 
 const control =
   'block w-full rounded-card border border-(--field-border) bg-(--field-fill) px-4 text-body text-text ' +
-  'transition-colors duration-(--dur-1) ease-out hover:border-white/28 focus:border-salmon aria-invalid:border-ember-300';
+  'transition-colors duration-(--dur-1) ease-out hover:border-blue/45 focus:border-pink aria-invalid:border-error';
 
 export type EnquiryFormProps = {
   /** Web3Forms access key. Empty or missing: the form opens WhatsApp or the email app instead. */
@@ -150,7 +150,7 @@ export function EnquiryForm({ accessKey, timeoutMs }: EnquiryFormProps) {
     >
       <div role="alert" className="empty:hidden">
         {errorList.length ? (
-          <div className="rounded-card border border-ember-300 bg-ember-900/60 p-4">
+          <div className="rounded-card border border-error bg-navy-900/70 p-4">
             <p className="flex items-center gap-2 font-medium text-text">
               <Warning aria-hidden="true" className="size-5 flex-none text-error" />
               Please fix the following before sending:
@@ -242,7 +242,7 @@ export function EnquiryForm({ accessKey, timeoutMs }: EnquiryFormProps) {
       ) : null}
 
       {status === 'failed' ? (
-        <p role="alert" className="flex gap-3 rounded-card border border-ember-300 bg-ember-900/60 p-4 text-text">
+        <p role="alert" className="flex gap-3 rounded-card border border-error bg-navy-900/70 p-4 text-text">
           <Warning aria-hidden="true" className="mt-0.5 size-5 flex-none text-error" />
           That did not go through. Your details are still here. Try again, or send them on WhatsApp or by email.
         </p>
@@ -257,7 +257,7 @@ export function EnquiryForm({ accessKey, timeoutMs }: EnquiryFormProps) {
       ) : (
         <>
           <p className="flex gap-3 text-small text-text-muted">
-            <Info aria-hidden="true" className="mt-px size-5 flex-none text-salmon" />
+            <Info aria-hidden="true" className="mt-px size-5 flex-none text-blue" />
             This opens WhatsApp or your email app with your details filled in. Nothing is sent until you press send
             there.
           </p>
@@ -279,7 +279,7 @@ export function EnquiryForm({ accessKey, timeoutMs }: EnquiryFormProps) {
 
       <div role="status" className="empty:hidden">
         {status === 'opened-whatsapp' || status === 'opened-email' ? (
-          <div className="grid gap-1 rounded-card border border-hairline bg-white/3 p-4">
+          <div className="grid gap-1 rounded-card border border-hairline bg-blue-300/4 p-4">
             <p className="flex gap-3 text-text">
               <CheckCircle aria-hidden="true" className="mt-0.5 size-5 flex-none text-success" />
               {status === 'opened-whatsapp'

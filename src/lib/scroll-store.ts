@@ -1,5 +1,5 @@
 /**
- * Scroll state shared by the scene and anything else that follows scroll. No React state:
+ * Scroll state shared by the sculpture and anything else that follows scroll. No React state:
  * `scrollState` is one mutable object, rewritten at most once per animation frame.
  *
  * Anchors are the elements with a `data-pose` attribute (the `Section` primitive emits it).
@@ -102,7 +102,7 @@ function measure(): void {
     found.add(el);
     const rect = el.getBoundingClientRect();
     // Centre of the anchor's first screen, not of the whole element: a tall section's pose is then
-    // in place by the time its heading reaches the top, instead of rings crossing the heading.
+    // in place by the time its heading reaches the top, instead of the sculpture still moving across the heading.
     entries.push({ centre: rect.top + scrollY + Math.min(rect.height, innerHeight) / 2, pose });
   }
 
@@ -173,7 +173,7 @@ export function startScrollTracking(): void {
   }
   started = true;
 
-  // Debug hook, like `window.__scene`: lets tests and a phone's console read the live state.
+  // Debug hook, like `window.__sculpture`: lets tests and a phone's console read the live state.
   (window as Window & { __scroll?: ScrollState }).__scroll = scrollState;
 
   const onScroll = () => schedule(false);

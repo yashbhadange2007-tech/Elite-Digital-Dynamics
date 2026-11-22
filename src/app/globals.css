@@ -14,13 +14,9 @@
 @custom-variant motion-full (&:where(html[data-motion='full'] *));
 @custom-variant motion-still (&:where(html[data-motion='still'] *));
 
-/* `scene-live:` applies while the 3D scene is animating (<html data-scene="live">, set by the
-   scene). The logo stage uses it to hide its 2D fallback mark. */
-@custom-variant scene-live (&:where(html[data-scene='live'] *));
-
 /*
  * `static` keeps every token in the output as a CSS variable, used or not, so CSS Modules and
- * the scene can rely on `var(--token)`.
+ * other stylesheets can rely on `var(--token)`.
  */
 @theme static {
   /* Only the tokens below exist: Tailwind's default palette, type scale and radii are removed. */
@@ -29,32 +25,33 @@
   --radius-*: initial;
 
   /* ---- Colour (DESIGN.md 2) ---- */
-  --color-bg: #080505;
-  --color-ember-950: #140606;
-  --color-ember-900: #2A0A07;
-  --color-ember-800: #4A0F0A;
-  --color-ember-700: #7A140D;
-  --color-ember-600: #A32012;
-  --color-ember-500: #C42415;
-  --color-ember-400: #FF3B1F;
-  --color-ember-300: #FF6A4D;
-  --color-salmon: #FF8A6B;
-  --color-hot: #FFD9CC;
-  --color-text: #F6F1EF;
-  --color-text-muted: #C4B9B6;
-  --color-hairline: rgb(255 255 255 / 0.10);
-  --color-hairline-strong: rgb(255 138 107 / 0.32);
-  --color-focus: #FFD9CC;
-  --color-error: #FFA391;
-  --color-success: #86D6A8;
+  --color-bg: #05070D;
+  --color-navy-950: #080C17;
+  --color-navy-900: #0B1526;
+  --color-navy-800: #0E2240;
+  --color-navy-700: #14325A;
+  --color-blue-600: #1C86D6;
+  --color-blue: #38B6FF;
+  --color-blue-300: #8FD4FF;
+  /* Pink means "you can tap this" and nothing else (DESIGN.md 2, Pink discipline). */
+  --color-pink: #FF2E93;
+  --color-pink-hover: #FF5CAB;
+  --color-on-pink: #05070D;
+  --color-text: #FFFFFF;
+  --color-text-muted: #B6C2D6;
+  --color-hairline: rgb(143 212 255 / 0.14);
+  --color-hairline-strong: rgb(56 182 255 / 0.45);
+  --color-focus: #FFFFFF;
+  --color-error: #FFC46B;
+  --color-success: #7FE3C0;
   --color-white: #FFFFFF;
 
   /* ---- Glass and form fields (DESIGN.md 2 and 6) ---- */
-  --glass-fill: rgb(18 8 7 / 0.64);
-  --glass-fill-lite: rgb(16 7 6 / 0.86);
-  --glass-blur: 22px;
-  --field-fill: rgb(255 255 255 / 0.045);
-  --field-border: rgb(255 255 255 / 0.16);
+  --glass-fill: rgb(9 18 34 / 0.62);
+  --glass-fill-lite: rgb(8 14 27 / 0.8);
+  --glass-blur: 20px;
+  --field-fill: rgb(143 212 255 / 0.05);
+  --field-border: rgb(143 212 255 / 0.22);
 
   /* ---- Type (DESIGN.md 4). `text-display` etc. set size, line height, tracking and weight. ---- */
   --text-display: clamp(2.375rem, 1.6rem + 3.4vw, 4.25rem);
@@ -133,31 +130,32 @@
 
   /* ---- Layers (DESIGN.md 3), back to front ---- */
   --z-glow: 0;
-  --z-scene: 1;
+  --z-sculpture: 1;
   --z-scrim: 2;
   --z-content: 10;
   --z-nav: 50;
   --z-skip: 100;
+  --z-intro: 200;
 }
 
 @layer base {
   :root {
     color-scheme: dark;
-    accent-color: var(--color-ember-500);
+    accent-color: var(--color-blue);
 
-    /* Glow centre when no scene is running: phone 62% 58%, desktop 70% 46% (DESIGN.md 3).
-       lvh matches the fixed layers and the canvas, which are all 100lvh tall. */
-    --glow-x: 62vw;
-    --glow-y: 58lvh;
+    /* Glow centre, behind the sculpture: phone 50% 62%, desktop 66% 48% (DESIGN.md 3).
+       lvh matches the fixed layers, which are all 100lvh tall. */
+    --glow-x: 50vw;
+    --glow-y: 62lvh;
 
     @media (min-width: 64rem) {
       --nav-h: 4.5rem;
-      --glow-x: 70vw;
-      --glow-y: 46lvh;
+      --glow-x: 66vw;
+      --glow-y: 48lvh;
     }
   }
 
-  /* Pages without the 3D scene (privacy, 404): put data-glow="top-right" on <main>. */
+  /* Pages without the sculpture (privacy, 404): put data-glow="top-right" on <main>. */
   :root:has([data-glow='top-right']) {
     --glow-x: 88vw;
     --glow-y: 8lvh;
@@ -192,7 +190,7 @@
     overflow-wrap: break-word;
   }
 
-  /* Content sits above the fixed glow, scene and scrim layers. */
+  /* Content sits above the fixed glow, sculpture and scrim layers. */
   body > main,
   body > footer {
     position: relative;
@@ -233,18 +231,15 @@
   }
 
   ::selection {
-    background-color: var(--color-ember-500);
-    color: var(--color-white);
+    background-color: var(--color-blue);
+    color: var(--color-on-pink);
   }
 }
 
 @layer components {
   /* ---- Glow (DESIGN.md 3) ----
-     .page-glow is the one element the scene moves. Its centre sits on the viewport origin and
-     `transform` carries it to the object. To move it from JS:
-       glow.style.transform = `translate3d(${centreX}px, ${centreY}px, 0)`;
-       glow.style.opacity = String(1 - 0.6 * dim);
-     The clip wrapper stops the 140vmax square from ever widening the page. */
+     .page-glow is the sculpture's nebula: static, its centre carried by `transform` from the
+     viewport origin to (--glow-x, --glow-y). The clip wrapper stops the 140vmax square from ever widening the page. */
   .page-glow-clip,
   .page-scrim {
     position: fixed;
@@ -269,26 +264,98 @@
     transform: translate3d(var(--glow-x), var(--glow-y), 0);
     background: radial-gradient(
       closest-side,
-      rgb(196 36 21 / 0.42) 0%,
-      rgb(122 20 13 / 0.26) 30%,
-      rgb(58 10 6 / 0.12) 58%,
+      rgb(56 182 255 / 0.16) 0%,
+      rgb(20 50 90 / 0.3) 32%,
+      rgb(14 34 64 / 0.16) 58%,
       transparent 78%
     );
   }
 
-  /* ---- Scrim (DESIGN.md 3): between the scene and the content ---- */
+  /* ---- Sculpture (DESIGN.md 9; src/components/sculpture) ----
+     Server-rendered as a poster that scrolls away with the hero. Once its script runs
+     ([data-live]) the layer is fixed and the script eases .sculpture-stage between poses.
+     The stage's default transform is the hero pose: keep it equal to PHONE_POSES[0] and
+     DESKTOP_POSES[0] in poses.ts. */
+  .sculpture {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 100lvh;
+    z-index: var(--z-sculpture);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .sculpture[data-live] {
+    position: fixed;
+  }
+
+  .sculpture-stage {
+    position: absolute;
+    inset: 0;
+    transform: translate3d(0, 22lvh, 0);
+    will-change: transform, opacity;
+  }
+
+  /* Phones and tablets: about 90% of the screen wide, never taller than the screen allows.
+     The edge fades out so the clip never shows as a rectangle. */
+  .sculpture-media {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: min(90vw, 62svh);
+    block-size: auto;
+    aspect-ratio: 9 / 10;
+    translate: -50% -50%;
+    object-fit: cover;
+    -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  }
+
+  .sculpture canvas {
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+  }
+
+  .sculpture canvas[data-ready] {
+    opacity: 1;
+  }
+
+  /* Desktop: the 16:9 frame covers the screen; the sculpture sits at 63% across it. */
+  @media (min-width: 64rem) {
+    .sculpture-stage {
+      transform-origin: 63% 50%;
+      transform: translate3d(2vw, 0, 0) scale(0.74);
+    }
+
+    .sculpture-media {
+      inline-size: max(100vw, 177.78lvh);
+      aspect-ratio: 16 / 9;
+      -webkit-mask-image:
+        linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent),
+        linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+      mask-image:
+        linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent),
+        linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+  }
+
+  /* ---- Scrim (DESIGN.md 3): between the sculpture and the content ---- */
   .page-scrim {
     z-index: var(--z-scrim);
     background: linear-gradient(
       180deg,
-      rgb(8 5 5 / 0.62) 0,
+      rgb(5 7 13 / 0.66) 0,
       transparent 16%,
       transparent 82%,
-      rgb(8 5 5 / 0.55) 100%
+      rgb(5 7 13 / 0.6) 100%
     );
   }
 
-  /* ---- Text scrim (DESIGN.md 3): for a text block that sits over the object without a panel.
+  /* ---- Text scrim (DESIGN.md 3): for a text block that sits over the sculpture without a panel.
      The halo reaches 12% beyond the block. Sideways it stops at the page gutter, so a block
      that fills the container on a phone can never widen the page. ---- */
   .text-scrim {
@@ -302,7 +369,7 @@
     inset-block: -12%;
     inset-inline: max(-12%, -1 * var(--page-gutter));
     z-index: -1;
-    background: radial-gradient(closest-side, rgb(8 5 5 / 0.66), transparent);
+    background: radial-gradient(closest-side, rgb(5 7 13 / 0.72), transparent);
     pointer-events: none;
   }
 
@@ -315,16 +382,16 @@
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-panel);
     background-color: var(--glass-fill-lite);
-    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.045), transparent 38%);
+    background-image: linear-gradient(180deg, rgb(143 212 255 / 0.06), transparent 38%);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.07),
-      0 24px 60px -24px rgb(0 0 0 / 0.7);
+      inset 0 1px 0 rgb(143 212 255 / 0.1),
+      0 24px 60px -24px rgb(1 3 8 / 0.8);
   }
 
   html[data-glass='real'] .ui-glass[data-primary] {
     background-color: var(--glass-fill);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
-    backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
   }
 
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -337,7 +404,7 @@
   .ui-glass[data-tone='flat'] {
     padding: var(--glass-pad, var(--space-5));
     border-radius: var(--radius-card);
-    background-color: rgb(255 255 255 / 0.03);
+    background-color: rgb(143 212 255 / 0.04);
     background-image: none;
     box-shadow: none;
   }

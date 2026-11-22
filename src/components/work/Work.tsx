@@ -84,7 +84,7 @@ export default function Work() {
                     </li>
                   ))}
                 </ul>
-                <span className="mt-auto inline-flex min-h-11 self-start pt-2 items-center gap-2 font-medium text-salmon">
+                <span className="mt-auto inline-flex min-h-11 self-start pt-2 items-center gap-2 font-medium text-pink">
                   {card.action}
                   <span className="transition-transform duration-2 group-hover:translate-x-0.5 [&_svg]:size-5">{card.icon}</span>
                   {card.external ? <VisuallyHidden> (opens in new tab)</VisuallyHidden> : null}

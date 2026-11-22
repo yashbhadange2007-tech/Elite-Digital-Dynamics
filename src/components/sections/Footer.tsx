@@ -32,7 +32,7 @@ export default function Footer() {
               className="-ml-[44px] h-[120px] w-auto max-w-none lg:-ml-[55px] lg:h-[150px]"
             />
           </div>
-          <p className="pt-3 text-eyebrow text-salmon">{site.taglineDisplay}</p>
+          <p className="pt-3 text-eyebrow text-blue-300">{site.taglineDisplay}</p>
         </div>
 
         <nav aria-label="Footer" className="md:col-span-4 lg:col-span-3">
