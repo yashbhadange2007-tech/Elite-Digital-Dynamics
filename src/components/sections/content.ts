@@ -18,9 +18,10 @@ export const CTA = { href: '/#contact', label: 'Start a project' } as const;
 
 export const HERO = {
   eyebrow: 'Digital agency in Pune',
-  title: 'Make your business the easy choice online.',
-  line: 'Websites, apps and automation for local businesses: gyms, salons, hotels and clinics.',
-  secondary: { href: '#work', label: 'See our work' },
+  title: 'Websites, apps and automation.',
+  line: 'Designed, built and launched for your business: gyms, salons, hotels, clinics and more.',
+  whatsapp: 'WhatsApp us',
+  work: { href: '#work', label: 'See our work' },
 } as const;
 
 export const SERVICES_HEAD = {

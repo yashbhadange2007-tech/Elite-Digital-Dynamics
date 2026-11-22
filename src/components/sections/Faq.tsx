@@ -32,7 +32,7 @@ export default function Faq() {
               <summary className="flex min-h-14 cursor-pointer list-none items-center gap-4 rounded-card py-3 text-h3 [&::-webkit-details-marker]:hidden">
                 <Plus
                   aria-hidden="true"
-                  className="size-5 flex-none text-salmon duration-2 ease-out group-open:rotate-45 motion-full:transition-transform"
+                  className="size-5 flex-none text-blue duration-2 ease-out group-open:rotate-45 motion-full:transition-transform"
                 />
                 {item.q}
               </summary>

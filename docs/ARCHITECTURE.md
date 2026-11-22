@@ -1,5 +1,7 @@
 # Architecture and build contracts
 
+> **November 2026 update.** The owner replaced the real-time WebGL ring scene with a pre-rendered video sculpture and the red theme with navy, electric blue and hot pink. Everything in this file about three.js, React Three Fiber, quality tiers, the logo stage, `data-scene` and ring colours is history. Current truth: `DESIGN.md` (sections 1 to 3 and 9), `SPEC.md` section 5 and `src/components/sculpture/`.
+
 Approved by the owner. Read `docs/BRIEF.md` first. Design values (colours, type, spacing, motion) live in `DESIGN.md`; content lives in `SPEC.md`.
 
 ## 0. Pins and things to re-check

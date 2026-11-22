@@ -78,13 +78,13 @@
 }
 
 .chip:hover {
-  background-color: rgb(255 255 255 / 0.06);
+  background-color: rgb(56 182 255 / 0.1);
 }
 
 .chip[aria-current='step'] {
-  border-color: var(--color-ember-600);
-  background-color: var(--color-ember-600);
-  color: var(--color-white);
+  border-color: var(--color-pink);
+  background-color: var(--color-pink);
+  color: var(--color-on-pink);
 }
 
 @media (min-width: 64rem) {

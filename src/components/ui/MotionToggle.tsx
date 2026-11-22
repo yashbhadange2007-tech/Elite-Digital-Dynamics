@@ -15,7 +15,7 @@ export type MotionToggleProps = {
 const DEFAULT_LABELS = { pause: 'Pause motion', play: 'Play motion' };
 
 /**
- * The visible control that stops and restarts all motion (scene, demo tour, reveals) and
+ * The visible control that stops and restarts all motion (sculpture, demo tour, reveals) and
  * remembers the choice (WCAG 2.2.2). The label names the action, so there is no `aria-pressed`:
  * a pressed "Play motion" button would be read out as the opposite of what it does.
  */

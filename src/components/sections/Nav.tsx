@@ -37,7 +37,8 @@ export default function Nav() {
     cn(
       'rounded-pill border p-1 transition-colors duration-1',
       scrolled ? 'ui-glass border-hairline-strong' : 'border-transparent',
-      scrolled && (blurs ? 'in-data-[glass=lite]:bg-ember-950' : 'bg-ember-950'),
+      // Denser than a panel: the pill also passes over the demo's light screens.
+      scrolled && (blurs ? 'bg-navy-950/85 in-data-[glass=lite]:bg-navy-950' : 'bg-navy-950'),
     );
 
   return (
@@ -45,9 +46,17 @@ export default function Nav() {
       <Container className="flex min-h-(--nav-h) items-center justify-between gap-2">
         {/* The logo gets its own capsule (never blurred), so it stays readable over the page text. */}
         <Link href="/" className={cn(pill(false), '-ml-1 inline-flex items-center lg:-ml-3 lg:px-3')}>
-          {/* `lazy` on both: the one hidden by CSS is then never downloaded. */}
-          <Logo variant="horizontal" height={40} decorative loading="lazy" className="hidden lg:block" />
-          <Logo variant="mark" decorative loading="lazy" className="lg:hidden" />
+          {/* Phones show the full name at the top of the page (the first screen must say who we
+              are) and the mark alone once the page has scrolled and the button takes the space.
+              `lazy` on both: the one hidden by CSS is then never downloaded. */}
+          <Logo
+            variant="horizontal"
+            height={40}
+            decorative
+            loading="lazy"
+            className={cn('max-lg:h-8 max-lg:w-auto', scrolled ? 'hidden lg:block' : 'block')}
+          />
+          <Logo variant="mark" decorative loading="lazy" className={scrolled ? 'lg:hidden' : 'hidden'} />
           <VisuallyHidden>Elite Digital Dynamics, home</VisuallyHidden>
         </Link>
 
@@ -65,7 +74,10 @@ export default function Nav() {
               </li>
             ))}
           </ul>
-          <Button href={CTA.href}>{CTA.label}</Button>
+          {/* At the top of a phone screen the hero's own button is right below: one pink button, not two. */}
+          <Button href={CTA.href} className={scrolled ? undefined : 'max-lg:hidden'}>
+            {CTA.label}
+          </Button>
 
           <button
             type="button"
@@ -78,7 +90,7 @@ export default function Nav() {
           <div
             id={MENU_ID}
             popover="auto"
-            className="ui-glass fixed inset-auto inset-x-(--page-gutter) top-(--nav-h) m-0 hidden max-h-[calc(100dvh-var(--nav-h)-1rem)] w-auto overflow-auto bg-ember-950 p-2 text-text open:block lg:hidden!"
+            className="ui-glass fixed inset-auto inset-x-(--page-gutter) top-(--nav-h) m-0 hidden max-h-[calc(100dvh-var(--nav-h)-1rem)] w-auto overflow-auto bg-navy-950 p-2 text-text open:block lg:hidden!"
             onToggle={(event) => {
               const isOpen = event.newState === 'open';
               setOpen(isOpen);

@@ -29,12 +29,12 @@ export default function Services() {
                   <p className="max-w-[40ch] text-text-muted">{promise}</p>
                 </div>
                 <div className="grid content-start gap-4 md:col-span-6 lg:pt-1">
-                  <ul className="grid list-disc gap-2 pl-5 marker:text-salmon">
+                  <ul className="grid list-disc gap-2 pl-5 marker:text-blue">
                     {deliverables.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                  {note ? <p className="text-small font-medium text-salmon">{note}</p> : null}
+                  {note ? <p className="text-small font-medium text-blue-300">{note}</p> : null}
                 </div>
               </li>
             );

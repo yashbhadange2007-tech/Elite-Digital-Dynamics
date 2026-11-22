@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useLayoutEffect } from 'react';
-import { initMotionPreference } from '@/lib/quality-store';
+import { initGlass, initMotionPreference } from '@/lib/quality-store';
 import { startScrollTracking } from '@/lib/scroll-store';
 
 /**
@@ -11,10 +11,11 @@ import { startScrollTracking } from '@/lib/scroll-store';
 export function AppInit() {
   const pathname = usePathname();
 
-  // Before paint: applies the saved or OS motion preference to the store and re-applies the root
+  // Before paint: applies the saved or OS motion preference and the glass mode, and re-applies the root
   // attributes (React resets <html> attributes when Strict Mode remounts in development).
   useLayoutEffect(() => {
     initMotionPreference();
+    initGlass();
   }, []);
 
   // Starts scroll tracking once; on a route change it asks for a fresh measurement of the anchors.

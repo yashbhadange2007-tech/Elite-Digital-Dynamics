@@ -7,6 +7,7 @@ import Footer from '@/components/sections/Footer';
 import Nav from '@/components/sections/Nav';
 import JsonLd from '@/components/seo/JsonLd';
 import { AppInit } from '@/components/ui/AppInit';
+import { Intro } from '@/components/ui/Intro';
 import { SkipLinks } from '@/components/ui/SkipLinks';
 import { manrope } from '@/lib/fonts';
 import { MOTION_BOOT_SCRIPT } from '@/lib/quality-store';
@@ -22,8 +23,8 @@ export { metadata, viewport } from '@/components/seo/metadata';
  *   suppressHydrationWarning.
  * - data-scroll-behavior="smooth" tells Next to jump (not glide) to the top on route changes
  *   while the CSS keeps smooth scrolling for in-page anchors.
- * - Layer order, back to front: glow (0), scene canvas (1, mounted by page.tsx), scrim (2),
- *   content (10), nav (50), skip links (100).
+ * - Layer order, back to front: glow (0), sculpture (1, mounted by page.tsx), scrim (2),
+ *   content (10), nav (50), skip links (100), intro (200).
  */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <Footer />
         <JsonLd />
+        <Intro />
         <AppInit />
       </body>
     </html>

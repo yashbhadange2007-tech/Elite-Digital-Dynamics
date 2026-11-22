@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState, useSyncExternalStore, type RefObject 
 import { getQuality, getServerQuality, subscribe, type Quality } from './quality-store';
 
 /**
- * Current quality settings. Re-renders when tier, glass or motion changes.
+ * Current quality settings. Re-renders when glass or motion changes.
  * For motion decisions use `useQuality().motion === 'still'`: it covers the OS setting and the
- * visitor's Pause control. During hydration it returns the server values (`full`, `lite`, tier 0).
+ * visitor's Pause control. During hydration it returns the server values (`full`, `lite`).
  */
 export function useQuality(): Quality {
   return useSyncExternalStore(subscribe, getQuality, getServerQuality);

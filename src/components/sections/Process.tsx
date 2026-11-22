@@ -6,7 +6,7 @@ import { PROCESS } from './content';
 
 /**
  * How we work (DESIGN.md 8, SPEC.md): five steps hanging off one rail. The rail is each step's
- * own border, so it is a salmon-tinted line down the left on phones and one hairline across the
+ * own border, so it is a blue-tinted line down the left on phones and one hairline across the
  * top from 1024px. No cards, no glass; the text scrim keeps the steps readable over the object.
  */
 export default function Process() {

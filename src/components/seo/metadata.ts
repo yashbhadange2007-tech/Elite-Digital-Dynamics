@@ -14,19 +14,19 @@ export const metadata: Metadata = {
     template: '%s | Elite Digital Dynamics',
   },
   description:
-    'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.',
+    'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for businesses.',
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     siteName: site.name,
     title: 'Elite Digital Dynamics',
-    description: 'Websites, apps and automation for local businesses. Your Vision, Our Innovation.',
+    description: 'Websites, apps and automation for businesses. Your Vision, Our Innovation.',
   },
   twitter: { card: 'summary_large_image' },
 };
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#080505', // --color-bg
+  themeColor: '#05070D', // --color-bg
 };

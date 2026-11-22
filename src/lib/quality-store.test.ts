@@ -62,7 +62,7 @@ describe('quality store', () => {
   it('starts with the values the server renders', async () => {
     installDom();
     const store = await loadStore();
-    expect(store.getQuality()).toEqual({ tier: 0, glass: 'lite', motion: 'full' });
+    expect(store.getQuality()).toEqual({ glass: 'lite', motion: 'full' });
     expect(store.getServerQuality()).toBe(store.getServerQuality());
     expect(store.getQuality()).toBe(store.getServerQuality());
   });
@@ -76,36 +76,35 @@ describe('quality store', () => {
     const before = store.getQuality();
     store.setGlass('real');
     expect(store.getQuality()).not.toBe(before);
-    expect(store.getQuality()).toEqual({ tier: 0, glass: 'real', motion: 'full' });
+    expect(store.getQuality()).toEqual({ glass: 'real', motion: 'full' });
     expect(dom.attributes.get('data-glass')).toBe('real');
     expect(listener).toHaveBeenCalledTimes(1);
 
     store.setMotion('still');
     expect(dom.attributes.get('data-motion')).toBe('still');
-    store.setTier(2);
-    expect(store.getQuality()).toEqual({ tier: 2, glass: 'real', motion: 'still' });
-    expect(listener).toHaveBeenCalledTimes(3);
+    expect(store.getQuality()).toEqual({ glass: 'real', motion: 'still' });
+    expect(listener).toHaveBeenCalledTimes(2);
 
     // No change: same snapshot object, no notification (required by useSyncExternalStore).
     const same = store.getQuality();
-    store.setTier(2);
+    store.setMotion('still');
     store.setGlass('real');
     expect(store.getQuality()).toBe(same);
-    expect(listener).toHaveBeenCalledTimes(3);
+    expect(listener).toHaveBeenCalledTimes(2);
 
     unsubscribe();
-    store.setTier(3);
-    expect(listener).toHaveBeenCalledTimes(3);
+    store.setGlass('lite');
+    expect(listener).toHaveBeenCalledTimes(2);
   });
 
   it('does nothing harmful without a DOM (server render)', async () => {
     const store = await loadStore();
     expect(() => {
       store.initMotionPreference();
+      store.initGlass();
       store.setGlass('real');
-      store.setTier(1);
     }).not.toThrow();
-    expect(store.getQuality()).toEqual({ tier: 1, glass: 'real', motion: 'full' });
+    expect(store.getQuality()).toEqual({ glass: 'real', motion: 'full' });
   });
 });
 

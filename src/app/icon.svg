@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" ><defs>
   <linearGradient id="ringf" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF8A6B"/><stop offset=".45" stop-color="#C42415"/><stop offset="1" stop-color="#7A140D"/>
+    <stop offset="0" stop-color="#8FD4FF"/><stop offset=".45" stop-color="#38B6FF"/><stop offset="1" stop-color="#1560C0"/>
   </linearGradient>
   <linearGradient id="innerf" x1="44" y1="20" x2="20" y2="44" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#C42415"/>
+    <stop offset="0" stop-color="#8FD4FF"/><stop offset="1" stop-color="#38B6FF"/>
   </linearGradient>
   <radialGradient id="coref" cx="30.6" cy="30.4" r="10" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FFD9CC"/><stop offset=".45" stop-color="#FF3B1F"/><stop offset="1" stop-color="#C42415"/>
+    <stop offset="0" stop-color="#FFD6EA"/><stop offset=".45" stop-color="#FF2E93"/><stop offset="1" stop-color="#C41572"/>
   </radialGradient>
   <radialGradient id="glowf" cx="32" cy="32" r="16" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FF3B1F" stop-opacity=".55"/><stop offset="1" stop-color="#FF3B1F" stop-opacity="0"/>
+    <stop offset="0" stop-color="#FF2E93" stop-opacity=".55"/><stop offset="1" stop-color="#FF2E93" stop-opacity="0"/>
   </radialGradient>
 </defs><path d="M52.68 28.35A21 21 0 1 1 35.65 11.32" fill="none" stroke="url(#ringf)" stroke-width="10" stroke-linecap="round"/><circle cx="32" cy="32" r="8" fill="url(#coref)"/></svg>

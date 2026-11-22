@@ -33,7 +33,7 @@ export function ContactBlock({ className }: { className?: string }) {
 function Row({ icon, label, href, children }: { icon: ReactNode; label: string; href?: string; children: ReactNode }) {
   const body = (
     <>
-      <span aria-hidden="true" className="flex-none text-salmon [&>svg]:size-6">
+      <span aria-hidden="true" className="flex-none text-blue [&>svg]:size-6">
         {icon}
       </span>
       <span className="grid min-w-0">

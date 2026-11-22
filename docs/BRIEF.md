@@ -1,9 +1,11 @@
 # Owner's brief (source of truth for every agent)
 
+> **November 2026 update.** The owner replaced the real-time WebGL ring scene with a pre-rendered video sculpture and the red theme with navy, electric blue and hot pink. Everything in this file about three.js, React Three Fiber, quality tiers, the logo stage, `data-scene` and ring colours is history. Current truth: `DESIGN.md` (sections 1 to 3 and 9), `SPEC.md` section 5 and `src/components/sculpture/`.
+
 Written by the owner of Elite Digital Dynamics. If anything in a skill disagrees with this file, this file wins.
 
 ## Context
-Elite Digital Dynamics is a small digital agency in Pune, India. Tagline: "Your Vision Our Innovation". Buyers are local business owners (gyms, salons, hotels, clinics). Most open links on a phone and decide in a few seconds whether we look premium or cheap. There is no website yet.
+Elite Digital Dynamics is a small digital agency in Pune, India. Tagline: "Your Vision Our Innovation". Buyers are business owners (gyms, salons, hotels, clinics). Most open links on a phone and decide in a few seconds whether we look premium or cheap. There is no website yet.
 
 Visual reference: five screenshots of a template called DEVHAUS, at
 `/tmp/claude-0/-home-user-Elite-Digital-Dynamics/ff53f3cc-0df7-51ca-8cac-2cf57e944bce/images/` (`1.png`, `2.png`, `3.webp`, `4.png`, `5.png`). Read them. The owner wants that look and the feeling of a live 3D object behind the page.
@@ -46,11 +48,11 @@ Several nested glossy metal rings, dark red with bright salmon-red highlights on
    The review service helps a business's real customers leave real Google reviews (a link or QR after a visit, reminders, help turning the customer's own words into a draft). Do not write "review generation" or anything that suggests fake, paid or filtered reviews, because Google bans those and the wording would scare off buyers.
 4. Our work: three live client sites and the SocialSync demo (details below).
 5. How we work: a short, honest process (for example: understand, design, build, launch, support).
-6. FAQ: five or six questions a local business owner really asks.
+6. FAQ: five or six questions a business owner really asks.
 7. Enquiry form and contact details.
 8. Footer.
 
-Also include what a professional agency site needs: page metadata, a social share image, favicon, sitemap, robots file, local-business structured data, a simple privacy page (the form collects personal data), keyboard access and WCAG AA contrast.
+Also include what a professional agency site needs: page metadata, a social share image, favicon, sitemap, robots file, business structured data, a simple privacy page (the form collects personal data), keyboard access and WCAG AA contrast.
 
 ## Honesty rule
 For claims about us, use only the facts in this brief. Leave out testimonials, client counts, years of experience, awards, team members and prices, because none are real and buyers check. If a section needs facts that were not given, skip it and list it for the final report.

@@ -16,19 +16,34 @@ type Options = {
   extraAllowedOrigins: string[];
   /** Console errors a spec expects, e.g. [/404/] when it loads a missing page on purpose. */
   allowedConsoleErrors: RegExp[];
+  /** Default true: the page loads as a returning visitor, without the intro. */
+  skipIntro: boolean;
 };
 
 export const test = base.extend<Options & { guard: void }>({
   extraAllowedOrigins: [[], { option: true }],
   allowedConsoleErrors: [[], { option: true }],
+  skipIntro: [true, { option: true }],
 
   guard: [
-    async ({ page, baseURL, extraAllowedOrigins, allowedConsoleErrors }, use) => {
+    async ({ page, baseURL, extraAllowedOrigins, allowedConsoleErrors, skipIntro }, use) => {
       const own = new URL(baseURL ?? 'http://localhost:3000').origin;
       const allowed = new Set([...ALLOWED_HOSTS, ...extraAllowedOrigins.map((o) => new URL(o).host)]);
       const problems: string[] = [];
       const isOwn = (url: string) => url.startsWith(own + '/') || url === own;
       const isHttp = (url: string) => /^https?:/.test(url);
+
+      // The intro plays once per browser session. Tests start as a returning visitor, so it never
+      // covers a screenshot; the intro spec clears this flag to see it.
+      if (skipIntro) {
+        await page.addInitScript(() => {
+          try {
+            sessionStorage.setItem('edd-intro', '1');
+          } catch {
+            /* storage blocked */
+          }
+        });
+      }
 
       page.on('pageerror', (error) => problems.push(`page error: ${error.message}`));
 

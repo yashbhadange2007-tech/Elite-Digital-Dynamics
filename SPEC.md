@@ -3,16 +3,16 @@
 Written with `build-premium-website`. Source of truth for structure and words. Values (colour, type, spacing, motion) are in `DESIGN.md`. Contracts are in `docs/ARCHITECTURE.md`.
 
 ## 1. Brief in six lines
-- **Audience:** owners of local businesses in Pune (gyms, salons, hotels, clinics), on a phone, deciding in seconds.
+- **Audience:** business owners (gyms, salons, hotels, clinics and others), on a phone as often as a laptop, deciding in seconds.
 - **Promise:** we make your business the easy choice online: a site, app or automation that looks premium and works.
-- **Proof:** three live client sites the visitor can scroll right on the page, and a working demo of an app we built.
+- **Proof:** three live client sites, one tap away as link cards, and a working demo of an app we built.
 - **Primary action:** "Start a project" (scrolls to the enquiry form). Secondary: WhatsApp and call.
-- **Tone:** plain, confident, local. Short sentences. No agency jargon, no invented proof.
-- **Signature:** the live ring object behind the page. It ends the page by settling into our logo.
+- **Tone:** plain, confident, down to earth. Short sentences. No agency jargon, no invented proof.
+- **Signature:** the video sculpture behind the page (dark rings, pink edge lines, a glowing blue core). Scroll turns it on desktop; it plays on its own on phones.
 
 ## 2. Pages and sections
 
-| # | Section | id | 3D pose | Notes |
+| # | Section | id | Sculpture pose | Notes |
 |---|---|---|---|---|
 | 1 | Navigation | (header) | n/a | sticky |
 | 2 | Hero | `top` | `hero` | h1 |
@@ -24,7 +24,7 @@ Written with `build-premium-website`. Source of truth for structure and words. V
 | 8 | Enquiry + contact | `contact` | `contact` | form, logo moment |
 | 9 | Footer | (footer) | n/a | |
 
-Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
+Other routes: `/privacy`, 404. Both use the CSS glow only (no sculpture).
 
 ## 3. Content map (final copy)
 
@@ -37,10 +37,11 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 
 ### Hero
 - Eyebrow: `Digital agency in Pune`
-- H1: **Make your business the easy choice online.**
-- Line: Websites, apps and automation for local businesses: gyms, salons, hotels and clinics.
+- H1: **Websites, apps and automation.** (says what we do in one short headline)
+- Line: Designed, built and launched for your business: gyms, salons, hotels, clinics and more.
 - Primary button: **Start a project**
-- Secondary (ghost): **See our work** (to `#work`)
+- Secondary (ghost, WhatsApp icon): **WhatsApp us** (opens WhatsApp in a new tab)
+- Text link: **See our work** (to `#work`), so real work is one tap from the first screen
 - Nothing else in the hero. The tagline lives at the logo moment in the contact section and in the footer lockup.
 
 ### Services
@@ -98,7 +99,7 @@ Other routes: `/privacy`, 404. Both use the CSS glow only (no 3D).
 6. **What do you need from me to start?** A short conversation about your business, your logo and photos if you have them, and the details customers ask for most: services, timings, location and contact numbers. If your content is not ready, tell us and we will work out what is needed together.
 
 ### Enquiry and contact
-- Above the heading: the logo stage (an empty square where the 3D rings land as the logo; it shows the 2D mark when the scene is off), then the tagline `Your Vision, Our Innovation` (small, salmon).
+- Above the heading: the logo mark, then the tagline `Your Vision, Our Innovation` (small, salmon).
 - H2: **Tell us what you are planning.**
 - Lead: Fill this in, or call or WhatsApp us. We are in Shivaji Nagar, Pune.
 
@@ -163,9 +164,9 @@ Contact block (beside the form on desktop, above it on phone):
 ### Metadata
 - Title: `Elite Digital Dynamics | Websites, Apps & Automation in Pune`
 - Title template for other pages: `%s | Elite Digital Dynamics`
-- Description: `Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.`
-- OG title: `Elite Digital Dynamics`; OG description: `Websites, apps and automation for local businesses. Your Vision, Our Innovation.`
-- Share image: 1200x630, dark background with the red glow, mark at left, company name in type, tagline. Alt: `Elite Digital Dynamics: two red rings around a glowing core. Your Vision, Our Innovation.`
+- Description: `Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for businesses.`
+- OG title: `Elite Digital Dynamics`; OG description: `Websites, apps and automation for businesses. Your Vision, Our Innovation.`
+- Share image: 1200x630, navy background with the blue glow, mark at left, company name in type, tagline. Alt: `Elite Digital Dynamics: two blue rings around a glowing pink core. Your Vision, Our Innovation.`
 - Structured data: `ProfessionalService` (a LocalBusiness type) with name, slogan, both phones, email, street address, locality Pune, region Maharashtra, country IN, area served Pune, logo, URL, and the five services as offers. **No** rating, price range, opening hours, geo coordinates, founding date or social profiles.
 
 ### Copy rules for every agent
@@ -192,24 +193,24 @@ Contact block (beside the form on desktop, above it on phone):
 | Social media profiles | **missing** | no social icons |
 | Business registration / GST | **missing** | not shown |
 
-## 5. Scroll choreography (3D)
+## 5. Sculpture choreography
 
-The object is our logo in 3D and nothing else: outer ring **A** and inner ring **B** (each an open band with a gap and round ends) turning in opposite directions around the glowing core.
+The WebGL rings were replaced in November 2026 by a pre-rendered video sculpture. Values and rules are in `DESIGN.md` section 9; the poses are in `src/components/sculpture/poses.ts`.
 
-| Pose | Rings | Object position, phone | Object position, desktop | Dim |
-|---|---|---|---|---|
-| hero | A and B tilted on different axes like a gyroscope; slow counter-turn | lower half of the screen, shifted right so it bleeds off the edge; headline above it | right 55% of the screen, large; headline left | 0 (full) |
-| services | both rings flatten and face the viewer, concentric, still turning, cropped by the screen edge | low and centred, behind the panel | left third, half off-screen; list on the right | 0.55 |
-| work | rings stand upright and rise from below as arcs behind the previews | bottom edge, only the upper arcs visible | bottom centre, wide arcs behind the frames | 0.6 |
-| demo | small and calm in a corner; capped at 30fps | top right corner, small | top right, small | 0.75 |
-| process | the object comes apart along one line: ring A, core, ring B side by side | along the left edge, top to bottom | in a row behind the steps | 0.6 |
-| faq | small gyroscope to one side | top right, small | right edge | 0.65 |
-| contact | **the logo**: A and B face the viewer in one plane, outer gap at top-right, inner gap at bottom-left, core glowing; turning stops and the rings settle exactly | lands on the logo stage above the heading | lands on the logo stage in the left column | 0.1 |
+| Section | Desktop (1024 and up) | Phone and tablet |
+|---|---|---|
+| Hero | Full strength, right of centre, whole. | Full strength, about 90% of the screen wide, under the text. |
+| Services | Low, behind the panel, dim. | Centred, larger, dim. |
+| Work | Large and faint behind the cards. | Same, a little lower. |
+| SocialSync | Behind the demo frame, clear of the text. | Centred, dim. |
+| How we work | Low left under the rail, at its dimmest. | Centred, dim. |
+| FAQ | Behind the panel. | Centred, dim. |
+| Contact | Behind the enquiry form. | Centred, largest, dim. |
 
-Rules:
-- Text never sits on the bright core. Where a heading must cross the object, the scrim and the pose dim keep AA contrast.
-- The contact pose is anchored to the **logo stage**, an empty square in the contact section. The rings fly to it as it scrolls into view, are fully settled when it reaches the middle of the screen, and stay attached to it as the page scrolls on. The logo pose holds still so it reads as the mark.
-- When the scene is off (no WebGL, reduced motion, paused), the hero shows a still picture of the object and the logo stage shows the 2D mark.
+- Desktop: page scroll picks the frame (down turns the rings forward, up turns them back), eased; a slow drift when the page is still.
+- Phone: the clip loops on its own; scroll only moves, scales and fades the layer.
+- Reduced motion, a paused page, Save-Data or refused autoplay: a still poster in the hero that scrolls away. No intro.
+- Intro: "ELITE DIGITAL DYNAMICS" resolves, a thin pink line sweeps, the wordmark settles toward the nav while the page fades up. 1.5 s, once per browser session, ended by any tap, scroll or key.
 
 ## 6. Client sites (measured by the scout, full evidence in `docs/research/sites.md`)
 

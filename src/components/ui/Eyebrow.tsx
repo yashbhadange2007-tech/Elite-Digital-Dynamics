@@ -9,7 +9,7 @@ export type EyebrowProps = {
 };
 
 /**
- * Small salmon line above a heading. Sentence case, never uppercase.
+ * Small light-blue line above a heading. Sentence case, never uppercase.
  * The home page has exactly two: hero and SocialSync (SPEC.md).
  */
 export function Eyebrow({ as: Tag = 'p', className, children }: EyebrowProps) {

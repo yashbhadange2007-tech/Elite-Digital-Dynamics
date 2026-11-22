@@ -31,7 +31,7 @@ const PRIVACY = [
   'Last updated: November 2026.',
 ];
 
-test('G1 /privacy: SPEC text, one h1, headings in order, nav and footer, no 3D', async ({ page }, testInfo) => {
+test('G1 /privacy: SPEC text, one h1, headings in order, nav and footer, no sculpture', async ({ page }, testInfo) => {
   const scripts: Response[] = [];
   page.on('response', (r) => {
     if (r.request().resourceType() === 'script') scripts.push(r);
@@ -47,15 +47,11 @@ test('G1 /privacy: SPEC text, one h1, headings in order, nav and footer, no 3D',
   ]);
   await expect(page.locator('body > header nav').first()).toBeAttached();
   await expect(page.locator('body > footer')).toBeVisible();
-  await expect(page.locator('canvas')).toHaveCount(0);
+  await expect(page.locator('canvas, video, [data-sculpture]')).toHaveCount(0);
   await expect(page).toHaveTitle('Privacy | Elite Digital Dynamics');
 
   await page.waitForLoadState('networkidle');
-  // Read bodies one at a time after load (reading them eagerly in the handler can come back empty).
-  const withThree: string[] = [];
-  for (const r of scripts) if ((await r.text()).includes('WebGLRenderer')) withThree.push(r.url());
   expect(scripts.length, 'scripts seen').toBeGreaterThan(0);
-  expect(withThree, 'three.js chunk requested').toEqual([]);
 
   await expectNoHorizontalOverflow(page);
   const { violations } = await new AxeBuilder({ page }).withTags(WCAG_AA).analyze();
@@ -90,23 +86,23 @@ test('G3 head of / carries the SPEC metadata; /privacy uses the title template',
 
   await expect(page).toHaveTitle('Elite Digital Dynamics | Websites, Apps & Automation in Pune');
   expect(await attr('meta[name="description"]')).toBe(
-    'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for local businesses.',
+    'Pune digital agency building websites, custom apps, Google review collection, AI video and WhatsApp automation for businesses.',
   );
   expect(new URL((await attr('link[rel="canonical"]', 'href'))!).pathname).toBe('/');
   expect(await attr('meta[property="og:title"]')).toBe('Elite Digital Dynamics');
   expect(await attr('meta[property="og:description"]')).toBe(
-    'Websites, apps and automation for local businesses. Your Vision, Our Innovation.',
+    'Websites, apps and automation for businesses. Your Vision, Our Innovation.',
   );
   const ogImage = new URL((await attr('meta[property="og:image"]'))!); // throws unless absolute
   expect(ogImage.protocol).toMatch(/^https?:$/);
   expect(ogImage.pathname).toBe('/opengraph-image.png');
   expect(await attr('meta[property="og:image:alt"]')).toBe(
-    'Elite Digital Dynamics: two red rings around a glowing core. Your Vision, Our Innovation.',
+    'Elite Digital Dynamics: two blue rings around a glowing pink core. Your Vision, Our Innovation.',
   );
   expect((await request.get(ogImage.pathname)).headers()['content-type']).toBe('image/png');
   expect(await attr('meta[name="twitter:card"]')).toBe('summary_large_image');
   expect(await attr('meta[name="twitter:image"]')).toBe(ogImage.href);
-  expect(await attr('meta[name="theme-color"]')).toBe('#080505');
+  expect(await attr('meta[name="theme-color"]')).toBe('#05070D');
   expect(await attr('link[rel="icon"][type="image/svg+xml"]', 'href')).toMatch(/^\/icon\.svg/);
   expect(await attr('link[rel="apple-touch-icon"]', 'sizes')).toBe('180x180');
   expect(await attr('link[rel="manifest"]', 'href')).toBe('/manifest.webmanifest');
@@ -133,8 +129,8 @@ test('G6 sitemap, robots and manifest', async ({ request }) => {
     short_name: expect.any(String),
     start_url: '/',
     display: 'standalone',
-    background_color: '#080505',
-    theme_color: '#080505',
+    background_color: '#05070D',
+    theme_color: '#05070D',
   });
   expect(manifest.icons.map((i: { sizes: string }) => i.sizes)).toEqual(['192x192', '512x512']);
   for (const icon of manifest.icons) expect((await request.get(icon.src)).status()).toBe(200);

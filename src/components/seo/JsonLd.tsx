@@ -2,7 +2,7 @@ import { SERVICES } from '@/lib/services';
 import { site } from '@/lib/site';
 
 /**
- * Local-business structured data, built only from src/lib/site.ts and src/lib/services.ts.
+ * Business structured data, built only from src/lib/site.ts and src/lib/services.ts.
  * Facts that do not exist (rating, price range, opening hours, geo, founding date, social
  * profiles) are left out on purpose (SPEC.md section 4).
  */
